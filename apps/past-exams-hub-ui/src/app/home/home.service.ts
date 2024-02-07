@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StatisticsService } from 'libs/portal/src/api/statistics.service';
+import { StatisticsService } from '@org/portal/data-access';
 import { BehaviorSubject, switchMap } from 'rxjs';
 
 @Injectable()

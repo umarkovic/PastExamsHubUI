@@ -3,26 +3,16 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
-import { CoursesService } from './api/courses.service';
-import { ExamPeriodsService } from './api/examPeriods.service';
-import { ExamSolutionService } from './api/examSolution.service';
-import { ExamsService } from './api/exams.service';
-import { StatisticsService } from './api/statistics.service';
-import { TeachersService } from './api/teachers.service';
-import { UsersService } from './api/users.service';
+import { AuthenticationService } from './api/authentication.service';
+import { PasswordService } from './api/password.service';
 
 @NgModule({
   imports:      [],
   declarations: [],
   exports:      [],
   providers: [
-    CoursesService,
-    ExamPeriodsService,
-    ExamSolutionService,
-    ExamsService,
-    StatisticsService,
-    TeachersService,
-    UsersService ]
+    AuthenticationService,
+    PasswordService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<unknown> {

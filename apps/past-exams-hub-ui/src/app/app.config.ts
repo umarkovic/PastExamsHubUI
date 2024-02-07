@@ -5,11 +5,12 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 import { AuthenticationService } from './shared/services/authentication.service';
-//import { environment } from '../environments/environment';
+import { Configuration as CoreConfiguration, ApiModule as CoreApiModule } from '@org/portal/data-access';
+import { Configuration as AuthorityConfiguration, ApiModule as AuthorityApiModule } from '@org/authority/data-access'
+import { environment } from '../environments/environment';
 
 function configureAuth(authenticationService: AuthenticationService) {
-  const authorityApiUrl = 'http://localhost:5000';
-  return () => authenticationService.configureAuth(authorityApiUrl);
+  return () => authenticationService.configureAuth(environment.authorityApiUrl);
 }
 
 export const appConfig: ApplicationConfig = {
@@ -19,7 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideOAuthClient({
       resourceServer: {
-        allowedUrls: ['http://localhost:5002'],
+        allowedUrls: [environment.coreApiUrl],
         sendAccessToken: true,
       }
     }),
@@ -29,6 +30,20 @@ export const appConfig: ApplicationConfig = {
       multi: true,
       deps: [AuthenticationService],
     },
-    
+    CoreApiModule,
+    {
+      provide: CoreConfiguration,
+      useFactory: () => new CoreConfiguration({
+        basePath: environment.coreApiUrl,
+      })
+    },
+    AuthorityApiModule,
+    {
+      provide: AuthorityConfiguration,
+      useFactory: () => new AuthorityConfiguration({
+        basePath: environment.coreApiUrl,
+        withCredentials: true
+      })
+    }
   ],
 };

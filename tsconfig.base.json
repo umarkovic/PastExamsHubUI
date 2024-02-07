@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@org/data-access": ["libs/authority/data-access/src/index.ts"]
+      "@org/authority/data-access": ["libs/authority/data-access/src/index.ts"],
+      "@org/portal/data-access": ["libs/portal/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
