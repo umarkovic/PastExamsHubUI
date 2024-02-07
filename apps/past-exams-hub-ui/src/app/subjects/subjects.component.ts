@@ -31,6 +31,7 @@ export class SubjectsComponent {
     'studies',
     'year',
     'espb',
+    'action',
   ];
   dataSource = new MatTableDataSource([]);
 }
