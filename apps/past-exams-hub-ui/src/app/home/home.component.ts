@@ -3,16 +3,21 @@ import { CommonModule } from '@angular/common';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
+import { HomeService } from './home.service';
+import { StatisticsService } from 'libs/portal/src/api/statistics.service';
 
 @Component({
   selector: 'pastexamshub-home',
   standalone: true,
   imports: [CommonModule, MatGridListModule, MatCardModule],
+  providers: [HomeService, StatisticsService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
+  data$ = this.homeService.fetchData();
+
   private router = inject(Router);
 
   readonly studyYears = [
@@ -33,6 +38,8 @@ export class HomeComponent {
       name: 'IV',
     },
   ];
+
+  constructor(private homeService: HomeService) {}
 
   navigateToStudyYearCourses(studyYear: number) {
     this.router.navigate(['/predmeti'], {

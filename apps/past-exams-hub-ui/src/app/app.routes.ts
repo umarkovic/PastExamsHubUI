@@ -1,11 +1,10 @@
 import { Route } from '@angular/router';
-import { ShellComponent } from './shell/shell.component';
 import { AuthComponent } from './auth/auth.component';
 
 export const appRoutes: Route[] = [
   {
     path: '',
-    component: AuthComponent
+    component: AuthComponent,
   },
   {
     path: 'login',
@@ -14,7 +13,8 @@ export const appRoutes: Route[] = [
   },
   {
     path: '',
-    loadComponent: () => import('../app/shell/shell.component').then((c) => c.ShellComponent),
+    loadComponent: () =>
+      import('../app/shell/shell.component').then((c) => c.ShellComponent),
     children: [
       {
         path: 'pocetna',
@@ -47,6 +47,14 @@ export const appRoutes: Route[] = [
         loadComponent: () =>
           import('../app/professors/professors.component').then(
             (c) => c.ProfessorsComponent
+          ),
+      },
+
+      {
+        path: 'profil',
+        loadComponent: () =>
+          import('../app/profile/profile.component').then(
+            (c) => c.ProfileComponent
           ),
       },
     ],

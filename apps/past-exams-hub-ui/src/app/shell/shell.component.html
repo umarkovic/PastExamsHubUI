@@ -42,21 +42,18 @@
       </div>
       <span>PAST EXAMS HUB</span>
       <span class="example-spacer"></span>
+      <div class="gap">
+        <button mat-button (click)="addBlanket()">
+          <mat-icon aria-hidden="false" fontIcon="add"></mat-icon>
+          Dodaj blanket
+        </button>
+        <button mat-button (click)="profile()">
+          <mat-icon aria-hidden="false" fontIcon="person"></mat-icon>
+          Profil
+        </button>
 
-      <button
-        mat-icon-button
-        class="example-icon favorite-icon"
-        aria-label="Example icon-button with heart icon"
-      >
-        <mat-icon>favorite</mat-icon>
-      </button>
-      <button
-        mat-icon-button
-        class="example-icon"
-        aria-label="Example icon-button with share icon"
-      >
-        <mat-icon>share</mat-icon>
-      </button>
+        <button mat-button (click)="logout()">Odjavi se</button>
+      </div>
     </mat-toolbar>
     <router-outlet></router-outlet>
     <!-- Add Content Here -->

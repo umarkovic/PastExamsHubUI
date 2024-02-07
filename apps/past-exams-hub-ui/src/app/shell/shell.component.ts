@@ -9,12 +9,12 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 interface MenuItem {
   text: string;
   iconName: string;
-  url: string
+  url: string;
 }
 
 @Component({
@@ -38,35 +38,48 @@ export class ShellComponent {
     {
       text: 'Pocetna',
       iconName: 'home',
-      url: '/pocetna'
+      url: '/pocetna',
     },
     {
       text: 'Predmeti',
       iconName: 'description',
-      url: '/predmeti'
+      url: '/predmeti',
     },
     {
       text: 'Rokovi',
       iconName: 'list_alt',
-      url: '/rokovi'
+      url: '/rokovi',
     },
     {
       text: 'Studenti',
       iconName: 'group',
-      url: '/studenti'
+      url: '/studenti',
     },
     {
       text: 'Profesori',
       iconName: 'supervisor_account',
-      url: '/profesori'
-    }
-  ]
+      url: '/profesori',
+    },
+  ];
 
   private breakpointObserver = inject(BreakpointObserver);
-
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  constructor(private router: Router) {}
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(Breakpoints.Handset)
     .pipe(
-      map(result => result.matches),
+      map((result) => result.matches),
       shareReplay()
     );
+
+  addBlanket() {
+    console.log('addBlanket');
+  }
+
+  profile() {
+    this.router.navigate(['profil']);
+  }
+
+  logout() {
+    console.log('logout');
+  }
 }
