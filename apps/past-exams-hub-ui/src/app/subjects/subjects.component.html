@@ -9,7 +9,11 @@
             <input matInput autocomplete="on" />
           </mat-form-field>
         </div>
-        <table mat-table [dataSource]="data.courses!" class="mat-elevation-z8">
+        <table
+          mat-table
+          [dataSource]="data.data.result!"
+          class="mat-elevation-z8"
+        >
           <ng-container matColumnDef="nameSubject">
             <th mat-header-cell *matHeaderCellDef class="nameSubject">
               {{ 'Naziv predmeta' }}
@@ -80,11 +84,10 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
-
         <mat-paginator
-          [length]="data.totalPages"
-          [pageSize]="5"
-          [pageSizeOptions]="[5, 10, 20]"
+          [length]="data.data.count"
+          [pageSize]="data.pageSize"
+          [pageSizeOptions]="[10, 20, 50]"
           [showFirstLastButtons]="true"
           (page)="updatePagination($event.pageIndex, $event.pageSize)"
         >

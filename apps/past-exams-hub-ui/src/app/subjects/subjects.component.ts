@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute } from '@angular/router';
 import { SubjectsService } from './subjects.service';
-import { map, switchMap } from 'rxjs';
+import { switchMap } from 'rxjs';
 import { CoursesService } from '@org/portal/data-access';
 
 @Component({
@@ -35,11 +35,9 @@ export class SubjectsComponent {
   data$ = this.route.queryParams.pipe(
     switchMap((params) => {
       const godinaStudija = params['godinaStudija'];
-      return this.subjectsService.fetchData(godinaStudija).pipe();
+      return this.subjectsService.fetchData(godinaStudija);
     })
   );
-
-  pageSettings$ = this.subjectsService.paginationStream$;
 
   displayedColumns: string[] = [
     'nameSubject',
@@ -57,6 +55,6 @@ export class SubjectsComponent {
   ) {}
 
   updatePagination(pageIndex: number, pageSize: number) {
-    this.subjectsService.updatePagination(pageIndex, pageSize);
+    this.subjectsService.updatePageSettings(pageIndex + 1, pageSize);
   }
 }
