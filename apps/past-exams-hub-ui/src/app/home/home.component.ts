@@ -5,12 +5,13 @@ import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { HomeService } from './home.service';
 import { StatisticsService } from 'libs/portal/src/api/statistics.service';
+import { ExamsService } from 'libs/portal/src/api/api';
 
 @Component({
   selector: 'pastexamshub-home',
   standalone: true,
   imports: [CommonModule, MatGridListModule, MatCardModule],
-  providers: [HomeService, StatisticsService],
+  providers: [HomeService, StatisticsService, ExamsService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
