@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -7,29 +7,62 @@ import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormBaseComponent } from '../shared/components/form-base.component';
 import { HeaderComponent } from '../shared/components/header/header.component';
+import { SignInService } from './sign-in.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RegexPatterns } from '../shared/constants/regex-patterns';
 
 @Component({
   selector: 'pastexamshub-sign-in',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonModule,HeaderComponent ],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    HeaderComponent,
+  ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [SignInService],
 })
 export class SignInComponent extends FormBaseComponent {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private signInService = inject(SignInService);
+
+  private returnUrl = this.route.snapshot.queryParamMap.get('ReturnUrl');
 
   override form = this.fb.group({
-    email: this.fb.nonNullable.control<string | undefined>('', [Validators.required]),
-    password: this.fb.nonNullable.control<string | undefined>('', [Validators.required])
-  })
+    email: this.fb.nonNullable.control<string | undefined>('', [
+      Validators.required,
+      Validators.email,
+    ]),
+    password: this.fb.nonNullable.control<string | undefined>('', [
+      Validators.required,
+      Validators.pattern(RegexPatterns.PASSWORD_STRENGTH_REGEX),
+    ]),
+  });
 
   isPasswordVisible = false;
 
+  passwordVisibilityChanged(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isPasswordVisible = !this.isPasswordVisible;
+  }
+
   submit() {
-    if (this.checkFormValidity()) return;
+    if (this.checkFormValidity() || !this.returnUrl) return;
 
     const formData = this.form.getRawValue();
 
     console.log(formData);
+
+    /* this.signInService.signIn(formData, this.returnUrl).subscribe(() => {
+      this.router.navigate(['']);
+    }); */
   }
 }

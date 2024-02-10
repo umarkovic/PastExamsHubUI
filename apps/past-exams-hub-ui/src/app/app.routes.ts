@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 export const appRoutes: Route[] = [
   {
@@ -7,7 +8,7 @@ export const appRoutes: Route[] = [
     component: AuthComponent,
   },
   {
-    path: 'login',
+    path: 'signin',
     loadComponent: () =>
       import('../app/sign-in/sign-in.component').then((c) => c.SignInComponent),
   },
@@ -15,6 +16,7 @@ export const appRoutes: Route[] = [
     path: '',
     loadComponent: () =>
       import('../app/shell/shell.component').then((c) => c.ShellComponent),
+    // canActivate: [AuthGuard],
     children: [
       {
         path: 'pocetna',
