@@ -1,3 +1,6 @@
+<body>
+  <ng-container *ngIf="data$ | async as data">
+
 <main>
   <mat-card>
     <section>
@@ -7,14 +10,22 @@
           <mat-label>{{ 'Search' }} </mat-label>
           <input matInput autocomplete="on" />
         </mat-form-field>
+
+        <div class="btn-save-wrapper">
+          <button mat-raised-button > + Dodaj rok</button>
+        </div>
       </div>
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <table 
+      mat-table 
+      [dataSource]="data.data.result!"  
+      class="mat-elevation-z8"
+      >
         <ng-container matColumnDef="nameDeadlines">
           <th mat-header-cell *matHeaderCellDef class="nameDeadlines">
             {{ 'Naziv roka' }}
           </th>
           <td mat-cell *matCellDef="let element" class="nameDeadlines">
-            {{ element.nameDeadlines }}
+            {{ element.name }}
           </td>
         </ng-container>
 
@@ -23,7 +34,7 @@
             {{ 'Pocetak' }}
           </th>
           <td mat-cell *matCellDef="let element" class="start">
-            {{ element.start }}
+            {{ element.startDate | date: 'dd MMMM yyyy' }}
           </td>
         </ng-container>
 
@@ -32,7 +43,7 @@
             {{ 'Kraj' }}
           </th>
           <td mat-cell *matCellDef="let element" class="end">
-            {{ element.end }}
+            {{ element.endDate | date: 'dd MMMM yyyy' }}
           </td>
         </ng-container>
 
@@ -41,7 +52,8 @@
             {{ 'Trajanje (dani)' }}
           </th>
           <td mat-cell *matCellDef="let element" class="duration">
-            {{ element.duration }}
+            {{ element.periodDayDuration + (element.periodDayDuration === 1 ? ' dan' : ' dana') }}
+
           </td>
         </ng-container>
 
@@ -63,10 +75,15 @@
       </table>
 
       <mat-paginator
-        #paginator
-        [pageSizeOptions]="[12, 14, 16]"
-        showFirstLastButtons
-      ></mat-paginator>
+          [length]="data.data.count"
+          [pageSize]="data.pageSize"
+          [pageSizeOptions]="[10, 20, 50]"
+          [showFirstLastButtons]="true"
+          (page)="updatePagination($event.pageIndex, $event.pageSize)"
+        >
+        </mat-paginator>
     </section>
   </mat-card>
 </main>
+</ng-container>
+</body>

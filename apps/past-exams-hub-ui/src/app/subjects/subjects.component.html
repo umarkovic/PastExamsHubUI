@@ -1,3 +1,4 @@
+<body>
 <ng-container *ngIf="data$ | async as data">
   <main>
     <mat-card>
@@ -8,6 +9,10 @@
             <mat-label>{{ 'Search' }} </mat-label>
             <input matInput autocomplete="on" />
           </mat-form-field>
+
+          <div class="btn-save-wrapper">
+            <button mat-raised-button > + Dodaj predmet</button>
+          </div>
         </div>
         <table
           mat-table
@@ -87,7 +92,7 @@
         <mat-paginator
           [length]="data.data.count"
           [pageSize]="data.pageSize"
-          [pageSizeOptions]="[10, 20, 50]"
+          [pageSizeOptions]="[10, 15, 20]"
           [showFirstLastButtons]="true"
           (page)="updatePagination($event.pageIndex, $event.pageSize)"
         >
@@ -96,3 +101,4 @@
     </mat-card>
   </main>
 </ng-container>
+</body>

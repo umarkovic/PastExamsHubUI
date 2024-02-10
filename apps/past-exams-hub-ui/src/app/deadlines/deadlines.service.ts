@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UsersService } from '@org/portal/data-access';
+import { ExamPeriodsService } from '@org/portal/data-access';
 import {
   BehaviorSubject,
   combineLatest,
@@ -12,7 +12,7 @@ import {
 
 
 @Injectable()
-export class StudentsService {
+export class DeadlinesService {
   private _pageSettings = new BehaviorSubject<{
     pageSizes: number[];
     pageSize: number;
@@ -42,19 +42,19 @@ export class StudentsService {
   private _refresh = new BehaviorSubject<void>(undefined);
   refresh$ = this._refresh.asObservable();
 
-  constructor(private usersService: UsersService) {}
+  constructor(private examPeriodsService: ExamPeriodsService) {}
 
-  fetchUsers(
+  fetchExamPeriods(
     pageSettings: { currentPage?: number; pageSize: number }
   ) {
     const currentPage = pageSettings.currentPage ?? 1;
-    return this.usersService
-      .usersGet(currentPage, pageSettings.pageSize)
+    return this.examPeriodsService
+      .examPeriodsGet(currentPage, pageSettings.pageSize)
       .pipe(
         map((res) => ({
           data: 
           { 
-            result: res.users, 
+            result: res.periods, 
             count: res.totalCount 
           },
           currentPage: res.currentPage,
@@ -103,7 +103,7 @@ export class StudentsService {
 
         if (shouldFetch) {
           lastFetched = { ...state };
-          return this.fetchUsers({
+          return this.fetchExamPeriods({
             currentPage: state.currentPage,
             pageSize: state.pageSize,
           });
