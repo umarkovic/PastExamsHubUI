@@ -1,15 +1,17 @@
-import { ChangeDetectionStrategy, Component , ViewChild} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
-import { MatPaginator,MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { TeachersService } from '@org/portal/data-access';
 import { MatInputModule } from '@angular/material/input';
 import { ProfessorsService } from './professors.service';
+import { ListRange } from '@angular/cdk/collections';
+import { TableScrollingViewportComponent } from '../shared/components/table-scrolling-viewport';
 @Component({
   selector: 'pastexamshub-professors',
   standalone: true,
@@ -21,6 +23,7 @@ import { ProfessorsService } from './professors.service';
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
+    TableScrollingViewportComponent,
   ],
   providers: [ProfessorsService, TeachersService],
   templateUrl: './professors.component.html',
@@ -29,14 +32,13 @@ import { ProfessorsService } from './professors.service';
 })
 export class ProfessorsComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
+  items = [];
+  itemsSlice = [];
   dataSource = new MatTableDataSource();
   data$ = this.route.queryParams.pipe(
     switchMap(() => {
       return this.professorsService.fetchData();
-
     })
-    
   );
   displayedColumns: string[] = ['email', 'fullName', 'subjects', 'action'];
 
@@ -46,5 +48,9 @@ export class ProfessorsComponent {
   ) {}
   updatePagination(pageIndex: number, pageSize: number) {
     this.professorsService.updatePageSettings(pageIndex + 1, pageSize);
+  }
+
+  updateSlice(range: ListRange) {
+    this.itemsSlice = this.items.slice(range.start, range.end);
   }
 }

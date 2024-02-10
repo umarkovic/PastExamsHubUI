@@ -120,4 +120,12 @@ export class SubjectsService {
   refreshData() {
     this._refresh.next(undefined);
   }
+
+  addSubjects(data: any) {
+    console.log(data);
+  }
+
+  editSubjects(data: any) {
+    console.log(data);
+  }
 }

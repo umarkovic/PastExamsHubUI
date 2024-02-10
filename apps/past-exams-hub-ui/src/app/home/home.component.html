@@ -126,12 +126,18 @@
     <div class="flex-column side latestExams mat-elevation-z2">
       <h2>Najnoviji blanketi</h2>
       <div style="display: flex; gap: 16px; flex-direction: column">
-        @for (latestExam of data.latestExams.latestExams; track latestExam) {
-        <div class="text-wrapper">
-          <p>{{ latestExam.courseName }}</p>
-          <span>{{ latestExam.examPeriodName }}</span>
-        </div>
-        }
+        <pastexamshub-table-scrolling-viewport
+          [itemSize]="10"
+          [totalItems]="items.length"
+          (itemsRangeChange)="updateSlice($event)"
+        >
+          @for (latestExam of data.latestExams.latestExams; track latestExam) {
+          <div class="text-wrapper">
+            <p>{{ latestExam.courseName }}</p>
+            <span>{{ latestExam.examPeriodName }}</span>
+          </div>
+          }
+        </pastexamshub-table-scrolling-viewport>
       </div>
     </div>
   </div>

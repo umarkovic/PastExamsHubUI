@@ -6,11 +6,19 @@ import { Router } from '@angular/router';
 import { HomeService } from './home.service';
 import { StatisticsService } from 'libs/portal/src/api/statistics.service';
 import { ExamsService } from 'libs/portal/src/api/api';
+import { TableScrollingViewportComponent } from '../shared/components/table-scrolling-viewport';
+import { ListRange } from '@angular/cdk/collections';
 
 @Component({
   selector: 'pastexamshub-home',
   standalone: true,
-  imports: [CommonModule, MatGridListModule, MatCardModule],
+
+  imports: [
+    CommonModule,
+    MatGridListModule,
+    MatCardModule,
+    TableScrollingViewportComponent,
+  ],
   providers: [HomeService, StatisticsService, ExamsService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -18,7 +26,8 @@ import { ExamsService } from 'libs/portal/src/api/api';
 })
 export class HomeComponent {
   data$ = this.homeService.fetchData();
-
+  items = [];
+  itemsSlice = [];
   private router = inject(Router);
 
   readonly studyYears = [
@@ -46,5 +55,9 @@ export class HomeComponent {
     this.router.navigate(['/predmeti'], {
       queryParams: { godinaStudija: studyYear },
     });
+  }
+
+  updateSlice(range: ListRange) {
+    this.itemsSlice = this.items.slice(range.start, range.end);
   }
 }

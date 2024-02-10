@@ -10,6 +10,11 @@ import { ActivatedRoute } from '@angular/router';
 import { SubjectsService } from './subjects.service';
 import { switchMap } from 'rxjs';
 import { CoursesService } from '@org/portal/data-access';
+import { MatButtonModule } from '@angular/material/button';
+import { TableScrollingViewportComponent } from '../shared/components/table-scrolling-viewport';
+import { ListRange } from '@angular/cdk/collections';
+import { MatDialog } from '@angular/material/dialog';
+import { AddEditSubjectsDialogComponent } from './add-edit-subjects-dialog/add-edit-subjects-dialog.component';
 
 @Component({
   selector: 'pastexamshub-subjects',
@@ -22,6 +27,8 @@ import { CoursesService } from '@org/portal/data-access';
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
+    MatButtonModule,
+    TableScrollingViewportComponent,
   ],
   providers: [SubjectsService, CoursesService],
   templateUrl: './subjects.component.html',
@@ -30,6 +37,8 @@ import { CoursesService } from '@org/portal/data-access';
 })
 export class SubjectsComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  items = [];
+  itemsSlice = [];
 
   dataSource = new MatTableDataSource();
   data$ = this.route.queryParams.pipe(
@@ -50,11 +59,32 @@ export class SubjectsComponent {
   ];
 
   constructor(
+    private dialog: MatDialog,
     private route: ActivatedRoute,
     private subjectsService: SubjectsService
   ) {}
 
   updatePagination(pageIndex: number, pageSize: number) {
     this.subjectsService.updatePageSettings(pageIndex + 1, pageSize);
+  }
+
+  updateSlice(range: ListRange) {
+    this.itemsSlice = this.items.slice(range.start, range.end);
+  }
+
+  addEditSubject(uid?: string) {
+    const dialogRef = this.dialog.open(AddEditSubjectsDialogComponent, {
+      width: '750px',
+      data: { uid: uid },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (result.uid) {
+          this.subjectsService.editSubjects(result);
+        } else {
+          this.subjectsService.addSubjects(result);
+        }
+      }
+    });
   }
 }

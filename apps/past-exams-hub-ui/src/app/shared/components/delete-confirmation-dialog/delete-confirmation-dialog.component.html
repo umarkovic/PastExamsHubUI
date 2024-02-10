@@ -1,0 +1,11 @@
+<div class="header-wrapper-dialog">
+  <h2 mat-dialog-title>{{ t('Delete') }}</h2>
+  <button mat-button (click)="closeDialog()">
+    <mat-icon class="material-symbols-outlined"> close </mat-icon>
+  </button>
+</div>
+<mat-dialog-content>{{ data }}</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Ne</button>
+  <button mat-button (click)="onYesClick()">Da</button>
+</mat-dialog-actions>

@@ -10,7 +10,8 @@ import { switchMap } from 'rxjs';
 import { UsersService } from '@org/portal/data-access';
 import { MatInputModule } from '@angular/material/input';
 import { StudentsService } from './students.service';
-
+import { TableScrollingViewportComponent } from '../shared/components/table-scrolling-viewport';
+import { ListRange } from '@angular/cdk/collections';
 
 @Component({
   selector: 'pastexamshub-students',
@@ -23,6 +24,7 @@ import { StudentsService } from './students.service';
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
+    TableScrollingViewportComponent,
   ],
   providers: [StudentsService, UsersService],
   templateUrl: './students.component.html',
@@ -30,17 +32,15 @@ import { StudentsService } from './students.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StudentsComponent {
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  items = [];
+  itemsSlice = [];
 
   dataSource = new MatTableDataSource();
   data$ = this.route.queryParams.pipe(
     switchMap(() => {
       return this.studentsService.fetchData();
-
-       
     })
-    
   );
 
   displayedColumns: string[] = ['email', 'fullName', 'index', 'year', 'action'];
@@ -52,5 +52,9 @@ export class StudentsComponent {
 
   updatePagination(pageIndex: number, pageSize: number) {
     this.studentsService.updatePageSettings(pageIndex + 1, pageSize);
+  }
+
+  updateSlice(range: ListRange) {
+    this.itemsSlice = this.items.slice(range.start, range.end);
   }
 }

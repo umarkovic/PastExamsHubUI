@@ -15,7 +15,7 @@
   height: calc(80vh - 64px);
   overflow-y: auto;
   display: grid;
-  grid-template-columns: repeat(3, 2fr); /* 3 columns with equal width */
+  grid-template-columns: 40% 40% calc(20% - 3rem); /* 3 columns with equal width */
   grid-template-rows: auto; /* Rows height will be determined by content */
   grid-template-areas:
     'first second side'

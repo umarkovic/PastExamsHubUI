@@ -10,7 +10,6 @@ import {
   tap,
 } from 'rxjs';
 
-
 @Injectable()
 export class DeadlinesService {
   private _pageSettings = new BehaviorSubject<{
@@ -44,18 +43,15 @@ export class DeadlinesService {
 
   constructor(private examPeriodsService: ExamPeriodsService) {}
 
-  fetchExamPeriods(
-    pageSettings: { currentPage?: number; pageSize: number }
-  ) {
+  fetchExamPeriods(pageSettings: { currentPage?: number; pageSize: number }) {
     const currentPage = pageSettings.currentPage ?? 1;
     return this.examPeriodsService
       .examPeriodsGet(currentPage, pageSettings.pageSize)
       .pipe(
         map((res) => ({
-          data: 
-          { 
-            result: res.periods, 
-            count: res.totalCount 
+          data: {
+            result: res.periods,
+            count: res.totalCount,
           },
           currentPage: res.currentPage,
           totalPages: res.totalPages,
@@ -64,7 +60,6 @@ export class DeadlinesService {
           hasPrevious: res.hasPrevious,
         })),
         tap((res) => {
-          
           if (res.data && res.data.count! > 0) {
             this._pageSettings.next({
               ...this._pageSettings.getValue(),
@@ -124,5 +119,12 @@ export class DeadlinesService {
 
   refreshData() {
     this._refresh.next(undefined);
+  }
+
+  addDeadline(data: any) {
+    console.log(data);
+  }
+  editDeadline(data: any) {
+    console.log(data);
   }
 }
