@@ -5,7 +5,6 @@ import {
   combineLatest,
   distinctUntilChanged,
   map,
-  of,
   switchMap,
   tap,
 } from 'rxjs';
@@ -30,90 +29,63 @@ export class DeadlinesService {
     skip: 0,
     take: 10,
   });
-  dataStateChanged$ = this._dataStateChanged
-    .asObservable()
-    .pipe(
-      distinctUntilChanged(
-        (prev, curr) => prev.skip === curr.skip && prev.take === curr.take
-      )
-    );
+  dataStateChanged$ = this._dataStateChanged.asObservable().pipe(
+    distinctUntilChanged((prev, curr) => {
+      return prev.skip === curr.skip && prev.take === curr.take;
+    })
+  );
 
   private _refresh = new BehaviorSubject<void>(undefined);
   refresh$ = this._refresh.asObservable();
 
   constructor(private examPeriodsService: ExamPeriodsService) {}
 
-  fetchExamPeriods(pageSettings: { currentPage?: number; pageSize: number }) {
-    const currentPage = pageSettings.currentPage ?? 1;
-    return this.examPeriodsService
-      .examPeriodsGet(currentPage, pageSettings.pageSize)
-      .pipe(
-        map((res) => ({
-          data: {
-            result: res.periods,
-            count: res.totalCount,
-          },
-          currentPage: res.currentPage,
-          totalPages: res.totalPages,
-          pageSize: res.pageSize,
-          hasNext: res.hasNext,
-          hasPrevious: res.hasPrevious,
-        })),
-        tap((res) => {
-          if (res.data && res.data.count! > 0) {
-            this._pageSettings.next({
-              ...this._pageSettings.getValue(),
-              totalRecordsCount: res.data.count,
-              pageSize: res.pageSize as number,
-              currentPage: res.currentPage,
-            });
-          }
-        })
-      );
-  }
-
-  fetchData() {
-    let lastFetched: {
-      currentPage?: number;
-      pageSize?: number;
-      skip?: number;
-      take?: number;
-    } = {};
-
-    return combineLatest([
-      this.dataStateChanged$,
-      this.pageSettings$,
-      this.refresh$,
-    ]).pipe(
-      map(([dataState, pageSettings]) => ({ ...dataState, ...pageSettings })),
-      distinctUntilChanged(
-        (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
-      ),
-      switchMap((state) => {
-        const shouldFetch =
-          state.currentPage !== lastFetched.currentPage ||
-          state.pageSize !== lastFetched.pageSize ||
-          state.skip !== lastFetched.skip ||
-          state.take !== lastFetched.take;
-
-        if (shouldFetch) {
-          lastFetched = { ...state };
-          return this.fetchExamPeriods({
-            currentPage: state.currentPage,
-            pageSize: state.pageSize,
+  fetchExamPeriods(pageNumber: number, pageSize: number) {
+    return this.examPeriodsService.examPeriodsGet(pageNumber, pageSize).pipe(
+      map((res) => ({
+        data: {
+          result: res.periods,
+          count: res.totalCount,
+        },
+        currentPage: res.currentPage,
+        totalPages: res.totalPages,
+        pageSize: res.pageSize,
+        hasNext: res.hasNext,
+        hasPrevious: res.hasPrevious,
+      })),
+      tap((res) => {
+        if ((res.data?.count as number) > 0) {
+          this._pageSettings.next({
+            ...this._pageSettings.getValue(),
+            totalRecordsCount: res.data?.count ?? 0,
+            pageSize: res.pageSize as number,
+            currentPage: res.currentPage,
           });
-        } else {
-          return of();
         }
       })
     );
   }
 
-  updatePageSettings(currentPage: number, pageSize?: number) {
-    this._pageSettings.next({
-      ...this._pageSettings.getValue(),
-      currentPage,
-      pageSize: pageSize ?? this._pageSettings.getValue().pageSize,
+  fetchData() {
+    return combineLatest([this.refresh$, this.dataStateChanged$]).pipe(
+      switchMap(([, dataStateChanges]) => {
+        return this.fetchExamPeriods(
+          (dataStateChanges.skip as number) /
+            (dataStateChanges.take as number) +
+            1,
+          dataStateChanges.take as number
+        );
+      })
+    );
+  }
+
+  set dataStateChanged(dataStateChanged: {
+    pageIndex: number;
+    pageSize: number;
+  }) {
+    this._dataStateChanged.next({
+      skip: dataStateChanged.pageIndex * dataStateChanged.pageSize,
+      take: dataStateChanged.pageSize,
     });
   }
 
@@ -126,5 +98,17 @@ export class DeadlinesService {
   }
   editDeadline(data: any) {
     console.log(data);
+  }
+
+  removeDeadline(uid: string) {
+    this.examPeriodsService
+      .examPeriodsUidDelete(uid, {})
+      .pipe(
+        tap(() => {
+          this.refreshData();
+        })
+      )
+
+      .subscribe();
   }
 }

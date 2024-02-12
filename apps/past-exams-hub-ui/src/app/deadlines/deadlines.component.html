@@ -77,10 +77,18 @@
                     (click)="$event.stopPropagation()"
                     >edit</mat-icon
                   >
+                  <mat-icon
+                    class="material-symbols-outlined cursor"
+                    (click)="$event.stopPropagation(); remove(element.uid)"
+                    >delete</mat-icon
+                  >
                 </td>
               </ng-container>
 
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr
+                mat-header-row
+                *matHeaderRowDef="displayedColumns; sticky: true"
+              ></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
           </pastexamshub-table-scrolling-viewport>

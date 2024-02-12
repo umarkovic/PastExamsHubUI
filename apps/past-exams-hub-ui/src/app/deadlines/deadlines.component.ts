@@ -15,6 +15,7 @@ import { TableScrollingViewportComponent } from '../shared/components/table-scro
 import { ListRange } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditDeadlineDialogComponent } from './add-edit-deadlines-dialog/add-edit-deadlines-dialog.component';
+import { DeleteConfirmationDialogComponent } from '../shared/components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 @Component({
   selector: 'pastexamshub-deadlines',
@@ -61,7 +62,10 @@ export class DeadlinesComponent {
   ) {}
 
   updatePagination(pageIndex: number, pageSize: number) {
-    this.deadlinesService.updatePageSettings(pageIndex + 1, pageSize);
+    this.deadlinesService.dataStateChanged = {
+      pageIndex: pageIndex,
+      pageSize: pageSize,
+    };
   }
 
   updateSlice(range: ListRange) {
@@ -80,6 +84,18 @@ export class DeadlinesComponent {
         } else {
           this.deadlinesService.addDeadline(result);
         }
+      }
+    });
+  }
+
+  remove(uid: string) {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      width: '450px',
+      data: 'Da li ste sigurni da zelite da obrisete?',
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deadlinesService.removeDeadline(uid);
       }
     });
   }

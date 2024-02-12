@@ -6,13 +6,14 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'pastexamshub-delete-confirmation-dialog',
   templateUrl: './delete-confirmation-dialog.component.html',
   styleUrls: ['./delete-confirmation-dialog.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatDialogModule],
+  imports: [CommonModule, MatButtonModule, MatDialogModule, MatIconModule],
 })
 export class DeleteConfirmationDialogComponent {
   constructor(
