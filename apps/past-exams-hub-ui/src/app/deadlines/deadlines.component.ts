@@ -72,10 +72,10 @@ export class DeadlinesComponent {
     this.itemsSlice = this.items.slice(range.start, range.end);
   }
 
-  addEditDeadline(uid?: string) {
+  addEditDeadline(data?: any) {
     const dialogRef = this.dialog.open(AddEditDeadlineDialogComponent, {
       width: '750px',
-      data: { uid: uid },
+      data: data,
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

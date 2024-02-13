@@ -20,6 +20,17 @@ type Professor = {
   viewValue: string;
 };
 
+export const PastExamsHubCoreDomainEnumsExamPeriodType = {
+  Januar: 'Januar',
+  April: 'April',
+  Jun: 'Jun',
+  Jun2: 'Jun2',
+  Septembar: 'Septembar',
+  Oktobar: 'Oktobar',
+  Oktobar2: 'Oktobar2',
+  Decembar: 'Decembar',
+};
+
 @Component({
   selector: 'pastexamshub-add-edit-deadline-dialog',
   standalone: true,
@@ -42,7 +53,9 @@ type Professor = {
 })
 export class AddEditDeadlineDialogComponent extends FormBaseComponent {
   professors: Professor[] = [{ value: 'urke', viewValue: 'Uros' }];
-
+  examPeriodTypes = Object.entries(
+    PastExamsHubCoreDomainEnumsExamPeriodType
+  ).map(([key, value]) => ({ key, value }));
   constructor(
     public dialogRef: MatDialogRef<AddEditDeadlineDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -59,9 +72,9 @@ export class AddEditDeadlineDialogComponent extends FormBaseComponent {
         this.data?.name ?? '',
         [Validators.required, Validators.minLength(1)],
       ],
-      type: [this.data?.type ?? ''],
-      start: [this.data?.start ?? ''],
-      end: [this.data?.end ?? ''],
+      type: [this.data?.periodType ?? 'Januar'],
+      start: [this.data?.startDate ?? ''],
+      end: [this.data?.endDate ?? ''],
     });
   }
 
@@ -71,15 +84,15 @@ export class AddEditDeadlineDialogComponent extends FormBaseComponent {
       this.dialogRef.close({
         name: this.form.controls['name'].getRawValue(),
         type: this.form.controls['type'].getRawValue(),
-        start: this.form.controls['start'].getRawValue(),
-        end: this.form.controls['end'].getRawValue(),
+        start: new Date(this.form.controls['start'].getRawValue()),
+        end: new Date(this.form.controls['end'].getRawValue()),
       });
     } else {
       this.dialogRef.close({
         name: this.form.controls['name'].getRawValue(),
         type: this.form.controls['type'].getRawValue(),
-        start: this.form.controls['start'].getRawValue(),
-        end: this.form.controls['end'].getRawValue(),
+        start: new Date(this.form.controls['start'].getRawValue()),
+        end: new Date(this.form.controls['end'].getRawValue()),
         uid: this.data?.uid,
       });
     }

@@ -94,10 +94,34 @@ export class DeadlinesService {
   }
 
   addDeadline(data: any) {
-    console.log(data);
+    this.examPeriodsService
+      .examPeriodsPost({
+        name: data.name,
+        periodType: data.type,
+        startDate: data.start,
+        endDate: data.end,
+      })
+      .pipe(
+        tap(() => {
+          this.refreshData();
+        })
+      )
+      .subscribe();
   }
   editDeadline(data: any) {
-    console.log(data);
+    this.examPeriodsService
+      .examPeriodsUidPut(data.uid, {
+        name: data.name,
+        periodType: data.type,
+        startDate: data.start,
+        endDate: data.end,
+      })
+      .pipe(
+        tap(() => {
+          this.refreshData();
+        })
+      )
+      .subscribe();
   }
 
   removeDeadline(uid: string) {
@@ -108,7 +132,6 @@ export class DeadlinesService {
           this.refreshData();
         })
       )
-
       .subscribe();
   }
 }
