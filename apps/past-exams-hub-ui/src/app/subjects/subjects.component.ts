@@ -15,6 +15,7 @@ import { TableScrollingViewportComponent } from '../shared/components/table-scro
 import { ListRange } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditSubjectsDialogComponent } from './add-edit-subjects-dialog/add-edit-subjects-dialog.component';
+import { DeleteConfirmationDialogComponent } from '../shared/components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 @Component({
   selector: 'pastexamshub-subjects',
@@ -65,7 +66,10 @@ export class SubjectsComponent {
   ) {}
 
   updatePagination(pageIndex: number, pageSize: number) {
-    this.subjectsService.updatePageSettings(pageIndex + 1, pageSize);
+    this.subjectsService.dataStateChanged = {
+      pageIndex: pageIndex,
+      pageSize: pageSize,
+    };
   }
 
   updateSlice(range: ListRange) {
@@ -84,6 +88,18 @@ export class SubjectsComponent {
         } else {
           this.subjectsService.addSubjects(result);
         }
+      }
+    });
+  }
+
+  remove(uid: string) {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      width: '450px',
+      data: 'Da li ste sigurni da zelite da obrisete?',
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.subjectsService.removeSubject(uid);
       }
     });
   }

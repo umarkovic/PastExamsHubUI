@@ -10,11 +10,11 @@
  * Do not edit the class manually.
  */
 
-export type PastExamsHubCoreDomainEnumsExamType = 'Unkwnon' | 'Written' | 'Theory' | 'WrittenAndTheory';
+export type PastExamsHubCoreDomainEnumsExamType = 'Unkwnon' | 'Pismeni' | 'Usmeni' | 'PismenoUsmeni';
 
 export const PastExamsHubCoreDomainEnumsExamType = {
     Unkwnon: 'Unkwnon' as PastExamsHubCoreDomainEnumsExamType,
-    Written: 'Written' as PastExamsHubCoreDomainEnumsExamType,
-    Theory: 'Theory' as PastExamsHubCoreDomainEnumsExamType,
-    WrittenAndTheory: 'WrittenAndTheory' as PastExamsHubCoreDomainEnumsExamType
+    Pismeni: 'Pismeni' as PastExamsHubCoreDomainEnumsExamType,
+    Usmeni: 'Usmeni' as PastExamsHubCoreDomainEnumsExamType,
+    PismenoUsmeni: 'PismenoUsmeni' as PastExamsHubCoreDomainEnumsExamType
 };

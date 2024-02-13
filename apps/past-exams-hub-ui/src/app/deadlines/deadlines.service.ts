@@ -40,6 +40,16 @@ export class DeadlinesService {
 
   constructor(private examPeriodsService: ExamPeriodsService) {}
 
+  set dataStateChanged(dataStateChanged: {
+    pageIndex: number;
+    pageSize: number;
+  }) {
+    this._dataStateChanged.next({
+      skip: dataStateChanged.pageIndex * dataStateChanged.pageSize,
+      take: dataStateChanged.pageSize,
+    });
+  }
+
   fetchExamPeriods(pageNumber: number, pageSize: number) {
     return this.examPeriodsService.examPeriodsGet(pageNumber, pageSize).pipe(
       map((res) => ({
@@ -77,16 +87,6 @@ export class DeadlinesService {
         );
       })
     );
-  }
-
-  set dataStateChanged(dataStateChanged: {
-    pageIndex: number;
-    pageSize: number;
-  }) {
-    this._dataStateChanged.next({
-      skip: dataStateChanged.pageIndex * dataStateChanged.pageSize,
-      take: dataStateChanged.pageSize,
-    });
   }
 
   refreshData() {

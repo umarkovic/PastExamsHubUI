@@ -10,11 +10,14 @@
  * Do not edit the class manually.
  */
 import { PastExamsHubCoreDomainEnumsCourseType } from './pastExamsHubCoreDomainEnumsCourseType';
+import { PastExamsHubCoreDomainEnumsStudyType } from './pastExamsHubCoreDomainEnumsStudyType';
 
 export interface PastExamsHubCoreApplicationCoursesModelsCourseModel { 
     uid?: string;
     name?: string;
     courseType?: PastExamsHubCoreDomainEnumsCourseType;
+    studyType?: PastExamsHubCoreDomainEnumsStudyType;
+    lecturerUid?: string;
     lecturerFirstName?: string;
     lecturerLastName?: string;
     studyYear?: number;

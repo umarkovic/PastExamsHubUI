@@ -99,6 +99,11 @@
                   (click)="$event.stopPropagation()"
                   >edit</mat-icon
                 >
+                <mat-icon
+                  class="material-symbols-outlined cursor"
+                  (click)="$event.stopPropagation(); remove(element.uid)"
+                  >delete</mat-icon
+                >
               </td>
             </ng-container>
 
