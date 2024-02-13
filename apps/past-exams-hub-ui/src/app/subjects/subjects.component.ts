@@ -8,8 +8,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute } from '@angular/router';
 import { SubjectsService } from './subjects.service';
-import { switchMap } from 'rxjs';
-import { CoursesService } from '@org/portal/data-access';
+import { combineLatest, forkJoin, switchMap, tap } from 'rxjs';
+import {
+  CoursesService,
+  PastExamsHubCoreApplicationTeachersModelsTeacherListModel,
+  TeachersService,
+} from '@org/portal/data-access';
 import { MatButtonModule } from '@angular/material/button';
 import { TableScrollingViewportComponent } from '../shared/components/table-scrolling-viewport';
 import { ListRange } from '@angular/cdk/collections';
@@ -31,7 +35,7 @@ import { DeleteConfirmationDialogComponent } from '../shared/components/delete-c
     MatButtonModule,
     TableScrollingViewportComponent,
   ],
-  providers: [SubjectsService, CoursesService],
+  providers: [SubjectsService, CoursesService, TeachersService],
   templateUrl: './subjects.component.html',
   styleUrl: './subjects.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,7 +49,10 @@ export class SubjectsComponent {
   data$ = this.route.queryParams.pipe(
     switchMap((params) => {
       const godinaStudija = params['godinaStudija'];
-      return this.subjectsService.fetchData(godinaStudija);
+      return combineLatest({
+        professorsData: this.subjectsService.fetchProfessorsData(),
+        subjectData: this.subjectsService.fetchData(godinaStudija),
+      });
     })
   );
 
@@ -76,13 +83,18 @@ export class SubjectsComponent {
     this.itemsSlice = this.items.slice(range.start, range.end);
   }
 
-  addEditSubject(uid?: string) {
+  addEditSubject(
+    proffesorsData: PastExamsHubCoreApplicationTeachersModelsTeacherListModel[],
+    dataSubject?: any
+  ) {
+    console.log(proffesorsData);
     const dialogRef = this.dialog.open(AddEditSubjectsDialogComponent, {
       width: '750px',
-      data: { uid: uid },
+      data: { dataSubject: dataSubject, proffesorsData: proffesorsData },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        console.log(result);
         if (result.uid) {
           this.subjectsService.editSubjects(result);
         } else {

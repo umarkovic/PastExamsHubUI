@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { CoursesService } from '@org/portal/data-access';
+import { CoursesService, TeachersService } from '@org/portal/data-access';
 import {
   BehaviorSubject,
   combineLatest,
   distinctUntilChanged,
   map,
-  of,
   switchMap,
   tap,
 } from 'rxjs';
@@ -39,7 +38,10 @@ export class SubjectsService {
   private _refresh = new BehaviorSubject<void>(undefined);
   refresh$ = this._refresh.asObservable();
 
-  constructor(private coursesService: CoursesService) {}
+  constructor(
+    private coursesService: CoursesService,
+    private teachersService: TeachersService
+  ) {}
 
   set dataStateChanged(dataStateChanged: {
     pageIndex: number;
@@ -76,6 +78,10 @@ export class SubjectsService {
       );
   }
 
+  fetchProfessorsData() {
+    return this.teachersService.teachersGet().pipe(map((x) => x.teachers));
+  }
+
   fetchData(godinaStudija: string = '') {
     return combineLatest([this.refresh$, this.dataStateChanged$]).pipe(
       switchMap(([, dataStateChanges]) => {
@@ -95,11 +101,39 @@ export class SubjectsService {
   }
 
   addSubjects(data: any) {
-    console.log(data);
+    this.coursesService
+      .coursesPost({
+        lecturerUid: data.professorUid,
+        name: data.name,
+        courseType: data.type,
+        studyYear: data.year,
+        semester: data.semester,
+        espb: data.points,
+      })
+      .pipe(
+        tap(() => {
+          this.refreshData();
+        })
+      )
+      .subscribe();
   }
 
   editSubjects(data: any) {
-    console.log(data);
+    this.coursesService
+      .coursesUidPut(data.uid, {
+        lecturerUid: data.professorUid,
+        name: data.name,
+        courseType: data.type,
+        studyYear: data.year,
+        semester: data.semester,
+        espb: data.points,
+      })
+      .pipe(
+        tap(() => {
+          this.refreshData();
+        })
+      )
+      .subscribe();
   }
 
   removeSubject(uid: string) {
