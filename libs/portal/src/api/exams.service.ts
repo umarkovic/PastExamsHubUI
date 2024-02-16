@@ -18,11 +18,11 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { InlineResponse404 } from '../model/inlineResponse404';
-import { PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommand } from '../model/pastExamsHubCoreApplicationExamsCommandCreateCreateExamCommand';
 import { PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommandResult } from '../model/pastExamsHubCoreApplicationExamsCommandCreateCreateExamCommandResult';
 import { PastExamsHubCoreApplicationExamsQueriesGetCollectionGetExamsQueryResult } from '../model/pastExamsHubCoreApplicationExamsQueriesGetCollectionGetExamsQueryResult';
 import { PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQuery } from '../model/pastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQuery';
 import { PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult } from '../model/pastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult';
+import { PastExamsHubCoreDomainEnumsExamType } from '../model/pastExamsHubCoreDomainEnumsExamType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -185,15 +185,47 @@ export class ExamsService {
     /**
      * 
      * 
-     * @param body 
+     * @param file 
+     * @param courseUid 
+     * @param periodUid 
+     * @param type 
+     * @param examDate 
+     * @param numberOfTasks 
+     * @param notes 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public examsPost(body?: PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommand, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommandResult>;
-    public examsPost(body?: PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommand, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommandResult>>;
-    public examsPost(body?: PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommand, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommandResult>>;
-    public examsPost(body?: PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommand, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public examsUploadPostForm(file?: Blob, courseUid?: string, periodUid?: string, type?: PastExamsHubCoreDomainEnumsExamType, examDate?: Date, numberOfTasks?: number, notes?: string, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommandResult>;
+    public examsUploadPostForm(file?: Blob, courseUid?: string, periodUid?: string, type?: PastExamsHubCoreDomainEnumsExamType, examDate?: Date, numberOfTasks?: number, notes?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommandResult>>;
+    public examsUploadPostForm(file?: Blob, courseUid?: string, periodUid?: string, type?: PastExamsHubCoreDomainEnumsExamType, examDate?: Date, numberOfTasks?: number, notes?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommandResult>>;
+    public examsUploadPostForm(file?: Blob, courseUid?: string, periodUid?: string, type?: PastExamsHubCoreDomainEnumsExamType, examDate?: Date, numberOfTasks?: number, notes?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
+
+
+
+
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (courseUid !== undefined && courseUid !== null) {
+            queryParameters = queryParameters.set('CourseUid', <any>courseUid);
+        }
+        if (periodUid !== undefined && periodUid !== null) {
+            queryParameters = queryParameters.set('PeriodUid', <any>periodUid);
+        }
+        if (type !== undefined && type !== null) {
+            queryParameters = queryParameters.set('Type', <any>type);
+        }
+        if (examDate !== undefined && examDate !== null) {
+            queryParameters = queryParameters.set('ExamDate', <any>examDate.toISOString());
+        }
+        if (numberOfTasks !== undefined && numberOfTasks !== null) {
+            queryParameters = queryParameters.set('NumberOfTasks', <any>numberOfTasks);
+        }
+        if (notes !== undefined && notes !== null) {
+            queryParameters = queryParameters.set('Notes', <any>notes);
+        }
 
         let headers = this.defaultHeaders;
 
@@ -215,19 +247,31 @@ export class ExamsService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json-patch+json',
-            'application/json',
-            'text/json',
-            'application/_*+json'
+            'multipart/form-data'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): void; };
+        let useForm = false;
+        let convertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         }
 
-        return this.httpClient.request<PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommandResult>('post',`${this.basePath}/Exams`,
+        if (file !== undefined) {
+            formParams = formParams.append('File', <any>file) as any || formParams;
+        }
+
+        return this.httpClient.request<PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommandResult>('post',`${this.basePath}/Exams/upload`,
             {
-                body: body,
+                body: convertFormParamsToString ? formParams.toString() : formParams,
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

@@ -72,7 +72,7 @@ export class ShellComponent {
     );
 
   addBlanket() {
-    console.log('addBlanket');
+    this.router.navigate(['dodaj_blanket']);
   }
 
   profile() {

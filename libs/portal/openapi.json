@@ -1609,31 +1609,75 @@
             }
           }
         }
-      },
+      }
+    },
+    "/Exams/upload": {
       "post": {
         "tags": [
           "Exams"
         ],
+        "parameters": [
+          {
+            "name": "CourseUid",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PeriodUid",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Type",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/PastExamsHub.Core.Domain.Enums.ExamType"
+            }
+          },
+          {
+            "name": "ExamDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "NumberOfTasks",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Notes",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
-            "application/json-patch+json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Command.Create.CreateExamCommand"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Command.Create.CreateExamCommand"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Command.Create.CreateExamCommand"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Command.Create.CreateExamCommand"
+                "type": "object",
+                "properties": {
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "File": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -3526,39 +3570,6 @@
             "items": {
               "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Models.ExamModel"
             },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "PastExamsHub.Core.Application.Exams.Command.Create.CreateExamCommand": {
-        "type": "object",
-        "properties": {
-          "courseUid": {
-            "type": "string",
-            "nullable": true
-          },
-          "periodUid": {
-            "type": "string",
-            "nullable": true
-          },
-          "documentPath": {
-            "type": "string",
-            "nullable": true
-          },
-          "type": {
-            "$ref": "#/components/schemas/PastExamsHub.Core.Domain.Enums.ExamType"
-          },
-          "examDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "numberOfTasks": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "notes": {
-            "type": "string",
             "nullable": true
           }
         },

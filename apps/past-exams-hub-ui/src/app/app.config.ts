@@ -5,8 +5,14 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 import { AuthenticationService } from './shared/services/authentication.service';
-import { Configuration as CoreConfiguration, ApiModule as CoreApiModule } from '@org/portal/data-access';
-import { Configuration as AuthorityConfiguration, ApiModule as AuthorityApiModule } from '@org/authority/data-access'
+import {
+  Configuration as CoreConfiguration,
+  ApiModule as CoreApiModule,
+} from '@org/portal/data-access';
+import {
+  Configuration as AuthorityConfiguration,
+  ApiModule as AuthorityApiModule,
+} from '@org/authority/data-access';
 import { environment } from '../environments/environment';
 
 function configureAuth(authenticationService: AuthenticationService) {
@@ -22,7 +28,7 @@ export const appConfig: ApplicationConfig = {
       resourceServer: {
         allowedUrls: [environment.coreApiUrl],
         sendAccessToken: true,
-      }
+      },
     }),
     {
       provide: APP_INITIALIZER,
@@ -33,17 +39,19 @@ export const appConfig: ApplicationConfig = {
     CoreApiModule,
     {
       provide: CoreConfiguration,
-      useFactory: () => new CoreConfiguration({
-        basePath: environment.coreApiUrl,
-      })
+      useFactory: () =>
+        new CoreConfiguration({
+          basePath: environment.coreApiUrl,
+        }),
     },
     AuthorityApiModule,
     {
       provide: AuthorityConfiguration,
-      useFactory: () => new AuthorityConfiguration({
-        basePath: environment.coreApiUrl,
-        withCredentials: true
-      })
-    }
+      useFactory: () =>
+        new AuthorityConfiguration({
+          basePath: environment.coreApiUrl,
+          withCredentials: true,
+        }),
+    },
   ],
 };
