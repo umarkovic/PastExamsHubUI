@@ -1,3 +1,9 @@
 {
-  "cSpell.words": ["Datepicker", "oidc", "pastexamshub"]
+  "cSpell.words": [
+    "Datepicker",
+    "oidc",
+    "pastexamshub",
+    "signin",
+    "signout"
+  ]
 }

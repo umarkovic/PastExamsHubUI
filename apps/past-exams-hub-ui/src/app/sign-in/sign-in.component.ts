@@ -4,6 +4,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormBaseComponent } from '../shared/components/form-base.component';
 import { HeaderComponent } from '../shared/components/header/header.component';
@@ -21,6 +23,7 @@ import { AuthenticationService } from '@org/authority/data-access';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    MatProgressBarModule,
     MatButtonModule,
     HeaderComponent,
   ],
@@ -34,7 +37,7 @@ export class SignInComponent extends FormBaseComponent {
   private router = inject(Router);
   private signInService = inject(SignInService);
 
-  private returnUrl = this.route.snapshot.queryParamMap.get('ReturnUrl');
+  private returnUrl = this.route.snapshot.queryParamMap.get('ReturnUrl') ?? undefined;
 
   override form = this.fb.group({
     email: this.fb.nonNullable.control<string | undefined>('', [
@@ -55,14 +58,18 @@ export class SignInComponent extends FormBaseComponent {
     this.isPasswordVisible = !this.isPasswordVisible;
   }
 
+  navigateToSignUp() {
+    this.router.navigate(['/signup']);
+  }
+
   submit() {
-    if (this.checkFormValidity() || !this.returnUrl) return;
+    if (this.checkFormValidity()) return;
 
     const formData = this.form.getRawValue();
 
     console.log(formData);
 
-    this.signInService.signIn(formData, this.returnUrl).subscribe(() => {
+    this.showSavingIndicator(this.signInService.signIn(formData, this.returnUrl)).subscribe(() => {
       this.router.navigate(['']);
     });
   }

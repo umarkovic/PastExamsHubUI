@@ -5,9 +5,16 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 import { AuthenticationService } from './shared/services/authentication.service';
-import { Configuration as CoreConfiguration, ApiModule as CoreApiModule } from '@org/portal/data-access';
-import { Configuration as AuthorityConfiguration, ApiModule as AuthorityApiModule } from '@org/authority/data-access';
+import {
+  Configuration as CoreConfiguration,
+  ApiModule as CoreApiModule,
+} from '@org/portal/data-access';
+import {
+  Configuration as AuthorityConfiguration,
+  ApiModule as AuthorityApiModule,
+} from '@org/authority/data-access';
 import { environment } from '../environments/environment';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 function configureAuth(authenticationService: AuthenticationService) {
   return () => authenticationService.configureAuth(environment.authorityApiUrl);
@@ -33,10 +40,11 @@ export const appConfig: ApplicationConfig = {
     AuthorityApiModule,
     {
       provide: AuthorityConfiguration,
-      useFactory: () => new AuthorityConfiguration({
-        basePath: environment.authorityApiUrl,
-        withCredentials: true
-      })
+      useFactory: () =>
+        new AuthorityConfiguration({
+          basePath: environment.authorityApiUrl,
+          withCredentials: true,
+        }),
     },
     CoreApiModule,
     {
@@ -46,6 +54,6 @@ export const appConfig: ApplicationConfig = {
           basePath: environment.coreApiUrl,
         }),
     },
-    
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 4000 } },
   ],
 };
