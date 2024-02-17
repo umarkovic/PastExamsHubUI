@@ -72,10 +72,13 @@ export class AddEditDeadlineDialogComponent extends FormBaseComponent {
     data: PastExamsHubCoreApplicationExamPeriodsExamPeriodModel
   ) {
     this.form = this.fb.group({
-      name: [data.name ?? '', [Validators.required, Validators.minLength(1)]],
-      type: [data.periodType ?? 'Januar'],
-      start: [data.startDate ?? ''],
-      end: [data.endDate ?? ''],
+      name: [
+        (data && data.name) ?? '',
+        [Validators.required, Validators.minLength(1)],
+      ],
+      type: [(data && data.periodType) ?? 'Januar'],
+      start: [(data && data.startDate) ?? ''],
+      end: [(data && data.endDate) ?? ''],
     });
   }
 
