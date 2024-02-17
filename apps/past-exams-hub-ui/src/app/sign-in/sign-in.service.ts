@@ -6,7 +6,7 @@ import {
 
 @Injectable()
 export class SignInService {
-  // private authenticationService = inject(AuthenticationService);
+  private authenticationService = inject(AuthenticationService);
 
   signIn(
     formData: {
@@ -22,6 +22,7 @@ export class SignInService {
         rememberMe: false,
         returnUrl,
       };
-    // return this.authenticationService.authenticationSignInPost(command);
+      
+    return this.authenticationService.authenticationSignInPost(command);
   }
 }

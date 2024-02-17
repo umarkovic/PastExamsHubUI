@@ -10,6 +10,7 @@ import { HeaderComponent } from '../shared/components/header/header.component';
 import { SignInService } from './sign-in.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RegexPatterns } from '../shared/constants/regex-patterns';
+import { AuthenticationService } from '@org/authority/data-access';
 
 @Component({
   selector: 'pastexamshub-sign-in',
@@ -26,7 +27,7 @@ import { RegexPatterns } from '../shared/constants/regex-patterns';
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [SignInService],
+  providers: [SignInService, AuthenticationService],
 })
 export class SignInComponent extends FormBaseComponent {
   private route = inject(ActivatedRoute);
@@ -61,8 +62,8 @@ export class SignInComponent extends FormBaseComponent {
 
     console.log(formData);
 
-    /* this.signInService.signIn(formData, this.returnUrl).subscribe(() => {
+    this.signInService.signIn(formData, this.returnUrl).subscribe(() => {
       this.router.navigate(['']);
-    }); */
+    });
   }
 }
