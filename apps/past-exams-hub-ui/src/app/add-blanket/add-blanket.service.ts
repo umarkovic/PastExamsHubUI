@@ -8,7 +8,7 @@ import {
 import { combineLatest, map } from 'rxjs';
 
 @Injectable()
-export class BlanketService {
+export class AddBlanketService {
   constructor(
     private examsService: ExamsService,
     private examPeriodsService: ExamPeriodsService,

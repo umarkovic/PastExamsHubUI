@@ -1,162 +1,45 @@
-<body>
-  <main>
-    <mat-card *ngIf="data$ | async as data">
-      <section>
-        <div class="header">
-          <h2>Dodaj blanket</h2>
+<div class="container">
+  <div class="row">
+    @for (item of arrayTen; track item ) {
+    <div class="col-lg-3">
+      <div class="card card-margin">
+        <div class="card-header no-border">
+          <h5 class="card-title">MOM</h5>
         </div>
-
-        <form [formGroup]="form">
-          <div class="form-container">
-            <div class="form-field">
-              <mat-form-field appearance="outline" class="professor-select">
-                <mat-label>Ispitni rok</mat-label>
-                <mat-select formControlName="deadline">
-                  <mat-option
-                    *ngFor="let examPeriod of data.examPeriods"
-                    [value]="examPeriod.uid!"
-                  >
-                    {{ examPeriod.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="professor-select">
-                <mat-label>Predmet</mat-label>
-                <mat-select formControlName="subject">
-                  <mat-option
-                    *ngFor="let subject of data.courses"
-                    [value]="subject.uid!"
-                  >
-                    {{ subject.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="form-row">
-              <mat-form-field appearance="outline">
-                <mat-label>Tip</mat-label>
-                <mat-select formControlName="type">
-                  <mat-option
-                    *ngFor="let examType of examTypes"
-                    [value]="examType.value"
-                  >
-                    {{ transformLabel(examType.label) }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Broj zadatka</mat-label>
-                <input
-                  matInput
-                  formControlName="numberTask"
-                  type="number"
-                  maxlength="2"
-                />
-              </mat-form-field>
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Datum</mat-label>
-                <input
-                  matInput
-                  [matDatepicker]="picker"
-                  formControlName="date"
-                />
-                <mat-datepicker-toggle
-                  matIconSuffix
-                  [for]="picker"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group upload-wrapper">
-                <!-- <mat-label>File:</mat-label>
-
-                <input
-                  type="file"
-                  #file
-                  placeholder="Choose file"
-                  (change)="uploadFile(file.files)"
-                  style="display: none"
-                />
-                <button mat-raised-button (click)="file.click()">
-                  Upload File
-                </button> -->
-
-                <div class="center">
-                  <ngx-file-drop
-                    dropZoneLabel="Drop files here"
-                    (onFileDrop)="dropped($event)"
-                  >
-                    <ng-template
-                      ngx-file-drop-content-tmp
-                      let-openFileSelector="openFileSelector"
-                    >
-                      Ubaci/Izaberi fajl
-                      <button
-                        color="primary"
-                        mat-raised-button
-                        (click)="openFileSelector()"
-                      >
-                        Upload
-                      </button>
-                    </ng-template>
-                  </ngx-file-drop>
-                  <div class="upload-table">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th *ngIf="showFile">Ime fajla:</th>
-                        </tr>
-                      </thead>
-
-                      <tbody class="upload-name-style">
-                        <tr *ngFor="let item of files; let i = index">
-                          <td>
-                            <strong
-                              >{{ item.relativePath }}
-                              <button
-                                *ngIf="showFile"
-                                mat-raised-button
-                                color="primary"
-                                (click)="displayFile()"
-                              >
-                                Prikazi
-                              </button></strong
-                            >
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+        <div class="card-body pt-0">
+          <div class="widget-49">
+            <div class="widget-49-title-wrapper">
+              <div class="widget-49-date-primary">
+                <span class="widget-49-date-day">09</span>
+                <span class="widget-49-date-month">apr</span>
               </div>
-
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Beleske </mat-label>
-                <textarea
-                  matInput
-                  cdkTextareaAutosize
-                  #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="8"
-                  cdkAutosizeMaxRows="10"
-                  formControlName="note"
-                ></textarea>
-              </mat-form-field>
+              <div class="widget-49-meeting-info">
+                <span class="widget-49-pro-title"
+                  >PRO-08235 DeskOpe. Website</span
+                >
+                <span class="widget-49-meeting-time">12:00 to 13.30 Hrs</span>
+              </div>
+            </div>
+            <ol class="widget-49-meeting-points">
+              <li class="widget-49-meeting-item">
+                <span>Expand module is removed</span>
+              </li>
+              <li class="widget-49-meeting-item">
+                <span>Data migration is in scope</span>
+              </li>
+              <li class="widget-49-meeting-item">
+                <span>Session timeout increase to 30 minutes</span>
+              </li>
+            </ol>
+            <div class="widget-49-meeting-action">
+              <a href="#" class="btn btn-sm btn-flash-border-primary"
+                >View All</a
+              >
             </div>
           </div>
-
-          <div class="btn-save-wrapper">
-            {{ message }}
-            <button color="primary" mat-raised-button (click)="save()">
-              Sacuvaj
-            </button>
-          </div>
-        </form>
-      </section>
-    </mat-card>
-  </main>
-</body>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</div>

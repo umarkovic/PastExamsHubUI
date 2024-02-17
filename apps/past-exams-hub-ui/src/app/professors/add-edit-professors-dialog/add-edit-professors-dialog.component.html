@@ -26,15 +26,22 @@
       </mat-form-field>
     </div>
     <div class="form-row courses-wrapper" formArrayName="courses">
-      @for ( course of courses.controls;track course;let index = $index ) {
-      <div [formGroupName]="index">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Predmet</mat-label>
-          <input matInput formControlName="name" readonly="true" />
-        </mat-form-field>
-      </div>
-
-      }
+      <h2>Predmeti koje profesor drzi</h2>
+      
+      <!-- Check if courses array is null or empty -->
+      <ng-container *ngIf="!courses || courses.length === 0; else coursesList">
+        <h4>Profesor trenutno ne drzi nijedan predmet ili nije uneto u sistem.</h4>
+      </ng-container>
+    
+      <ng-template #coursesList>
+        <!-- If courses array is not null or empty, iterate over the courses -->
+        <div *ngFor="let course of courses.controls; let i = index" [formGroupName]="i">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Predmet</mat-label>
+            <input matInput formControlName="name" readonly="true" />
+          </mat-form-field>
+        </div>
+      </ng-template>
     </div>
   </div>
 

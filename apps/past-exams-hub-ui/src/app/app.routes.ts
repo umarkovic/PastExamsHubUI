@@ -74,9 +74,14 @@ export const appRoutes: Route[] = [
       {
         path: 'dodaj_blanket',
         loadComponent: () =>
-          import('../app/blanket/blanket.component').then(
-            (c) => c.BlanketComponent
+          import('./add-blanket/add-blanket.component').then(
+            (c) => c.AddBlanketComponent
           ),
+      },
+      {
+        path: 'blanket',
+        loadComponent: () =>
+          import('./blanket/blanket.component').then((c) => c.BlanketComponent),
       },
     ],
   },
