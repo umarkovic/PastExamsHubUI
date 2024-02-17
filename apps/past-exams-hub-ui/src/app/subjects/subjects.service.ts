@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CoursesService, TeachersService } from '@org/portal/data-access';
+import {
+  CoursesService,
+  PastExamsHubCoreDomainEnumsCourseType,
+  TeachersService,
+} from '@org/portal/data-access';
 import {
   BehaviorSubject,
   combineLatest,
@@ -100,12 +104,20 @@ export class SubjectsService {
     this._refresh.next(undefined);
   }
 
-  addSubjects(data: any) {
+  addSubjects(data: {
+    name: string;
+    type: string;
+    professorUid: string;
+    year: number;
+    semester: number;
+    points: number;
+    uid?: string;
+  }) {
     this.coursesService
       .coursesPost({
         lecturerUid: data.professorUid,
         name: data.name,
-        courseType: data.type,
+        courseType: data.type as PastExamsHubCoreDomainEnumsCourseType,
         studyYear: data.year,
         semester: data.semester,
         espb: data.points,
@@ -118,12 +130,20 @@ export class SubjectsService {
       .subscribe();
   }
 
-  editSubjects(data: any) {
+  editSubjects(data: {
+    name: string;
+    type: string;
+    professorUid: string;
+    year: number;
+    semester: number;
+    points: number;
+    uid?: string;
+  }) {
     this.coursesService
-      .coursesUidPut(data.uid, {
+      .coursesUidPut(data.uid as string, {
         lecturerUid: data.professorUid,
         name: data.name,
-        courseType: data.type,
+        courseType: data.type as PastExamsHubCoreDomainEnumsCourseType,
         studyYear: data.year,
         semester: data.semester,
         espb: data.points,

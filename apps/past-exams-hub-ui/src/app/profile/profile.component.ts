@@ -41,10 +41,6 @@ export class ProfileComponent extends FormBaseComponent {
   }
 
   submit() {
-    console.log(
-      '%cprofile.component.ts line:38 this.form',
-      'color: #007acc;',
-      this.form
-    );
+    console.log(this.form.getRawValue());
   }
 }

@@ -68,8 +68,15 @@
                 <td mat-cell *matCellDef="let element" class="action">
                   <mat-icon
                     class="material-symbols-outlined cursor"
-                    (click)="$event.stopPropagation()"
+                    (click)="$event.stopPropagation(); addEditStudent(element)"
                     >edit</mat-icon
+                  >
+                  <mat-icon
+                    class="material-symbols-outlined cursor"
+                    (click)="
+                      $event.stopPropagation(); addEditStudent(element, true)
+                    "
+                    >visibility</mat-icon
                   >
                 </td>
               </ng-container>

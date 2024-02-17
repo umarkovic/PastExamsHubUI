@@ -8,9 +8,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute } from '@angular/router';
 import { SubjectsService } from './subjects.service';
-import { combineLatest, forkJoin, switchMap, tap } from 'rxjs';
+import { combineLatest, switchMap } from 'rxjs';
 import {
   CoursesService,
+  PastExamsHubCoreApplicationCoursesModelsCourseModel,
   PastExamsHubCoreApplicationTeachersModelsTeacherListModel,
   TeachersService,
 } from '@org/portal/data-access';
@@ -85,23 +86,33 @@ export class SubjectsComponent {
 
   addEditSubject(
     proffesorsData: PastExamsHubCoreApplicationTeachersModelsTeacherListModel[],
-    dataSubject?: any
+    dataSubject?: PastExamsHubCoreApplicationCoursesModelsCourseModel
   ) {
-    console.log(proffesorsData);
     const dialogRef = this.dialog.open(AddEditSubjectsDialogComponent, {
       width: '750px',
       data: { dataSubject: dataSubject, proffesorsData: proffesorsData },
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        console.log(result);
-        if (result.uid) {
-          this.subjectsService.editSubjects(result);
-        } else {
-          this.subjectsService.addSubjects(result);
+    dialogRef
+      .afterClosed()
+      .subscribe(
+        (result: {
+          name: string;
+          type: string;
+          professorUid: string;
+          year: number;
+          semester: number;
+          points: number;
+          uid?: string;
+        }) => {
+          if (result) {
+            if (result.uid) {
+              this.subjectsService.editSubjects(result);
+            } else {
+              this.subjectsService.addSubjects(result);
+            }
+          }
         }
-      }
-    });
+      );
   }
 
   remove(uid: string) {

@@ -6,7 +6,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { ExamPeriodsService } from '@org/portal/data-access';
+import {
+  ExamPeriodsService,
+  PastExamsHubCoreApplicationExamPeriodsExamPeriodModel,
+  PastExamsHubCoreDomainEnumsExamPeriodType,
+} from '@org/portal/data-access';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { DeadlinesService } from './deadlines.service';
@@ -72,20 +76,32 @@ export class DeadlinesComponent {
     this.itemsSlice = this.items.slice(range.start, range.end);
   }
 
-  addEditDeadline(data?: any) {
+  addEditDeadline(
+    data?: PastExamsHubCoreApplicationExamPeriodsExamPeriodModel
+  ) {
     const dialogRef = this.dialog.open(AddEditDeadlineDialogComponent, {
       width: '750px',
       data: data,
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        if (result.uid) {
-          this.deadlinesService.editDeadline(result);
-        } else {
-          this.deadlinesService.addDeadline(result);
+    dialogRef
+      .afterClosed()
+      .subscribe(
+        (result: {
+          name: string;
+          type: PastExamsHubCoreDomainEnumsExamPeriodType;
+          start: Date;
+          end: Date;
+          uid?: string;
+        }) => {
+          if (result) {
+            if (result.uid) {
+              this.deadlinesService.editDeadline(result);
+            } else {
+              this.deadlinesService.addDeadline(result);
+            }
+          }
         }
-      }
-    });
+      );
   }
 
   remove(uid: string) {

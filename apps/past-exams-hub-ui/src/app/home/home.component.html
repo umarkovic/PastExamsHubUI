@@ -132,8 +132,8 @@
           (itemsRangeChange)="updateSlice($event)"
         >
           @for (latestExam of data.latestExams.latestExams; track latestExam) {
-          <div class="text-wrapper">
-            <p>{{ latestExam.courseName }}</p>
+          <div class="card text-wrapper">
+            <b>{{ latestExam.courseName }}</b>
             <span>{{ latestExam.examPeriodName }}</span>
           </div>
           }

@@ -72,8 +72,8 @@
             </div>
 
             <div class="form-row">
-              <div class="form-group">
-                <mat-label>File:</mat-label>
+              <div class="form-group upload-wrapper">
+                <!-- <mat-label>File:</mat-label>
 
                 <input
                   type="file"
@@ -84,7 +84,55 @@
                 />
                 <button mat-raised-button (click)="file.click()">
                   Upload File
-                </button>
+                </button> -->
+
+                <div class="center">
+                  <ngx-file-drop
+                    dropZoneLabel="Drop files here"
+                    (onFileDrop)="dropped($event)"
+                  >
+                    <ng-template
+                      ngx-file-drop-content-tmp
+                      let-openFileSelector="openFileSelector"
+                    >
+                      Ubaci/Izaberi fajl
+                      <button
+                        color="primary"
+                        mat-raised-button
+                        (click)="openFileSelector()"
+                      >
+                        Upload
+                      </button>
+                    </ng-template>
+                  </ngx-file-drop>
+                  <div class="upload-table">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th *ngIf="showFile">Ime fajla:</th>
+                        </tr>
+                      </thead>
+
+                      <tbody class="upload-name-style">
+                        <tr *ngFor="let item of files; let i = index">
+                          <td>
+                            <strong
+                              >{{ item.relativePath }}
+                              <button
+                                *ngIf="showFile"
+                                mat-raised-button
+                                color="primary"
+                                (click)="displayFile()"
+                              >
+                                Prikazi
+                              </button></strong
+                            >
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
 
               <mat-form-field appearance="outline" class="full-width">
@@ -93,8 +141,8 @@
                   matInput
                   cdkTextareaAutosize
                   #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="5"
-                  cdkAutosizeMaxRows="8"
+                  cdkAutosizeMinRows="8"
+                  cdkAutosizeMaxRows="10"
                   formControlName="note"
                 ></textarea>
               </mat-form-field>
@@ -103,7 +151,9 @@
 
           <div class="btn-save-wrapper">
             {{ message }}
-            <button mat-raised-button (click)="save()">Sacuvaj</button>
+            <button color="primary" mat-raised-button (click)="save()">
+              Sacuvaj
+            </button>
           </div>
         </form>
       </section>

@@ -15,6 +15,7 @@ import { DateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { PastExamsHubCoreApplicationExamPeriodsExamPeriodModel } from 'libs/portal/src/model/models';
 type Professor = {
   value: string;
   viewValue: string;
@@ -58,7 +59,8 @@ export class AddEditDeadlineDialogComponent extends FormBaseComponent {
   ).map(([key, value]) => ({ key, value }));
   constructor(
     public dialogRef: MatDialogRef<AddEditDeadlineDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA)
+    public data: PastExamsHubCoreApplicationExamPeriodsExamPeriodModel,
     private dateAdapter: DateAdapter<Date>
   ) {
     super();
@@ -66,15 +68,14 @@ export class AddEditDeadlineDialogComponent extends FormBaseComponent {
     this.dateAdapter.setLocale('en-GB');
   }
 
-  private initializeForm(data: any) {
+  private initializeForm(
+    data: PastExamsHubCoreApplicationExamPeriodsExamPeriodModel
+  ) {
     this.form = this.fb.group({
-      name: [
-        this.data?.name ?? '',
-        [Validators.required, Validators.minLength(1)],
-      ],
-      type: [this.data?.periodType ?? 'Januar'],
-      start: [this.data?.startDate ?? ''],
-      end: [this.data?.endDate ?? ''],
+      name: [data.name ?? '', [Validators.required, Validators.minLength(1)]],
+      type: [data.periodType ?? 'Januar'],
+      start: [data.startDate ?? ''],
+      end: [data.endDate ?? ''],
     });
   }
 

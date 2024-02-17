@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { PastExamsHubCoreApplicationTeachersModelsTeacherListModel } from 'libs/portal/src/model/pastExamsHubCoreApplicationTeachersModelsTeacherListModel';
 import { PastExamsHubCoreDomainEnumsCourseType } from 'libs/portal/src/model/pastExamsHubCoreDomainEnumsCourseType';
+import { PastExamsHubCoreApplicationCoursesModelsCourseModel } from 'libs/portal/src/model/models';
 
 type Professor = {
   value: string;
@@ -47,10 +48,14 @@ export class AddEditSubjectsDialogComponent extends FormBaseComponent {
   courseTypes: CourseTypeOption[] = [];
   constructor(
     public dialogRef: MatDialogRef<AddEditSubjectsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      dataSubject: PastExamsHubCoreApplicationCoursesModelsCourseModel;
+      proffesorsData: PastExamsHubCoreApplicationTeachersModelsTeacherListModel[];
+    }
   ) {
     super();
-    this.initializeForm(data);
+    this.initializeForm(data.dataSubject);
     this.professorsData = data.proffesorsData;
     this.courseTypes = Object.entries(PastExamsHubCoreDomainEnumsCourseType)
       .map(([key, value]) => ({
@@ -60,17 +65,16 @@ export class AddEditSubjectsDialogComponent extends FormBaseComponent {
       .filter((courseType) => courseType.value !== 'Unknown');
   }
 
-  private initializeForm(data: any) {
+  private initializeForm(
+    data: PastExamsHubCoreApplicationCoursesModelsCourseModel
+  ) {
     this.form = this.fb.group({
-      name: [
-        data?.dataSubject ? data?.dataSubject.name : '',
-        [Validators.required, Validators.minLength(1)],
-      ],
-      type: [data?.dataSubject ? data?.dataSubject.courseType : ''],
-      professorUid: [data?.dataSubject ? data?.dataSubject.professor : ''],
-      year: [data?.dataSubject ? data?.dataSubject.studyYear : 1],
-      semester: [data?.dataSubject ? data?.dataSubject.semester : 1],
-      points: [data?.dataSubject ? data?.dataSubject.espb : 60],
+      name: [data?.name ?? '', [Validators.required, Validators.minLength(1)]],
+      type: [data?.courseType ?? ''],
+      professorUid: [data?.lecturerUid ?? ''],
+      year: [data?.studyYear ?? 1],
+      semester: [data?.semester ?? 1],
+      points: [data?.espb ?? 60],
     });
   }
 

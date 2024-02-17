@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ExamPeriodsService } from '@org/portal/data-access';
+import {
+  ExamPeriodsService,
+  PastExamsHubCoreDomainEnumsExamPeriodType,
+} from '@org/portal/data-access';
 import {
   BehaviorSubject,
   combineLatest,
@@ -93,7 +96,13 @@ export class DeadlinesService {
     this._refresh.next(undefined);
   }
 
-  addDeadline(data: any) {
+  addDeadline(data: {
+    name: string;
+    type: PastExamsHubCoreDomainEnumsExamPeriodType;
+    start: Date;
+    end: Date;
+    uid?: string;
+  }) {
     this.examPeriodsService
       .examPeriodsPost({
         name: data.name,
@@ -108,9 +117,15 @@ export class DeadlinesService {
       )
       .subscribe();
   }
-  editDeadline(data: any) {
+  editDeadline(data: {
+    name: string;
+    type: PastExamsHubCoreDomainEnumsExamPeriodType;
+    start: Date;
+    end: Date;
+    uid?: string;
+  }) {
     this.examPeriodsService
-      .examPeriodsUidPut(data.uid, {
+      .examPeriodsUidPut(data.uid as string, {
         name: data.name,
         periodType: data.type,
         startDate: data.start,

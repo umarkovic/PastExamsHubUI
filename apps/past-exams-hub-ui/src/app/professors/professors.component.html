@@ -54,7 +54,9 @@
                 <td mat-cell *matCellDef="let element" class="action">
                   <mat-icon
                     class="material-symbols-outlined cursor"
-                    (click)="$event.stopPropagation()"
+                    (click)="
+                      $event.stopPropagation(); addEditProfessor(element.uid)
+                    "
                     >edit</mat-icon
                   >
                 </td>

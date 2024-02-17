@@ -16,6 +16,12 @@ import {
   ExamPeriodsService,
   ExamsService,
 } from 'libs/portal/src/api/api';
+import {
+  NgxFileDropModule,
+  NgxFileDropEntry,
+  FileSystemFileEntry,
+} from 'ngx-file-drop';
+import { SafeResourceUrl } from '@angular/platform-browser';
 
 export type PastExamsHubCoreDomainEnumsExamType =
   | 'Unkwnon'
@@ -43,6 +49,7 @@ export const PastExamsHubCoreDomainEnumsExamType = {
     MatButtonModule,
     MatDatepickerModule,
     MatIconModule,
+    NgxFileDropModule,
   ],
   providers: [
     provideNativeDateAdapter(),
@@ -59,6 +66,12 @@ export class BlanketComponent extends FormBaseComponent implements OnInit {
   examTypes: { label: string; value: PastExamsHubCoreDomainEnumsExamType }[] =
     [];
   message = '';
+  urlFile!: string;
+  safeUrl!: SafeResourceUrl;
+  public files: NgxFileDropEntry[] = [];
+  public imageUrl: string | null = null;
+  public showFile!: boolean;
+
   constructor(private blanketService: BlanketService) {
     super();
     this.initializeForm();
@@ -78,8 +91,8 @@ export class BlanketComponent extends FormBaseComponent implements OnInit {
 
   override ngOnInit() {
     this.examTypes = Object.entries(PastExamsHubCoreDomainEnumsExamType)
-      .filter(([_, value]) => value !== 'Unkwnon')
-      .map(([_, value]) => ({
+      .filter(([, value]) => value !== 'Unkwnon')
+      .map(([, value]) => ({
         label: value,
         value: value as PastExamsHubCoreDomainEnumsExamType,
       }));
@@ -94,14 +107,58 @@ export class BlanketComponent extends FormBaseComponent implements OnInit {
       .join('');
   }
 
-  uploadFile(files: any) {
-    if (files.length === 0) {
-      return;
+  // uploadFile(files: any) {
+  //   if (files.length === 0) {
+  //     return;
+  //   }
+  //   const fileToUpload = files[0] as File;
+  //   this.form.patchValue({
+  //     fileSource: fileToUpload,
+  //   });
+  // }
+
+  public dropped(files: NgxFileDropEntry[]) {
+    this.files = files;
+    for (const droppedFile of files) {
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file((file: File) => {
+          this.form.patchValue({
+            fileSource: file,
+          });
+          if (
+            file.type === 'application/pdf' ||
+            file.type.startsWith('image/')
+          ) {
+            this.displayFile(file);
+            this.showFile = true;
+          } else {
+            this.showFile = false;
+          }
+        });
+      }
     }
-    const fileToUpload = files[0] as File;
-    this.form.patchValue({
-      fileSource: fileToUpload,
-    });
+  }
+  displayFile(file?: File) {
+    if (file) {
+      this.urlFile = URL.createObjectURL(file);
+    }
+
+    if (this.showFile) {
+      window.open(this.urlFile, '_blank');
+      this.showFile = false;
+    }
+  }
+
+  getFirstErrorMessage(obj: any) {
+    const keys = Object.keys(obj);
+    if (keys.length > 0) {
+      const firstKey = keys[0];
+      if (obj[firstKey].length > 0) {
+        return obj[firstKey][0];
+      }
+    }
+    return null;
   }
 
   save() {
@@ -113,7 +170,7 @@ export class BlanketComponent extends FormBaseComponent implements OnInit {
         this.message = 'Blanket je uspesno dodat!';
       },
       (error) => {
-        this.message = 'Blanket nije dodat:' + error.error.title;
+        this.message = 'Greska: ' + this.getFirstErrorMessage(error);
       }
     );
   }

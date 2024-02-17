@@ -1,9 +1,9 @@
-import { formatDate } from '@angular/common';
 import { Injectable } from '@angular/core';
 import {
   CoursesService,
   ExamPeriodsService,
   ExamsService,
+  PastExamsHubCoreDomainEnumsExamType,
 } from '@org/portal/data-access';
 import { combineLatest, map } from 'rxjs';
 
@@ -15,7 +15,19 @@ export class BlanketService {
     private coursesService: CoursesService
   ) {}
 
-  addBlanket(data: any, onSuccess: () => void, onError: (error: any) => void) {
+  addBlanket(
+    data: {
+      deadline: string;
+      subject: string;
+      type: PastExamsHubCoreDomainEnumsExamType;
+      numberTask: number;
+      date: Date;
+      fileSource: Blob;
+      note: string;
+    },
+    onSuccess: () => void,
+    onError: (error: string[]) => void
+  ) {
     this.examsService
       .examsUploadPostForm(
         data.fileSource,
@@ -29,7 +41,7 @@ export class BlanketService {
       .subscribe({
         next: () => onSuccess(),
         error: (error) => {
-          onError(error);
+          onError(error.error.errors);
         },
       });
   }

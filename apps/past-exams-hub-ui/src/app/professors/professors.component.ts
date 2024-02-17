@@ -7,11 +7,13 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { TeachersService } from '@org/portal/data-access';
 import { MatInputModule } from '@angular/material/input';
 import { ProfessorsService } from './professors.service';
 import { ListRange } from '@angular/cdk/collections';
 import { TableScrollingViewportComponent } from '../shared/components/table-scrolling-viewport';
+import { MatDialog } from '@angular/material/dialog';
+import { AddEditProfessorsDialogComponent } from './add-edit-professors-dialog/add-edit-professors-dialog.component';
+import { TeachersService } from 'libs/portal/src/api/api';
 @Component({
   selector: 'pastexamshub-professors',
   standalone: true,
@@ -24,6 +26,7 @@ import { TableScrollingViewportComponent } from '../shared/components/table-scro
     MatFormFieldModule,
     MatInputModule,
     TableScrollingViewportComponent,
+    AddEditProfessorsDialogComponent,
   ],
   providers: [ProfessorsService, TeachersService],
   templateUrl: './professors.component.html',
@@ -44,13 +47,43 @@ export class ProfessorsComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private professorsService: ProfessorsService
+    private professorsService: ProfessorsService,
+    private dialog: MatDialog
   ) {}
   updatePagination(pageIndex: number, pageSize: number) {
-    this.professorsService.updatePageSettings(pageIndex + 1, pageSize);
+    this.professorsService.dataStateChanged = {
+      pageIndex: pageIndex,
+      pageSize: pageSize,
+    };
   }
 
   updateSlice(range: ListRange) {
     this.itemsSlice = this.items.slice(range.start, range.end);
+  }
+
+  addEditProfessor(professorsUid: string) {
+    const dialogRef = this.dialog.open(AddEditProfessorsDialogComponent, {
+      width: '750px',
+      data: professorsUid,
+    });
+    dialogRef
+      .afterClosed()
+      .subscribe(
+        (result: {
+          email: string;
+          firstName: string;
+          lastName: string;
+          courses: [{ name: string; uid: string }];
+          uid?: string;
+        }) => {
+          if (result) {
+            if (result.uid) {
+              this.professorsService.editProfessor(result);
+            } else {
+              this.professorsService.addProfessor(result);
+            }
+          }
+        }
+      );
   }
 }

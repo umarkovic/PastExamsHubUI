@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
-import { UsersService } from '@org/portal/data-access';
+import {
+  PastExamsHubCoreDomainEnumsGenderType,
+  UsersService,
+} from '@org/portal/data-access';
 import {
   BehaviorSubject,
   combineLatest,
   distinctUntilChanged,
   map,
-  of,
   switchMap,
   tap,
 } from 'rxjs';
-
 
 @Injectable()
 export class StudentsService {
@@ -44,85 +45,92 @@ export class StudentsService {
 
   constructor(private usersService: UsersService) {}
 
-  fetchUsers(
-    pageSettings: { currentPage?: number; pageSize: number }
-  ) {
-    const currentPage = pageSettings.currentPage ?? 1;
-    return this.usersService
-      .usersGet(currentPage, pageSettings.pageSize)
-      .pipe(
-        map((res) => ({
-          data: 
-          { 
-            result: res.users, 
-            count: res.totalCount 
-          },
-          currentPage: res.currentPage,
-          totalPages: res.totalPages,
-          pageSize: res.pageSize,
-          hasNext: res.hasNext,
-          hasPrevious: res.hasPrevious,
-        })),
-        tap((res) => {
-          
-          if (res.data && res.data.count! > 0) {
-            this._pageSettings.next({
-              ...this._pageSettings.getValue(),
-              totalRecordsCount: res.data.count,
-              pageSize: res.pageSize as number,
-              currentPage: res.currentPage,
-            });
-          }
-        })
-      );
+  set dataStateChanged(dataStateChanged: {
+    pageIndex: number;
+    pageSize: number;
+  }) {
+    this._dataStateChanged.next({
+      skip: dataStateChanged.pageIndex * dataStateChanged.pageSize,
+      take: dataStateChanged.pageSize,
+    });
   }
 
-  fetchData() {
-    let lastFetched: {
-      currentPage?: number;
-      pageSize?: number;
-      skip?: number;
-      take?: number;
-    } = {};
-
-    return combineLatest([
-      this.dataStateChanged$,
-      this.pageSettings$,
-      this.refresh$,
-    ]).pipe(
-      map(([dataState, pageSettings]) => ({ ...dataState, ...pageSettings })),
-      distinctUntilChanged(
-        (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
-      ),
-      switchMap((state) => {
-        const shouldFetch =
-          state.currentPage !== lastFetched.currentPage ||
-          state.pageSize !== lastFetched.pageSize ||
-          state.skip !== lastFetched.skip ||
-          state.take !== lastFetched.take;
-
-        if (shouldFetch) {
-          lastFetched = { ...state };
-          return this.fetchUsers({
-            currentPage: state.currentPage,
-            pageSize: state.pageSize,
+  fetchUsers(pageNumber: number, pageSize: number) {
+    return this.usersService.usersGet(pageNumber, pageSize).pipe(
+      map((res) => ({
+        data: {
+          result: res.users,
+          count: res.totalCount,
+        },
+        currentPage: res.currentPage,
+        totalPages: res.totalPages,
+        pageSize: res.pageSize,
+        hasNext: res.hasNext,
+        hasPrevious: res.hasPrevious,
+      })),
+      tap((res) => {
+        if (res.data && res.data.count! > 0) {
+          this._pageSettings.next({
+            ...this._pageSettings.getValue(),
+            totalRecordsCount: res.data.count,
+            pageSize: res.pageSize as number,
+            currentPage: res.currentPage,
           });
-        } else {
-          return of();
         }
       })
     );
   }
 
-  updatePageSettings(currentPage: number, pageSize?: number) {
-    this._pageSettings.next({
-      ...this._pageSettings.getValue(),
-      currentPage,
-      pageSize: pageSize ?? this._pageSettings.getValue().pageSize,
-    });
+  fetchData() {
+    return combineLatest([this.dataStateChanged$, this.refresh$]).pipe(
+      switchMap(([dataStateChanges]) => {
+        return this.fetchUsers(
+          (dataStateChanges.skip as number) /
+            (dataStateChanges.take as number) +
+            1,
+          dataStateChanges.take as number
+        );
+      })
+    );
   }
 
   refreshData() {
     this._refresh.next(undefined);
+  }
+
+  editStudent(data: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    index: number;
+    studyYear: number;
+    gender: string;
+    uid?: string;
+  }) {
+    this.usersService
+      .usersUidPut(data.uid as string, {
+        firstName: data.firstName,
+        gender: data.gender as PastExamsHubCoreDomainEnumsGenderType,
+        index: data.index,
+        lastName: data.lastName,
+        studyYear: data.studyYear,
+      })
+      .pipe(
+        tap(() => {
+          this.refreshData();
+        })
+      )
+      .subscribe();
+  }
+  addStudent(data: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    index: number;
+    studyYear: number;
+    gender: string;
+    uid?: string;
+  }) {
+    console.log(data);
   }
 }
