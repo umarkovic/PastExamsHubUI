@@ -7,11 +7,16 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { UsersService } from '@org/portal/data-access';
+import {
+  PastExamsHubCoreApplicationCommonUsersModelsUserModel,
+  UsersService,
+} from '@org/portal/data-access';
 import { MatInputModule } from '@angular/material/input';
 import { StudentsService } from './students.service';
 import { TableScrollingViewportComponent } from '../shared/components/table-scrolling-viewport';
 import { ListRange } from '@angular/cdk/collections';
+import { MatDialog } from '@angular/material/dialog';
+import { AddEditStudentDialogComponent } from './add-edit-student-dialog/add-edit-student-dialog.component';
 
 @Component({
   selector: 'pastexamshub-students',
@@ -47,14 +52,49 @@ export class StudentsComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private studentsService: StudentsService
+    private studentsService: StudentsService,
+    private dialog: MatDialog
   ) {}
 
   updatePagination(pageIndex: number, pageSize: number) {
-    this.studentsService.updatePageSettings(pageIndex + 1, pageSize);
+    this.studentsService.dataStateChanged = {
+      pageIndex: pageIndex,
+      pageSize: pageSize,
+    };
   }
 
   updateSlice(range: ListRange) {
     this.itemsSlice = this.items.slice(range.start, range.end);
+  }
+
+  addEditStudent(
+    data?: PastExamsHubCoreApplicationCommonUsersModelsUserModel,
+    isVisibility?: boolean
+  ) {
+    const dialogRef = this.dialog.open(AddEditStudentDialogComponent, {
+      width: '750px',
+      data: { data: data, isVisibility: isVisibility },
+    });
+    dialogRef
+      .afterClosed()
+      .subscribe(
+        (result: {
+          email: string;
+          firstName: string;
+          lastName: string;
+          index: number;
+          studyYear: number;
+          gender: string;
+          uid?: string;
+        }) => {
+          if (result) {
+            if (result.uid) {
+              this.studentsService.editStudent(result);
+            } else {
+              this.studentsService.addStudent(result);
+            }
+          }
+        }
+      );
   }
 }

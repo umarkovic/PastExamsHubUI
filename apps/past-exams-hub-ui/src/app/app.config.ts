@@ -22,7 +22,7 @@ export const appConfig: ApplicationConfig = {
       resourceServer: {
         allowedUrls: [environment.coreApiUrl],
         sendAccessToken: true,
-      }
+      },
     }),
     {
       provide: APP_INITIALIZER,
@@ -41,9 +41,10 @@ export const appConfig: ApplicationConfig = {
     CoreApiModule,
     {
       provide: CoreConfiguration,
-      useFactory: () => new CoreConfiguration({
-        basePath: environment.coreApiUrl,
-      })
+      useFactory: () =>
+        new CoreConfiguration({
+          basePath: environment.coreApiUrl,
+        }),
     },
     
   ],

@@ -10,10 +10,10 @@
  * Do not edit the class manually.
  */
 
-export type PastExamsHubCoreDomainEnumsGenderType = 'Unknown' | 'Male' | 'Female';
+export type PastExamsHubCoreDomainEnumsGenderType = 'Unknown' | 'Musko' | 'Zensko';
 
 export const PastExamsHubCoreDomainEnumsGenderType = {
     Unknown: 'Unknown' as PastExamsHubCoreDomainEnumsGenderType,
-    Male: 'Male' as PastExamsHubCoreDomainEnumsGenderType,
-    Female: 'Female' as PastExamsHubCoreDomainEnumsGenderType
+    Musko: 'Musko' as PastExamsHubCoreDomainEnumsGenderType,
+    Zensko: 'Zensko' as PastExamsHubCoreDomainEnumsGenderType
 };

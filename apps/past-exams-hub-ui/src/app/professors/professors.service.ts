@@ -5,13 +5,12 @@ import {
   combineLatest,
   distinctUntilChanged,
   map,
-  of,
   switchMap,
   tap,
 } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 @Injectable()
 export class ProfessorsService {
@@ -46,72 +45,51 @@ export class ProfessorsService {
 
   constructor(private teachersService: TeachersService) {}
 
-  fetchTeachers(
-    pageSettings: { currentPage?: number; pageSize: number }
-  ) {
-    const currentPage = pageSettings.currentPage ?? 1;
-    return this.teachersService
-      .teachersGet(currentPage, pageSettings.pageSize)
-      .pipe(
-        map((res) => ({
-          data: 
-          { 
-            result: res.teachers, 
-            count: res.totalCount 
-          },
-          currentPage: res.currentPage,
-          totalPages: res.totalPages,
-          pageSize: res.pageSize,
-          hasNext: res.hasNext,
-          hasPrevious: res.hasPrevious,
-        })),
-        tap((res) => {
-          
-          if (res.data && res.data.count! > 0) {
-            this._pageSettings.next({
-              ...this._pageSettings.getValue(),
-              totalRecordsCount: res.data.count,
-              pageSize: res.pageSize as number,
-              currentPage: res.currentPage,
-            });
-          }
-        })
-      );
+  set dataStateChanged(dataStateChanged: {
+    pageIndex: number;
+    pageSize: number;
+  }) {
+    this._dataStateChanged.next({
+      skip: dataStateChanged.pageIndex * dataStateChanged.pageSize,
+      take: dataStateChanged.pageSize,
+    });
+  }
+
+  fetchTeachers(pageNumber: number, pageSize: number) {
+    return this.teachersService.teachersGet(pageNumber, pageSize).pipe(
+      map((res) => ({
+        data: {
+          result: res.teachers,
+          count: res.totalCount,
+        },
+        currentPage: res.currentPage,
+        totalPages: res.totalPages,
+        pageSize: res.pageSize,
+        hasNext: res.hasNext,
+        hasPrevious: res.hasPrevious,
+      })),
+      tap((res) => {
+        if (res.data && res.data.count! > 0) {
+          this._pageSettings.next({
+            ...this._pageSettings.getValue(),
+            totalRecordsCount: res.data.count,
+            pageSize: res.pageSize as number,
+            currentPage: res.currentPage,
+          });
+        }
+      })
+    );
   }
 
   fetchData() {
-    let lastFetched: {
-      currentPage?: number;
-      pageSize?: number;
-      skip?: number;
-      take?: number;
-    } = {};
-
-    return combineLatest([
-      this.dataStateChanged$,
-      this.pageSettings$,
-      this.refresh$,
-    ]).pipe(
-      map(([dataState, pageSettings]) => ({ ...dataState, ...pageSettings })),
-      distinctUntilChanged(
-        (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
-      ),
-      switchMap((state) => {
-        const shouldFetch =
-          state.currentPage !== lastFetched.currentPage ||
-          state.pageSize !== lastFetched.pageSize ||
-          state.skip !== lastFetched.skip ||
-          state.take !== lastFetched.take;
-
-        if (shouldFetch) {
-          lastFetched = { ...state };
-          return this.fetchTeachers({
-            currentPage: state.currentPage,
-            pageSize: state.pageSize,
-          });
-        } else {
-          return of();
-        }
+    return combineLatest([this.dataStateChanged$, this.refresh$]).pipe(
+      switchMap(([dataStateChanges]) => {
+        return this.fetchTeachers(
+          (dataStateChanges.skip as number) /
+            (dataStateChanges.take as number) +
+            1,
+          dataStateChanges.take as number
+        );
       })
     );
   }
@@ -127,5 +105,41 @@ export class ProfessorsService {
   refreshData() {
     this._refresh.next(undefined);
   }
-}
 
+  editProfessor(data: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    courses: [{ name: string; uid: string }];
+    uid?: string;
+  }) {
+    this.teachersService
+      .teachersUidPut(data.uid as string, {
+        firstName: data.firstName,
+        courses: data.courses,
+        lastName: data.lastName,
+      })
+      .pipe(
+        tap(() => {
+          this.refreshData();
+        })
+      )
+      .subscribe();
+  }
+
+  addProfessor(data: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    courses: [{ name: string; uid: string }];
+    uid?: string;
+  }) {
+    console.log(data);
+  }
+
+  getProfessorSingle(dataUid: string) {
+    return this.teachersService
+      .teachersUidGet(dataUid)
+      .pipe(map((x) => x.user));
+  }
+}

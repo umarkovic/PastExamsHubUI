@@ -1,3 +1,4 @@
+export * from './examsUploadBody';
 export * from './inlineResponse404';
 export * from './microsoftAspNetCoreHttpHttpValidationProblemDetails';
 export * from './microsoftAspNetCoreMvcProblemDetails';
@@ -5,6 +6,8 @@ export * from './pastExamsHubBaseDomainEnumsRoleType';
 export * from './pastExamsHubCoreApplicationCommonUsersModelsUserModel';
 export * from './pastExamsHubCoreApplicationCommonUsersQueriesGetCollectionGetUsersQueryResult';
 export * from './pastExamsHubCoreApplicationCoursesCommandsCreateCreateCourseCommand';
+export * from './pastExamsHubCoreApplicationCoursesCommandsDeleteDeleteCourseCommand';
+export * from './pastExamsHubCoreApplicationCoursesCommandsDeleteDeleteCourseCommandResult';
 export * from './pastExamsHubCoreApplicationCoursesCommandsUpdateUpdateCourseCommand';
 export * from './pastExamsHubCoreApplicationCoursesModelsCourseListModel';
 export * from './pastExamsHubCoreApplicationCoursesModelsCourseModel';
@@ -22,7 +25,6 @@ export * from './pastExamsHubCoreApplicationExamSoultionsCommandsCreateCreateExa
 export * from './pastExamsHubCoreApplicationExamSoultionsCommandsCreateCreateExamSolutionCommandResult';
 export * from './pastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel';
 export * from './pastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult';
-export * from './pastExamsHubCoreApplicationExamsCommandCreateCreateExamCommand';
 export * from './pastExamsHubCoreApplicationExamsCommandCreateCreateExamCommandResult';
 export * from './pastExamsHubCoreApplicationExamsModelsExamListModel';
 export * from './pastExamsHubCoreApplicationExamsModelsExamModel';
@@ -42,3 +44,4 @@ export * from './pastExamsHubCoreDomainEnumsCourseType';
 export * from './pastExamsHubCoreDomainEnumsExamPeriodType';
 export * from './pastExamsHubCoreDomainEnumsExamType';
 export * from './pastExamsHubCoreDomainEnumsGenderType';
+export * from './pastExamsHubCoreDomainEnumsStudyType';

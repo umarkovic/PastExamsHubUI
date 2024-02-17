@@ -68,6 +68,63 @@ main {
 }
 pastexamshub-home {
   cdk-virtual-scroll-viewport {
-    height: 55vh !important;
+    height: 60vh !important;
   }
+}
+
+.mat-mdc-select,
+textarea {
+  padding: 0px 16px !important;
+}
+
+.ngx-file-drop__content {
+  gap: 16px !important;
+  padding: 0px 36px !important;
+  button {
+    min-width: 85px !important;
+  }
+}
+
+td.action {
+  mat-icon {
+    cursor: pointer;
+    margin-right: 16px;
+    color: #673ab7 !important;
+  }
+}
+
+.cdk-virtual-scroll-content-wrapper {
+  display: flex !important;
+  flex-direction: column;
+  gap: 16px !important;
+  .text-wrapper {
+    background-color: #ffffff !important;
+  }
+}
+
+th {
+  background-color: #673ab7 !important;
+  color: #fff;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: currentColor;
+}
+
+.ngx-file-drop__drop-zone {
+  border-color: #673ab7 !important;
+}
+
+.ngx-file-drop__content {
+  color: #673ab7 !important;
+}
+
+.action {
+  text-align: end !important;
 }

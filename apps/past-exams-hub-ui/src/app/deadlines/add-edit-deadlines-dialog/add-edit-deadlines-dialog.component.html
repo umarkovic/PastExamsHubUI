@@ -14,7 +14,11 @@
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Tip</mat-label>
-        <input matInput formControlName="type" />
+        <mat-select formControlName="type">
+          <mat-option *ngFor="let type of examPeriodTypes" [value]="type.value">
+            {{ type.value }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
     <div class="form-row">
@@ -40,6 +44,8 @@
   </div>
 
   <div class="btn-save-wrapper">
-    <button mat-raised-button (click)="saveChanges()">Sacuvaj</button>
+    <button color="primary" mat-raised-button (click)="saveChanges()">
+      Sacuvaj
+    </button>
   </div>
 </form>

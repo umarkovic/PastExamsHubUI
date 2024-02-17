@@ -6,7 +6,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { ExamPeriodsService } from '@org/portal/data-access';
+import {
+  ExamPeriodsService,
+  PastExamsHubCoreApplicationExamPeriodsExamPeriodModel,
+  PastExamsHubCoreDomainEnumsExamPeriodType,
+} from '@org/portal/data-access';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { DeadlinesService } from './deadlines.service';
@@ -15,6 +19,7 @@ import { TableScrollingViewportComponent } from '../shared/components/table-scro
 import { ListRange } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditDeadlineDialogComponent } from './add-edit-deadlines-dialog/add-edit-deadlines-dialog.component';
+import { DeleteConfirmationDialogComponent } from '../shared/components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 @Component({
   selector: 'pastexamshub-deadlines',
@@ -61,25 +66,52 @@ export class DeadlinesComponent {
   ) {}
 
   updatePagination(pageIndex: number, pageSize: number) {
-    this.deadlinesService.updatePageSettings(pageIndex + 1, pageSize);
+    this.deadlinesService.dataStateChanged = {
+      pageIndex: pageIndex,
+      pageSize: pageSize,
+    };
   }
 
   updateSlice(range: ListRange) {
     this.itemsSlice = this.items.slice(range.start, range.end);
   }
 
-  addEditDeadline(uid?: string) {
+  addEditDeadline(
+    data?: PastExamsHubCoreApplicationExamPeriodsExamPeriodModel
+  ) {
     const dialogRef = this.dialog.open(AddEditDeadlineDialogComponent, {
       width: '750px',
-      data: { uid: uid },
+      data: data,
+    });
+    dialogRef
+      .afterClosed()
+      .subscribe(
+        (result: {
+          name: string;
+          type: PastExamsHubCoreDomainEnumsExamPeriodType;
+          start: Date;
+          end: Date;
+          uid?: string;
+        }) => {
+          if (result) {
+            if (result.uid) {
+              this.deadlinesService.editDeadline(result);
+            } else {
+              this.deadlinesService.addDeadline(result);
+            }
+          }
+        }
+      );
+  }
+
+  remove(uid: string) {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      width: '450px',
+      data: 'Da li ste sigurni da zelite da obrisete?',
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        if (result.uid) {
-          this.deadlinesService.editDeadline(result);
-        } else {
-          this.deadlinesService.addDeadline(result);
-        }
+        this.deadlinesService.removeDeadline(uid);
       }
     });
   }

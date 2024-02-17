@@ -1,5 +1,11 @@
 <div class="header-wrapper-dialog">
-  <h2 mat-dialog-title>{{ data?.uid ? 'Izmeni Predmet' : 'Dodaj Predmet' }}</h2>
+  <h2 mat-dialog-title>
+    {{
+      data.dataSubject && data.dataSubject.uid
+        ? 'Izmeni Predmet'
+        : 'Dodaj Predmet'
+    }}
+  </h2>
   <button mat-button (click)="closeDialog()">
     <mat-icon class="material-symbols-outlined">close</mat-icon>
   </button>
@@ -14,41 +20,51 @@
       </mat-form-field>
     </div>
     <div class="form-row">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" class="professor-select">
         <mat-label>Tip</mat-label>
-        <input matInput formControlName="type" />
+        <mat-select formControlName="type">
+          <mat-option
+            *ngFor="let courseType of courseTypes"
+            [value]="courseType.value"
+          >
+            {{ courseType.key }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="professor-select">
-        <mat-label>Profesor</mat-label>
-        <mat-select formControlName="professor">
+        <mat-label>Odaberite profesora</mat-label>
+        <mat-select formControlName="professorUid">
           <mat-option
-            *ngFor="let option of professors"
-            [value]="option.value"
-            >{{ option.viewValue }}</mat-option
+            *ngFor="let professor of professorsData"
+            [value]="professor.uid!"
           >
+            {{ professor.fullName! }}
+          </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
     <div class="form-row">
       <mat-form-field appearance="outline" class="third-width">
         <mat-label>Godina</mat-label>
-        <input matInput formControlName="year" />
+        <input matInput formControlName="year" type="number" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="third-width">
         <mat-label>Semestar</mat-label>
-        <input matInput formControlName="semester" />
+        <input matInput formControlName="semester" type="number" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="third-width">
         <mat-label>ESPB bodovi</mat-label>
-        <input matInput formControlName="points" />
+        <input matInput formControlName="points" type="number" />
       </mat-form-field>
     </div>
   </div>
 
   <div class="btn-save-wrapper">
-    <button mat-raised-button (click)="saveChanges()">Sacuvaj</button>
+    <button mat-raised-button color="primary" (click)="saveChanges()">
+      Sacuvaj
+    </button>
   </div>
 </form>

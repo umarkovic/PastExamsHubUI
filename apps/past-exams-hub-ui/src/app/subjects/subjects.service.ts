@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
-import { CoursesService } from '@org/portal/data-access';
+import {
+  CoursesService,
+  PastExamsHubCoreDomainEnumsCourseType,
+  TeachersService,
+} from '@org/portal/data-access';
 import {
   BehaviorSubject,
   combineLatest,
   distinctUntilChanged,
   map,
-  of,
   switchMap,
   tap,
 } from 'rxjs';
@@ -30,26 +33,33 @@ export class SubjectsService {
     skip: 0,
     take: 10,
   });
-  dataStateChanged$ = this._dataStateChanged
-    .asObservable()
-    .pipe(
-      distinctUntilChanged(
-        (prev, curr) => prev.skip === curr.skip && prev.take === curr.take
-      )
-    );
+  dataStateChanged$ = this._dataStateChanged.asObservable().pipe(
+    distinctUntilChanged((prev, curr) => {
+      return prev.skip === curr.skip && prev.take === curr.take;
+    })
+  );
 
   private _refresh = new BehaviorSubject<void>(undefined);
   refresh$ = this._refresh.asObservable();
 
-  constructor(private coursesService: CoursesService) {}
+  constructor(
+    private coursesService: CoursesService,
+    private teachersService: TeachersService
+  ) {}
 
-  fetchSubjects(
-    godinaStudija: string,
-    pageSettings: { currentPage?: number; pageSize: number }
-  ) {
-    const currentPage = pageSettings.currentPage ?? 1;
+  set dataStateChanged(dataStateChanged: {
+    pageIndex: number;
+    pageSize: number;
+  }) {
+    this._dataStateChanged.next({
+      skip: dataStateChanged.pageIndex * dataStateChanged.pageSize,
+      take: dataStateChanged.pageSize,
+    });
+  }
+
+  fetchSubjects(godinaStudija: string, pageNumber: number, pageSize: number) {
     return this.coursesService
-      .coursesGet(Number(godinaStudija), currentPage, pageSettings.pageSize)
+      .coursesGet(Number(godinaStudija), pageNumber, pageSize)
       .pipe(
         map((res) => ({
           data: { result: res.courses, count: res.totalCount },
@@ -72,60 +82,88 @@ export class SubjectsService {
       );
   }
 
-  fetchData(godinaStudija: string = '') {
-    let lastFetched: {
-      currentPage?: number;
-      pageSize?: number;
-      skip?: number;
-      take?: number;
-    } = {};
-
-    return combineLatest([
-      this.dataStateChanged$,
-      this.pageSettings$,
-      this.refresh$,
-    ]).pipe(
-      map(([dataState, pageSettings]) => ({ ...dataState, ...pageSettings })),
-      distinctUntilChanged(
-        (prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)
-      ),
-      switchMap((state) => {
-        const shouldFetch =
-          state.currentPage !== lastFetched.currentPage ||
-          state.pageSize !== lastFetched.pageSize ||
-          state.skip !== lastFetched.skip ||
-          state.take !== lastFetched.take;
-
-        if (shouldFetch) {
-          lastFetched = { ...state };
-          return this.fetchSubjects(godinaStudija, {
-            currentPage: state.currentPage,
-            pageSize: state.pageSize,
-          });
-        } else {
-          return of();
-        }
-      })
-    );
+  fetchProfessorsData() {
+    return this.teachersService.teachersGet().pipe(map((x) => x.teachers));
   }
 
-  updatePageSettings(currentPage: number, pageSize?: number) {
-    this._pageSettings.next({
-      ...this._pageSettings.getValue(),
-      currentPage,
-      pageSize: pageSize ?? this._pageSettings.getValue().pageSize,
-    });
+  fetchData(godinaStudija: string = '') {
+    return combineLatest([this.refresh$, this.dataStateChanged$]).pipe(
+      switchMap(([, dataStateChanges]) => {
+        return this.fetchSubjects(
+          godinaStudija,
+          (dataStateChanges.skip as number) /
+            (dataStateChanges.take as number) +
+            1,
+          dataStateChanges.take as number
+        );
+      })
+    );
   }
 
   refreshData() {
     this._refresh.next(undefined);
   }
 
-  addSubjects(data: any) {
-    console.log(data);
+  addSubjects(data: {
+    name: string;
+    type: string;
+    professorUid: string;
+    year: number;
+    semester: number;
+    points: number;
+    uid?: string;
+  }) {
+    this.coursesService
+      .coursesPost({
+        lecturerUid: data.professorUid,
+        name: data.name,
+        courseType: data.type as PastExamsHubCoreDomainEnumsCourseType,
+        studyYear: data.year,
+        semester: data.semester,
+        espb: data.points,
+      })
+      .pipe(
+        tap(() => {
+          this.refreshData();
+        })
+      )
+      .subscribe();
   }
 
-  editSubjects(data: any) {
-    console.log(data);
+  editSubjects(data: {
+    name: string;
+    type: string;
+    professorUid: string;
+    year: number;
+    semester: number;
+    points: number;
+    uid?: string;
+  }) {
+    this.coursesService
+      .coursesUidPut(data.uid as string, {
+        lecturerUid: data.professorUid,
+        name: data.name,
+        courseType: data.type as PastExamsHubCoreDomainEnumsCourseType,
+        studyYear: data.year,
+        semester: data.semester,
+        espb: data.points,
+      })
+      .pipe(
+        tap(() => {
+          this.refreshData();
+        })
+      )
+      .subscribe();
+  }
+
+  removeSubject(uid: string) {
+    this.coursesService
+      .coursesUidDelete(uid, {})
+      .pipe(
+        tap(() => {
+          this.refreshData();
+        })
+      )
+      .subscribe();
   }
 }

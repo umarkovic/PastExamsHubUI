@@ -10,16 +10,16 @@
  * Do not edit the class manually.
  */
 
-export type PastExamsHubCoreDomainEnumsExamPeriodType = 'Unknown' | 'January' | 'April' | 'June' | 'June2' | 'September' | 'October' | 'October2' | 'December';
+export type PastExamsHubCoreDomainEnumsExamPeriodType = 'Unknown' | 'Januar' | 'April' | 'Jun' | 'Jun2' | 'Septembar' | 'Oktobar' | 'Oktobar2' | 'Decembar';
 
 export const PastExamsHubCoreDomainEnumsExamPeriodType = {
     Unknown: 'Unknown' as PastExamsHubCoreDomainEnumsExamPeriodType,
-    January: 'January' as PastExamsHubCoreDomainEnumsExamPeriodType,
+    Januar: 'Januar' as PastExamsHubCoreDomainEnumsExamPeriodType,
     April: 'April' as PastExamsHubCoreDomainEnumsExamPeriodType,
-    June: 'June' as PastExamsHubCoreDomainEnumsExamPeriodType,
-    June2: 'June2' as PastExamsHubCoreDomainEnumsExamPeriodType,
-    September: 'September' as PastExamsHubCoreDomainEnumsExamPeriodType,
-    October: 'October' as PastExamsHubCoreDomainEnumsExamPeriodType,
-    October2: 'October2' as PastExamsHubCoreDomainEnumsExamPeriodType,
-    December: 'December' as PastExamsHubCoreDomainEnumsExamPeriodType
+    Jun: 'Jun' as PastExamsHubCoreDomainEnumsExamPeriodType,
+    Jun2: 'Jun2' as PastExamsHubCoreDomainEnumsExamPeriodType,
+    Septembar: 'Septembar' as PastExamsHubCoreDomainEnumsExamPeriodType,
+    Oktobar: 'Oktobar' as PastExamsHubCoreDomainEnumsExamPeriodType,
+    Oktobar2: 'Oktobar2' as PastExamsHubCoreDomainEnumsExamPeriodType,
+    Decembar: 'Decembar' as PastExamsHubCoreDomainEnumsExamPeriodType
 };

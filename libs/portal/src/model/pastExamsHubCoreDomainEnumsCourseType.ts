@@ -10,10 +10,10 @@
  * Do not edit the class manually.
  */
 
-export type PastExamsHubCoreDomainEnumsCourseType = 'Unknown' | 'Mandatory' | 'Elective';
+export type PastExamsHubCoreDomainEnumsCourseType = 'Unknown' | 'Obavezni' | 'Izborni';
 
 export const PastExamsHubCoreDomainEnumsCourseType = {
     Unknown: 'Unknown' as PastExamsHubCoreDomainEnumsCourseType,
-    Mandatory: 'Mandatory' as PastExamsHubCoreDomainEnumsCourseType,
-    Elective: 'Elective' as PastExamsHubCoreDomainEnumsCourseType
+    Obavezni: 'Obavezni' as PastExamsHubCoreDomainEnumsCourseType,
+    Izborni: 'Izborni' as PastExamsHubCoreDomainEnumsCourseType
 };

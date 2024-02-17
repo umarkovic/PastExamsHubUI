@@ -58,6 +58,14 @@ export const appRoutes: Route[] = [
             (c) => c.ProfileComponent
           ),
       },
+
+      {
+        path: 'dodaj_blanket',
+        loadComponent: () =>
+          import('../app/blanket/blanket.component').then(
+            (c) => c.BlanketComponent
+          ),
+      },
     ],
   },
 

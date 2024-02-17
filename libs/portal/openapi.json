@@ -551,6 +551,190 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "Courses"
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PastExamsHub.Core.Application.Courses.Commands.Delete.DeleteCourseCommand"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PastExamsHub.Core.Application.Courses.Commands.Delete.DeleteCourseCommand"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PastExamsHub.Core.Application.Courses.Commands.Delete.DeleteCourseCommand"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PastExamsHub.Core.Application.Courses.Commands.Delete.DeleteCourseCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PastExamsHub.Core.Application.Courses.Commands.Delete.DeleteCourseCommandResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PastExamsHub.Core.Application.Courses.Commands.Delete.DeleteCourseCommandResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PastExamsHub.Core.Application.Courses.Commands.Delete.DeleteCourseCommandResult"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/ExamPeriods": {
@@ -1425,31 +1609,75 @@
             }
           }
         }
-      },
+      }
+    },
+    "/Exams/upload": {
       "post": {
         "tags": [
           "Exams"
         ],
+        "parameters": [
+          {
+            "name": "CourseUid",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PeriodUid",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Type",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/PastExamsHub.Core.Domain.Enums.ExamType"
+            }
+          },
+          {
+            "name": "ExamDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "NumberOfTasks",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Notes",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
-            "application/json-patch+json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Command.Create.CreateExamCommand"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Command.Create.CreateExamCommand"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Command.Create.CreateExamCommand"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Command.Create.CreateExamCommand"
+                "type": "object",
+                "properties": {
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "File": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -3063,6 +3291,26 @@
         },
         "additionalProperties": false
       },
+      "PastExamsHub.Core.Application.Courses.Commands.Delete.DeleteCourseCommand": {
+        "type": "object",
+        "properties": {
+          "uid": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PastExamsHub.Core.Application.Courses.Commands.Delete.DeleteCourseCommandResult": {
+        "type": "object",
+        "properties": {
+          "uid": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "PastExamsHub.Core.Application.Courses.Commands.Update.UpdateCourseCommand": {
         "type": "object",
         "properties": {
@@ -3119,6 +3367,13 @@
           },
           "courseType": {
             "$ref": "#/components/schemas/PastExamsHub.Core.Domain.Enums.CourseType"
+          },
+          "studyType": {
+            "$ref": "#/components/schemas/PastExamsHub.Core.Domain.Enums.StudyType"
+          },
+          "lecturerUid": {
+            "type": "string",
+            "nullable": true
           },
           "lecturerFirstName": {
             "type": "string",
@@ -3315,39 +3570,6 @@
             "items": {
               "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Models.ExamModel"
             },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "PastExamsHub.Core.Application.Exams.Command.Create.CreateExamCommand": {
-        "type": "object",
-        "properties": {
-          "courseUid": {
-            "type": "string",
-            "nullable": true
-          },
-          "periodUid": {
-            "type": "string",
-            "nullable": true
-          },
-          "documentPath": {
-            "type": "string",
-            "nullable": true
-          },
-          "type": {
-            "$ref": "#/components/schemas/PastExamsHub.Core.Domain.Enums.ExamType"
-          },
-          "examDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "numberOfTasks": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "notes": {
-            "type": "string",
             "nullable": true
           }
         },
@@ -3805,39 +4027,48 @@
       "PastExamsHub.Core.Domain.Enums.CourseType": {
         "enum": [
           "Unknown",
-          "Mandatory",
-          "Elective"
+          "Obavezni",
+          "Izborni"
         ],
         "type": "string"
       },
       "PastExamsHub.Core.Domain.Enums.ExamPeriodType": {
         "enum": [
           "Unknown",
-          "January",
+          "Januar",
           "April",
-          "June",
-          "June2",
-          "September",
-          "October",
-          "October2",
-          "December"
+          "Jun",
+          "Jun2",
+          "Septembar",
+          "Oktobar",
+          "Oktobar2",
+          "Decembar"
         ],
         "type": "string"
       },
       "PastExamsHub.Core.Domain.Enums.ExamType": {
         "enum": [
           "Unkwnon",
-          "Written",
-          "Theory",
-          "WrittenAndTheory"
+          "Pismeni",
+          "Usmeni",
+          "PismenoUsmeni"
         ],
         "type": "string"
       },
       "PastExamsHub.Core.Domain.Enums.GenderType": {
         "enum": [
           "Unknown",
-          "Male",
-          "Female"
+          "Musko",
+          "Zensko"
+        ],
+        "type": "string"
+      },
+      "PastExamsHub.Core.Domain.Enums.StudyType": {
+        "enum": [
+          "Unknown",
+          "OsnovneAkademskeStudije",
+          "MasterStudije",
+          "DoktorskeStudije"
         ],
         "type": "string"
       }

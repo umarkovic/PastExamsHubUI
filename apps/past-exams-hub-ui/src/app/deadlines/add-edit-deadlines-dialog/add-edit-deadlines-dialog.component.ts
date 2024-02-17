@@ -15,9 +15,21 @@ import { DateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { PastExamsHubCoreApplicationExamPeriodsExamPeriodModel } from 'libs/portal/src/model/models';
 type Professor = {
   value: string;
   viewValue: string;
+};
+
+export const PastExamsHubCoreDomainEnumsExamPeriodType = {
+  Januar: 'Januar',
+  April: 'April',
+  Jun: 'Jun',
+  Jun2: 'Jun2',
+  Septembar: 'Septembar',
+  Oktobar: 'Oktobar',
+  Oktobar2: 'Oktobar2',
+  Decembar: 'Decembar',
 };
 
 @Component({
@@ -42,10 +54,13 @@ type Professor = {
 })
 export class AddEditDeadlineDialogComponent extends FormBaseComponent {
   professors: Professor[] = [{ value: 'urke', viewValue: 'Uros' }];
-
+  examPeriodTypes = Object.entries(
+    PastExamsHubCoreDomainEnumsExamPeriodType
+  ).map(([key, value]) => ({ key, value }));
   constructor(
     public dialogRef: MatDialogRef<AddEditDeadlineDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA)
+    public data: PastExamsHubCoreApplicationExamPeriodsExamPeriodModel,
     private dateAdapter: DateAdapter<Date>
   ) {
     super();
@@ -53,15 +68,17 @@ export class AddEditDeadlineDialogComponent extends FormBaseComponent {
     this.dateAdapter.setLocale('en-GB');
   }
 
-  private initializeForm(data: any) {
+  private initializeForm(
+    data: PastExamsHubCoreApplicationExamPeriodsExamPeriodModel
+  ) {
     this.form = this.fb.group({
       name: [
-        this.data?.name ?? '',
+        (data && data.name) ?? '',
         [Validators.required, Validators.minLength(1)],
       ],
-      type: [this.data?.type ?? ''],
-      start: [this.data?.start ?? ''],
-      end: [this.data?.end ?? ''],
+      type: [(data && data.periodType) ?? 'Januar'],
+      start: [(data && data.startDate) ?? ''],
+      end: [(data && data.endDate) ?? ''],
     });
   }
 
@@ -71,15 +88,15 @@ export class AddEditDeadlineDialogComponent extends FormBaseComponent {
       this.dialogRef.close({
         name: this.form.controls['name'].getRawValue(),
         type: this.form.controls['type'].getRawValue(),
-        start: this.form.controls['start'].getRawValue(),
-        end: this.form.controls['end'].getRawValue(),
+        start: new Date(this.form.controls['start'].getRawValue()),
+        end: new Date(this.form.controls['end'].getRawValue()),
       });
     } else {
       this.dialogRef.close({
         name: this.form.controls['name'].getRawValue(),
         type: this.form.controls['type'].getRawValue(),
-        start: this.form.controls['start'].getRawValue(),
-        end: this.form.controls['end'].getRawValue(),
+        start: new Date(this.form.controls['start'].getRawValue()),
+        end: new Date(this.form.controls['end'].getRawValue()),
         uid: this.data?.uid,
       });
     }
