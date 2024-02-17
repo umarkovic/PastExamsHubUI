@@ -1,11 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { AuthenticationService } from '@org/authority/data-access';
 import { ExamsService, StatisticsService } from '@org/portal/data-access';
 import { BehaviorSubject, forkJoin, map, switchMap } from 'rxjs';
 
 @Injectable()
 export class HomeService {
-  private authenticationService = inject(AuthenticationService);
   private statisticsService = inject(StatisticsService);
   private examsService = inject(ExamsService);
 
