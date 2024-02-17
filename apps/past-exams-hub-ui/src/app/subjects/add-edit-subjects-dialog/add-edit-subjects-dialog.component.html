@@ -23,24 +23,22 @@
       <mat-form-field appearance="outline" class="professor-select">
         <mat-label>Tip</mat-label>
         <mat-select formControlName="type">
-          <mat-option
-            *ngFor="let courseType of courseTypes"
-            [value]="courseType.value"
-          >
+          @for (courseType of courseTypes; track courseType) {
+          <mat-option [value]="courseType.value">
             {{ courseType.key }}
           </mat-option>
+          }
         </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="professor-select">
         <mat-label>Odaberite profesora</mat-label>
         <mat-select formControlName="professorUid">
-          <mat-option
-            *ngFor="let professor of professorsData"
-            [value]="professor.uid!"
-          >
+          @for (professor of professorsData; track professor) {
+          <mat-option [value]="professor.uid!">
             {{ professor.fullName! }}
           </mat-option>
+          }
         </mat-select>
       </mat-form-field>
     </div>
