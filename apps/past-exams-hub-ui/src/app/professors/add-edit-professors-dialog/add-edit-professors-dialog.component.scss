@@ -36,7 +36,8 @@
 }
 
 .courses-wrapper {
-  height: 300px;
+  max-height: 300px;
+  min-height: fit-content; 
   overflow: auto;
   display: flex;
   flex-direction: column;
