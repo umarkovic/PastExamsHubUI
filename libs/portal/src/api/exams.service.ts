@@ -22,6 +22,7 @@ import { PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommandResult } 
 import { PastExamsHubCoreApplicationExamsQueriesGetCollectionGetExamsQueryResult } from '../model/pastExamsHubCoreApplicationExamsQueriesGetCollectionGetExamsQueryResult';
 import { PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQuery } from '../model/pastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQuery';
 import { PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult } from '../model/pastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult';
+import { PastExamsHubCoreApplicationExamsQueriesGetSingleGetExamQueryResult } from '../model/pastExamsHubCoreApplicationExamsQueriesGetSingleGetExamQueryResult';
 import { PastExamsHubCoreDomainEnumsExamType } from '../model/pastExamsHubCoreDomainEnumsExamType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -174,6 +175,54 @@ export class ExamsService {
         return this.httpClient.request<PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult>('get',`${this.basePath}/Exams/LatestExams`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param uid 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public examsUidGet(uid: string, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationExamsQueriesGetSingleGetExamQueryResult>;
+    public examsUidGet(uid: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationExamsQueriesGetSingleGetExamQueryResult>>;
+    public examsUidGet(uid: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationExamsQueriesGetSingleGetExamQueryResult>>;
+    public examsUidGet(uid: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (uid === null || uid === undefined) {
+            throw new Error('Required parameter uid was null or undefined when calling examsUidGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<PastExamsHubCoreApplicationExamsQueriesGetSingleGetExamQueryResult>('get',`${this.basePath}/Exams/${encodeURIComponent(String(uid))}`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

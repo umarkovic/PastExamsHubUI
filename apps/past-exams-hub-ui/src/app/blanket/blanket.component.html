@@ -1,45 +1,64 @@
-<div class="container">
-  <div class="row">
-    @for (item of arrayTen; track item ) {
-    <div class="col-lg-3">
-      <div class="card card-margin">
-        <div class="card-header no-border">
-          <h5 class="card-title">MOM</h5>
-        </div>
-        <div class="card-body pt-0">
-          <div class="widget-49">
-            <div class="widget-49-title-wrapper">
-              <div class="widget-49-date-primary">
-                <span class="widget-49-date-day">09</span>
-                <span class="widget-49-date-month">apr</span>
+<main>
+  <ng-container *ngIf="data$ | async as data">
+    <ng-container *ngIf="data.exams?.length === 0; else exams">
+      <div class="no-data">
+        <h1>Nemate blankete</h1>
+      </div>
+    </ng-container>
+
+    <ng-template #exams>
+      <div class="row-center">
+        <h1>
+          Blanketi
+          <ng-container *ngIf="lastPage === 'predmeti'; else examPeriod">
+            iz predmeta: {{ data?.exams?.[0]?.courseName ?? 'Nepoznato' }}
+          </ng-container>
+          <ng-template #examPeriod>
+            u roku:
+            {{ (lastPage !== 'predmeti') ? (data?.exams?.[0]?.examPeriod?.name ?? 'Nepoznato') : '' }}
+          </ng-template>
+        </h1>
+      </div>
+
+      <div class="container">
+        <div class="row">
+          @for (item of data?.exams; track item ) {
+          <mat-card class="column">
+            <div class="row">{{ transformLabel(item.type!) }}</div>
+
+            <div class="row margin">
+              <div class="border-radius">
+                <span>{{ item.examDate | date : 'dd' }}</span>
+                <span>{{ item.examDate | date : 'MMM' }}</span>
               </div>
-              <div class="widget-49-meeting-info">
-                <span class="widget-49-pro-title"
-                  >PRO-08235 DeskOpe. Website</span
-                >
-                <span class="widget-49-meeting-time">12:00 to 13.30 Hrs</span>
+              <div class="course-name-wrapper">
+                <b>{{ item.courseName }}</b>
+                <span>{{
+                  item.studyYear + ' godina, ' + item.espb + ' ESPB'
+                }}</span>
               </div>
             </div>
-            <ol class="widget-49-meeting-points">
-              <li class="widget-49-meeting-item">
-                <span>Expand module is removed</span>
-              </li>
-              <li class="widget-49-meeting-item">
-                <span>Data migration is in scope</span>
-              </li>
-              <li class="widget-49-meeting-item">
-                <span>Session timeout increase to 30 minutes</span>
-              </li>
-            </ol>
-            <div class="widget-49-meeting-action">
-              <a href="#" class="btn btn-sm btn-flash-border-primary"
-                >View All</a
+
+            <div>
+              <p>
+                Rok: <b>{{ item.examPeriod?.name }} </b>
+              </p>
+              <p>{{ item.courseType + ' predmet' }}</p>
+              <p>Broj zadataka: {{ item.numberOfTasks }}</p>
+            </div>
+            <div class="flex-end">
+              <button
+                color="primary"
+                mat-raised-button
+                (click)="redirectTo(item.examUid!)"
               >
+                Pregled
+              </button>
             </div>
-          </div>
+          </mat-card>
+          }
         </div>
       </div>
-    </div>
-    }
-  </div>
-</div>
+    </ng-template>
+  </ng-container>
+</main>

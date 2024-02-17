@@ -118,7 +118,11 @@
               mat-header-row
               *matHeaderRowDef="displayedColumns; sticky: true"
             ></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              (click)="onRowClick(row)"
+            ></tr>
           </table>
         </pastexamshub-table-scrolling-viewport>
         <mat-paginator

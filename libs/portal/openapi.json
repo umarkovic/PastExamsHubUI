@@ -1908,6 +1908,127 @@
         }
       }
     },
+    "/Exams/{uid}": {
+      "get": {
+        "tags": [
+          "Exams"
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Queries.GetSingle.GetExamQueryResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Queries.GetSingle.GetExamQueryResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Queries.GetSingle.GetExamQueryResult"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ExamSolution": {
       "get": {
         "tags": [
@@ -3637,6 +3758,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "examUid": {
+            "type": "string",
+            "nullable": true
+          },
           "type": {
             "$ref": "#/components/schemas/PastExamsHub.Core.Domain.Enums.ExamType"
           },
@@ -3658,6 +3783,14 @@
           },
           "examPeriod": {
             "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamPeriods.ExamPeriodModel"
+          },
+          "fileType": {
+            "$ref": "#/components/schemas/PastExamsHub.Core.Domain.Enums.FileType"
+          },
+          "file": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3710,6 +3843,15 @@
               "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Models.ExamListModel"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PastExamsHub.Core.Application.Exams.Queries.GetSingle.GetExamQueryResult": {
+        "type": "object",
+        "properties": {
+          "exam": {
+            "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Models.ExamModel"
           }
         },
         "additionalProperties": false
@@ -4052,6 +4194,15 @@
           "Pismeni",
           "Usmeni",
           "PismenoUsmeni"
+        ],
+        "type": "string"
+      },
+      "PastExamsHub.Core.Domain.Enums.FileType": {
+        "enum": [
+          "Unknown",
+          "Document",
+          "Image",
+          "TextFile"
         ],
         "type": "string"
       },

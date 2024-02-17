@@ -1,10 +1,15 @@
-import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
 import {
   ExamPeriodsService,
@@ -44,6 +49,7 @@ export class DeadlinesComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   items = [];
   itemsSlice = [];
+  private router = inject(Router);
 
   dataSource = new MatTableDataSource();
   data$ = this.route.queryParams.pipe(
@@ -74,6 +80,12 @@ export class DeadlinesComponent {
 
   updateSlice(range: ListRange) {
     this.itemsSlice = this.items.slice(range.start, range.end);
+  }
+
+  onRowClick(data: any) {
+    this.router.navigate(['/blanketi'], {
+      queryParams: { uid: data.uid, lastPage: 'rokovi' },
+    });
   }
 
   addEditDeadline(

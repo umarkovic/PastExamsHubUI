@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,7 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SubjectsService } from './subjects.service';
 import { combineLatest, switchMap } from 'rxjs';
 import {
@@ -45,7 +50,7 @@ export class SubjectsComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   items = [];
   itemsSlice = [];
-
+  private router = inject(Router);
   dataSource = new MatTableDataSource();
   data$ = this.route.queryParams.pipe(
     switchMap((params) => {
@@ -82,6 +87,12 @@ export class SubjectsComponent {
 
   updateSlice(range: ListRange) {
     this.itemsSlice = this.items.slice(range.start, range.end);
+  }
+
+  onRowClick(data: any) {
+    this.router.navigate(['/blanketi'], {
+      queryParams: { uid: data.uid, lastPage: 'predmeti' },
+    });
   }
 
   addEditSubject(

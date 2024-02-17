@@ -67,9 +67,17 @@ export const appRoutes: Route[] = [
           ),
       },
       {
-        path: 'blanket',
+        path: 'blanketi',
         loadComponent: () =>
           import('./blanket/blanket.component').then((c) => c.BlanketComponent),
+      },
+
+      {
+        path: 'blanket/:id',
+        loadComponent: () =>
+          import('./blanket/single-blanket/single-blanket.component').then(
+            (c) => c.SingleBlanketComponent
+          ),
       },
     ],
   },

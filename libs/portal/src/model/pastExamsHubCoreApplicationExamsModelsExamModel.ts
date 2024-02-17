@@ -12,6 +12,7 @@
 import { PastExamsHubCoreApplicationExamPeriodsExamPeriodModel } from './pastExamsHubCoreApplicationExamPeriodsExamPeriodModel';
 import { PastExamsHubCoreDomainEnumsCourseType } from './pastExamsHubCoreDomainEnumsCourseType';
 import { PastExamsHubCoreDomainEnumsExamType } from './pastExamsHubCoreDomainEnumsExamType';
+import { PastExamsHubCoreDomainEnumsFileType } from './pastExamsHubCoreDomainEnumsFileType';
 
 export interface PastExamsHubCoreApplicationExamsModelsExamModel { 
     courseUid?: string;
@@ -21,10 +22,13 @@ export interface PastExamsHubCoreApplicationExamsModelsExamModel {
     lecturerLastName?: string;
     studyYear?: number;
     espb?: number;
+    examUid?: string;
     type?: PastExamsHubCoreDomainEnumsExamType;
     examDate?: Date;
     numberOfTasks?: number;
     notes?: string;
     periodUid?: string;
     examPeriod?: PastExamsHubCoreApplicationExamPeriodsExamPeriodModel;
+    fileType?: PastExamsHubCoreDomainEnumsFileType;
+    file?: string;
 }

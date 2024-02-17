@@ -31,6 +31,7 @@ export * from './pastExamsHubCoreApplicationExamsModelsExamModel';
 export * from './pastExamsHubCoreApplicationExamsQueriesGetCollectionGetExamsQueryResult';
 export * from './pastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQuery';
 export * from './pastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult';
+export * from './pastExamsHubCoreApplicationExamsQueriesGetSingleGetExamQueryResult';
 export * from './pastExamsHubCoreApplicationStatisticsQueriesGetStatisticsGetStatisticsQuery';
 export * from './pastExamsHubCoreApplicationStatisticsQueriesGetStatisticsGetStatisticsQueryResult';
 export * from './pastExamsHubCoreApplicationTeachersCommandsUpdateUpdateTeacherCommand';
@@ -43,5 +44,6 @@ export * from './pastExamsHubCoreApplicationUsersQueriesGetSingleGetUserQueryRes
 export * from './pastExamsHubCoreDomainEnumsCourseType';
 export * from './pastExamsHubCoreDomainEnumsExamPeriodType';
 export * from './pastExamsHubCoreDomainEnumsExamType';
+export * from './pastExamsHubCoreDomainEnumsFileType';
 export * from './pastExamsHubCoreDomainEnumsGenderType';
 export * from './pastExamsHubCoreDomainEnumsStudyType';
