@@ -34,6 +34,9 @@ interface MenuItem {
   ],
 })
 export class ShellComponent {
+  private breakpointObserver = inject(BreakpointObserver);
+  private router = inject(Router);
+
   readonly menuItems: MenuItem[] = [
     {
       text: 'Pocetna',
@@ -62,8 +65,6 @@ export class ShellComponent {
     },
   ];
 
-  private breakpointObserver = inject(BreakpointObserver);
-  constructor(private router: Router) {}
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(

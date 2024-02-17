@@ -6,7 +6,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideOAuthClient } from 'angular-oauth2-oidc';
 import { AuthenticationService } from './shared/services/authentication.service';
 import { Configuration as CoreConfiguration, ApiModule as CoreApiModule } from '@org/portal/data-access';
-import { Configuration as AuthorityConfiguration, ApiModule as AuthorityApiModule } from '@org/authority/data-access'
+import { Configuration as AuthorityConfiguration, ApiModule as AuthorityApiModule } from '@org/authority/data-access';
 import { environment } from '../environments/environment';
 
 function configureAuth(authenticationService: AuthenticationService) {
@@ -30,6 +30,14 @@ export const appConfig: ApplicationConfig = {
       multi: true,
       deps: [AuthenticationService],
     },
+    AuthorityApiModule,
+    {
+      provide: AuthorityConfiguration,
+      useFactory: () => new AuthorityConfiguration({
+        basePath: environment.authorityApiUrl,
+        withCredentials: true
+      })
+    },
     CoreApiModule,
     {
       provide: CoreConfiguration,
@@ -37,13 +45,6 @@ export const appConfig: ApplicationConfig = {
         basePath: environment.coreApiUrl,
       })
     },
-    AuthorityApiModule,
-    {
-      provide: AuthorityConfiguration,
-      useFactory: () => new AuthorityConfiguration({
-        basePath: environment.coreApiUrl,
-        withCredentials: true
-      })
-    }
+    
   ],
 };

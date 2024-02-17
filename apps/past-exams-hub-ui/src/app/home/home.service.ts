@@ -1,21 +1,21 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { AuthenticationService } from '@org/authority/data-access';
 import { ExamsService, StatisticsService } from '@org/portal/data-access';
-import { BehaviorSubject, combineLatest, map, switchMap } from 'rxjs';
+import { BehaviorSubject, forkJoin, map, switchMap } from 'rxjs';
 
 @Injectable()
 export class HomeService {
+  private authenticationService = inject(AuthenticationService);
+  private statisticsService = inject(StatisticsService);
+  private examsService = inject(ExamsService);
+
   private _refresh = new BehaviorSubject<void>(undefined);
   refresh$ = this._refresh.asObservable();
-
-  constructor(
-    private statisticsService: StatisticsService,
-    private examsService: ExamsService
-  ) {}
 
   fetchData() {
     return this.refresh$.pipe(
       switchMap(() =>
-        combineLatest([
+        forkJoin([
           this.statisticsService.statisticsGet(),
           this.examsService.examsLatestExamsGet(),
         ]).pipe(
