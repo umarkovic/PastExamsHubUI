@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 export const appRoutes: Route[] = [
   {
@@ -10,12 +11,23 @@ export const appRoutes: Route[] = [
     path: 'signin',
     loadComponent: () =>
       import('../app/sign-in/sign-in.component').then((c) => c.SignInComponent),
+    // canActivate: [AuthGuard],
+  },
+  {
+    path: 'signup',
+    loadComponent: () =>
+      import('../app/sign-up/sign-up.component').then((c) => c.SignUpComponent),
+  },
+  {
+    path: 'signout',
+    loadComponent: () =>
+      import('../app/sign-out/sign-out.component').then((c) => c.SignOutComponent),
   },
   {
     path: '',
     loadComponent: () =>
       import('../app/shell/shell.component').then((c) => c.ShellComponent),
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'pocetna',

@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { Router, RouterModule } from '@angular/router';
+import { AuthenticationService } from '../shared/services/authentication.service';
 
 interface MenuItem {
   text: string;
@@ -34,6 +35,7 @@ interface MenuItem {
   ],
 })
 export class ShellComponent {
+  private authenticationService = inject(AuthenticationService);
   private breakpointObserver = inject(BreakpointObserver);
   private router = inject(Router);
 
@@ -81,6 +83,6 @@ export class ShellComponent {
   }
 
   logout() {
-    console.log('logout');
+    this.authenticationService.logout();
   }
 }

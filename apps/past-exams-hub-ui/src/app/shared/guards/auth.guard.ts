@@ -16,7 +16,13 @@ export const AuthGuard: CanActivateFn = (
   const hasIdToken = oauthService.hasValidIdToken();
   const hasAccessToken = oauthService.hasValidAccessToken();
   if (hasIdToken && hasAccessToken) {
-    return true;
+    console.log(state.url);
+    
+    if (state.url !== '/signin') {
+      return true;
+    }
+    router.navigate(['/']);
+    return false;
   }
   router.navigate(['/']);
   return false;
