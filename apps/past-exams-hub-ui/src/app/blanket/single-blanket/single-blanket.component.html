@@ -27,24 +27,32 @@
         >
           <div class="header">
             <p style="font-size: 20px">{{ data.examData?.examPeriod?.name }}</p>
-            <h2 style="margin-bottom: 6px">{{ data.examData?.courseName }}</h2>
+            <h1 style="margin-bottom: 6px">{{ data.examData?.courseName }}</h1>
             <div
               style="display: flex; flex-direction: column; align-items: center"
             >
-              <span>{{
+            <span>
+              {{
                 data.examData?.type +
-                  ', ' +
-                  data.examData?.numberOfTasks +
-                  ' zadataka'
-              }}</span>
-              <span>{{ data.examData?.examDate | date : 'dd. MM.YYY' }}</span>
+                ', ' +
+                (data.examData?.numberOfTasks ?? 0) +
+                ' ' +
+                ((data.examData?.numberOfTasks ?? 0) === 1
+                  ? 'zadatak'
+                  : (data.examData?.numberOfTasks ?? 0) > 1 &&
+                    (data.examData?.numberOfTasks ?? 0) < 5
+                  ? 'zadatka'
+                  : 'zadataka')
+              }}
+            </span>
+              <span>{{ data.examData?.examDate | date : 'dd. MM. YYY' }}</span>
             </div>
           </div>
 
-          <h2>Beleske</h2>
+          <h2>Beleške</h2>
           <form [formGroup]="form">
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Beleske </mat-label>
+              <mat-label>Beleške </mat-label>
               <textarea
                 matInput
                 cdkTextareaAutosize
@@ -63,7 +71,7 @@
               mat-raised-button
               (click)="addSolutions(data?.examData?.examUid!)"
             >
-              Dodaj resenja
+              Dodaj rešenje
             </button>
           </div>
 
@@ -169,7 +177,7 @@
                     >visibility</mat-icon
                   >
                   <mat-icon
-                    *ngIf="currentUser === element.ownerUid"
+                    *ngIf="currentUser !== element.ownerUid"
                     class="material-symbols-outlined cursor"
                     (click)="$event.stopPropagation()"
                     >delete</mat-icon

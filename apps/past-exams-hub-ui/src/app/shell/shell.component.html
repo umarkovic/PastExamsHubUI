@@ -40,7 +40,12 @@
           height="45px"
         />
       </div>
-      <span>PAST EXAMS HUB</span>
+      <div class="gap">
+        <span>PAST EXAMS HUB</span> 
+        <span class="role-color-student" >{{ currentUser.role === 'Student' ? 'STUDENT' : '' }}</span>
+        <span class="role-color-teacher" >{{ currentUser.role === 'Teacher' ? 'PROFESOR' : '' }}</span>  
+      </div>
+      
       <span class="example-spacer"></span>
       <div class="gap">
         <button mat-button (click)="addBlanket()">

@@ -11,7 +11,8 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { Router, RouterModule } from '@angular/router';
 import { AuthenticationService } from '../shared/services/authentication.service';
-
+import { CurrentUserService } from '../shared/services/current-user.service';
+import { CommonModule } from '@angular/common';
 interface MenuItem {
   text: string;
   iconName: string;
@@ -32,13 +33,21 @@ interface MenuItem {
     MatIconModule,
     MatRippleModule,
     AsyncPipe,
+    CommonModule
   ],
 })
 export class ShellComponent {
   private authenticationService = inject(AuthenticationService);
   private breakpointObserver = inject(BreakpointObserver);
   private router = inject(Router);
+  currentUser = this.currentUserService.currentUser;
 
+
+  constructor(
+    private currentUserService: CurrentUserService
+  ) {
+
+  }
   readonly menuItems: MenuItem[] = [
     {
       text: 'Pocetna',
