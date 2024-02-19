@@ -132,14 +132,11 @@
           (itemsRangeChange)="updateSlice($event)"
         >
           @for (latestExam of data.latestExams.latestExams; track latestExam) {
-          <div class="card text-wrapper">
+          <div class="card text-wrapper" (click)="redirectTo(latestExam.uid!)">
             <b>{{ latestExam.courseName }}</b>
             <span>{{ latestExam.examPeriodName }}</span>
           </div>
           }
-
-
-          
         </pastexamshub-table-scrolling-viewport>
       </div>
     </div>

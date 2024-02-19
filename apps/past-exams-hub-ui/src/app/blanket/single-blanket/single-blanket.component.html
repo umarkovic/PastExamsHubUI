@@ -4,14 +4,17 @@
       <div style="display: flex; width: 100%">
         <div style="display: flex; width: 40%">
           <iframe
-            *ngIf="pdfData"
-            [src]="pdfData"
+            *ngIf="fileData && isPdfFile; else img"
+            [src]="fileData"
             width="100%"
             height="100%"
             webkitallowfullscreen
             mozallowfullscreen
             allowfullscreen
           ></iframe>
+          <ng-template #img>
+            <img [src]="fileData" />
+          </ng-template>
         </div>
 
         <div
@@ -23,17 +26,22 @@
           "
         >
           <div class="header">
-            <p style="font-size: 20px">{{ data.examPeriod.name }}</p>
-            <h2 style="margin-bottom: 6px">{{ data.courseName }}</h2>
+            <p style="font-size: 20px">{{ data.examData?.examPeriod?.name }}</p>
+            <h2 style="margin-bottom: 6px">{{ data.examData?.courseName }}</h2>
             <div
               style="display: flex; flex-direction: column; align-items: center"
             >
               <span>{{
-                data.type + ', ' + data.numberOfTasks + ' zadataka'
+                data.examData?.type +
+                  ', ' +
+                  data.examData?.numberOfTasks +
+                  ' zadataka'
               }}</span>
-              <span>{{ data.examDate | date : 'dd. MM.YYY' }}</span>
+              <span>{{ data.examData?.examDate | date : 'dd. MM.YYY' }}</span>
             </div>
           </div>
+
+          <h2>Beleske</h2>
           <form [formGroup]="form">
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Beleske </mat-label>
@@ -48,6 +56,134 @@
               ></textarea>
             </mat-form-field>
           </form>
+          <div style="display: flex; justify-content: space-between">
+            <h2>Resenja</h2>
+            <button
+              color="primary"
+              mat-raised-button
+              (click)="addSolutions(data?.examData?.examUid!)"
+            >
+              Dodaj resenja
+            </button>
+          </div>
+
+          <div class="table">
+            <table
+              mat-table
+              [dataSource]="data.examSolution!"
+              class="mat-elevation-z8"
+            >
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef class="date" class="date">
+                  {{ 'Datum' }}
+                </th>
+                <td mat-cell *matCellDef="let element" class="date">
+                  {{ element.createdDateTimeUtc | date : 'dd.MMM.YYYY' ?? '/' }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="owner">
+                <th mat-header-cell *matHeaderCellDef class="owner">
+                  {{ 'Vlasnik' }}
+                </th>
+                <td mat-cell *matCellDef="let element" class="owner">
+                  {{
+                    element.ownerFirstName + ' ' + element.ownerLastName ?? '/'
+                  }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="file">
+                <th mat-header-cell *matHeaderCellDef class="file">
+                  {{ 'Fajl' }}
+                </th>
+                <td mat-cell *matCellDef="let element" class="file">
+                  <mat-icon
+                    class="material-symbols-outlined red"
+                    *ngIf="element.fileType === 'Document'"
+                  >
+                    picture_as_pdf
+                  </mat-icon>
+
+                  <mat-icon
+                    class="material-symbols-outlined yellow"
+                    *ngIf="element.fileType !== 'Document'"
+                  >
+                    image
+                  </mat-icon>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="taskNumber">
+                <th mat-header-cell *matHeaderCellDef class="taskNumber">
+                  {{ 'Br. zadataka' }}
+                </th>
+                <td mat-cell *matCellDef="let element" class="taskNumber">
+                  {{
+                    element.taskNumber !== 'undefined'
+                      ? element.taskNumber === 0
+                        ? '/'
+                        : element.taskNumber
+                      : '/'
+                  }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="rating">
+                <th mat-header-cell *matHeaderCellDef class="rating">
+                  {{ 'Ocena' }}
+                </th>
+                <td mat-cell *matCellDef="let element" class="rating">
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                    "
+                  >
+                    <mat-icon class="material-symbols-outlined remove_circle">
+                      remove_circle
+                    </mat-icon>
+                    <div class="rating-table-wrapper">
+                      <span>{{ element.grade ?? '0' }}</span>
+                      <span>{{
+                        ' (' + (element.gradeCount ?? '0') + ')'
+                      }}</span>
+                    </div>
+
+                    <mat-icon class="material-symbols-outlined add_circle">
+                      add_circle
+                    </mat-icon>
+                  </div>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef class="action">
+                  {{ 'Akcije' }}
+                </th>
+                <td mat-cell *matCellDef="let element" class="action">
+                  <mat-icon
+                    class="material-symbols-outlined cursor"
+                    (click)="$event.stopPropagation()"
+                    >visibility</mat-icon
+                  >
+                  <mat-icon
+                    *ngIf="currentUser === element.ownerUid"
+                    class="material-symbols-outlined cursor"
+                    (click)="$event.stopPropagation()"
+                    >delete</mat-icon
+                  >
+                </td>
+              </ng-container>
+
+              <tr
+                mat-header-row
+                *matHeaderRowDef="displayedColumns; sticky: true"
+              ></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </div>
         </div>
       </div>
     </mat-card>

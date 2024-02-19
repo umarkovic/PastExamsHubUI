@@ -21,7 +21,9 @@ export const appRoutes: Route[] = [
   {
     path: 'signout',
     loadComponent: () =>
-      import('../app/sign-out/sign-out.component').then((c) => c.SignOutComponent),
+      import('../app/sign-out/sign-out.component').then(
+        (c) => c.SignOutComponent
+      ),
   },
   {
     path: '',
@@ -89,6 +91,14 @@ export const appRoutes: Route[] = [
         loadComponent: () =>
           import('./blanket/single-blanket/single-blanket.component').then(
             (c) => c.SingleBlanketComponent
+          ),
+      },
+
+      {
+        path: 'dodaj_resenje/:id',
+        loadComponent: () =>
+          import('./add-solution/add-solution.component').then(
+            (c) => c.AddSolutionComponent
           ),
       },
     ],

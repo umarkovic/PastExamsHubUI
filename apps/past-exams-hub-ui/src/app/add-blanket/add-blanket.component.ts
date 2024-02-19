@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { FormBaseComponent } from '../shared/components/form-base.component';
 import { MatInputModule } from '@angular/material/input';
@@ -61,7 +61,7 @@ export const PastExamsHubCoreDomainEnumsExamType = {
   templateUrl: './add-blanket.component.html',
   styleUrl: './add-blanket.component.scss',
 })
-export class AddBlanketComponent extends FormBaseComponent implements OnInit {
+export class AddBlanketComponent extends FormBaseComponent {
   data$ = this.blanketService.fetchData();
   examTypes: { label: string; value: PastExamsHubCoreDomainEnumsExamType }[] =
     [];
@@ -118,6 +118,7 @@ export class AddBlanketComponent extends FormBaseComponent implements OnInit {
   // }
 
   public dropped(files: NgxFileDropEntry[]) {
+    console.log(files);
     this.files = files;
     for (const droppedFile of files) {
       if (droppedFile.fileEntry.isFile) {

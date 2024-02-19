@@ -10,9 +10,6 @@
  * Do not edit the class manually.
  */
 
-export interface PastExamsHubCoreApplicationExamSoultionsCommandsCreateCreateExamSolutionCommand { 
-    userUid?: string;
-    examUid?: string;
-    comment?: string;
-    taskNumber?: number;
+export interface ExamSolutionUploadBody { 
+    file?: Blob;
 }

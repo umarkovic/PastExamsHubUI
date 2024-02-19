@@ -1,3 +1,4 @@
+export * from './examSolutionUploadBody';
 export * from './examsUploadBody';
 export * from './inlineResponse404';
 export * from './microsoftAspNetCoreHttpHttpValidationProblemDetails';
@@ -21,7 +22,6 @@ export * from './pastExamsHubCoreApplicationExamPeriodsCommandUpdateUpdateExamPe
 export * from './pastExamsHubCoreApplicationExamPeriodsExamPeriodModel';
 export * from './pastExamsHubCoreApplicationExamPeriodsQueriesGetCollectionGetExamPeriodsQueryResult';
 export * from './pastExamsHubCoreApplicationExamPeriodsQueriesGetSingleGetExamPeriodQueryResult';
-export * from './pastExamsHubCoreApplicationExamSoultionsCommandsCreateCreateExamSolutionCommand';
 export * from './pastExamsHubCoreApplicationExamSoultionsCommandsCreateCreateExamSolutionCommandResult';
 export * from './pastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel';
 export * from './pastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult';

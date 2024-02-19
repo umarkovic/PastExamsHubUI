@@ -6,6 +6,7 @@ import { switchMap } from 'rxjs';
 import { BlanketService } from './blanket.service';
 import { ExamsService } from 'libs/portal/src/api/api';
 import { CommonModule } from '@angular/common';
+import { CurrentUserService } from '../shared/services/current-user.service';
 
 @Component({
   selector: 'pastexamshub-blanket',
@@ -17,12 +18,12 @@ import { CommonModule } from '@angular/common';
 })
 export class BlanketComponent {
   lastPage!: string;
+
   private router = inject(Router);
   data$ = this.route.queryParams.pipe(
     switchMap((x) => {
       const uid = x['uid'];
       this.lastPage = x['lastPage'];
-
       return this.blanketService.fetchData(x['lastPage'], uid);
     })
   );

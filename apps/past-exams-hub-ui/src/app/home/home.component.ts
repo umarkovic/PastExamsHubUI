@@ -60,4 +60,8 @@ export class HomeComponent {
   updateSlice(range: ListRange) {
     this.itemsSlice = this.items.slice(range.start, range.end);
   }
+
+  redirectTo(uid: string) {
+    this.router.navigate(['/blanket', uid]);
+  }
 }

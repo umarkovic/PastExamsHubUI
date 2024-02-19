@@ -30,5 +30,6 @@ export interface PastExamsHubCoreApplicationExamsModelsExamModel {
     periodUid?: string;
     examPeriod?: PastExamsHubCoreApplicationExamPeriodsExamPeriodModel;
     fileType?: PastExamsHubCoreDomainEnumsFileType;
+    contentType?: string;
     file?: string;
 }

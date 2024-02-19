@@ -2147,31 +2147,53 @@
             }
           }
         }
-      },
+      }
+    },
+    "/ExamSolution/upload": {
       "post": {
         "tags": [
           "ExamSolution"
         ],
+        "parameters": [
+          {
+            "name": "ExamUid",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Comment",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "TaskNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
-            "application/json-patch+json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Commands.Create.CreateExamSolutionCommand"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Commands.Create.CreateExamSolutionCommand"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Commands.Create.CreateExamSolutionCommand"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Commands.Create.CreateExamSolutionCommand"
+                "type": "object",
+                "properties": {
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "File": {
+                  "style": "form"
+                }
               }
             }
           }
@@ -3787,6 +3809,10 @@
           "fileType": {
             "$ref": "#/components/schemas/PastExamsHub.Core.Domain.Enums.FileType"
           },
+          "contentType": {
+            "type": "string",
+            "nullable": true
+          },
           "file": {
             "type": "string",
             "format": "byte",
@@ -3856,29 +3882,6 @@
         },
         "additionalProperties": false
       },
-      "PastExamsHub.Core.Application.ExamSoultions.Commands.Create.CreateExamSolutionCommand": {
-        "type": "object",
-        "properties": {
-          "userUid": {
-            "type": "string",
-            "nullable": true
-          },
-          "examUid": {
-            "type": "string",
-            "nullable": true
-          },
-          "comment": {
-            "type": "string",
-            "nullable": true
-          },
-          "taskNumber": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "PastExamsHub.Core.Application.ExamSoultions.Commands.Create.CreateExamSolutionCommandResult": {
         "type": "object",
         "properties": {
@@ -3892,6 +3895,10 @@
       "PastExamsHub.Core.Application.ExamSoultions.Models.ExamSolutionModel": {
         "type": "object",
         "properties": {
+          "createdDateTimeUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
           "ownerFirstName": {
             "type": "string",
             "nullable": true
@@ -3900,28 +3907,31 @@
             "type": "string",
             "nullable": true
           },
-          "ownerStudyYear": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
           "ownerRole": {
             "$ref": "#/components/schemas/PastExamsHub.Base.Domain.Enums.RoleType"
           },
-          "comment": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdDateTimeUtc": {
-            "type": "string",
-            "format": "date-time"
+          "fileType": {
+            "$ref": "#/components/schemas/PastExamsHub.Core.Domain.Enums.FileType"
           },
           "taskNumber": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
+          "soulutionComment": {
+            "type": "string",
+            "nullable": true
+          },
+          "ownerStudyYear": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "gradeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "grade": {
             "type": "integer",
             "format": "int32"
           },

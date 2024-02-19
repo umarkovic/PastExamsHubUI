@@ -12,16 +12,19 @@
 import { PastExamsHubBaseDomainEnumsRoleType } from './pastExamsHubBaseDomainEnumsRoleType';
 import { PastExamsHubCoreDomainEnumsExamPeriodType } from './pastExamsHubCoreDomainEnumsExamPeriodType';
 import { PastExamsHubCoreDomainEnumsExamType } from './pastExamsHubCoreDomainEnumsExamType';
+import { PastExamsHubCoreDomainEnumsFileType } from './pastExamsHubCoreDomainEnumsFileType';
 
 export interface PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel { 
+    createdDateTimeUtc?: Date;
     ownerFirstName?: string;
     ownerLastName?: string;
-    ownerStudyYear?: number;
     ownerRole?: PastExamsHubBaseDomainEnumsRoleType;
-    comment?: string;
-    createdDateTimeUtc?: Date;
+    fileType?: PastExamsHubCoreDomainEnumsFileType;
     taskNumber?: number;
+    soulutionComment?: string;
+    ownerStudyYear?: number;
     gradeCount?: number;
+    grade?: number;
     courseName?: string;
     type?: PastExamsHubCoreDomainEnumsExamType;
     periodName?: string;
