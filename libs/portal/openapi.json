@@ -1793,15 +1793,6 @@
         "tags": [
           "Exams"
         ],
-        "parameters": [
-          {
-            "name": "request",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/PastExamsHub.Core.Application.Exams.Queries.GetLatestExams.GetLatestExamsQuery"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -2041,6 +2032,29 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SearchText",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2060,6 +2074,127 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Queries.GetCollection.GetExamSolutionsQueryResult"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ExamSolution/{uid}": {
+      "get": {
+        "tags": [
+          "ExamSolution"
+        ],
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Queries.GetSingle.GetExamSolutionQueryResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Queries.GetSingle.GetExamSolutionQueryResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Queries.GetSingle.GetExamSolutionQueryResult"
                 }
               }
             }
@@ -2215,6 +2350,133 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Commands.Create.CreateExamSolutionCommandResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Microsoft.AspNetCore.Http.HttpValidationProblemDetails"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ExamSolution/Grade": {
+      "post": {
+        "tags": [
+          "ExamSolution"
+        ],
+        "parameters": [
+          {
+            "name": "ExamSolutionUid",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "IsPositive",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PastExamsHub.Core.Application.Grades.Commands.Create.CreateGradeCommandResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PastExamsHub.Core.Application.Grades.Commands.Create.CreateGradeCommandResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PastExamsHub.Core.Application.Grades.Commands.Create.CreateGradeCommandResult"
                 }
               }
             }
@@ -3537,6 +3799,9 @@
           "espb": {
             "type": "integer",
             "format": "int32"
+          },
+          "isEditAndDeleteAllowed": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3663,6 +3928,9 @@
           "periodDayDuration": {
             "type": "integer",
             "format": "int32"
+          },
+          "isEditAndDeleteAllowed": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3817,6 +4085,9 @@
             "type": "string",
             "format": "byte",
             "nullable": true
+          },
+          "isEditAndDeleteAllowed": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3856,10 +4127,6 @@
         },
         "additionalProperties": false
       },
-      "PastExamsHub.Core.Application.Exams.Queries.GetLatestExams.GetLatestExamsQuery": {
-        "type": "object",
-        "additionalProperties": false
-      },
       "PastExamsHub.Core.Application.Exams.Queries.GetLatestExams.GetLatestExamsQueryResult": {
         "type": "object",
         "properties": {
@@ -3892,12 +4159,36 @@
         },
         "additionalProperties": false
       },
+      "PastExamsHub.Core.Application.ExamSoultions.Models.ExamSolutionFileModel": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Models.ExamSolutionModel"
+          }
+        ],
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "PastExamsHub.Core.Application.ExamSoultions.Models.ExamSolutionModel": {
         "type": "object",
         "properties": {
+          "uid": {
+            "type": "string",
+            "nullable": true
+          },
           "createdDateTimeUtc": {
             "type": "string",
             "format": "date-time"
+          },
+          "ownerUid": {
+            "type": "string",
+            "nullable": true
           },
           "ownerFirstName": {
             "type": "string",
@@ -3948,6 +4239,12 @@
           },
           "periodType": {
             "$ref": "#/components/schemas/PastExamsHub.Core.Domain.Enums.ExamPeriodType"
+          },
+          "isEditAndDeleteAllowed": {
+            "type": "boolean"
+          },
+          "isAlreadyGraded": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3958,9 +4255,65 @@
           "solutions": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Models.ExamSolutionModel"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Models.ExamSolutionModel"
+                },
+                {
+                  "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Models.ExamSolutionFileModel"
+                }
+              ]
             },
             "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currentPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasNext": {
+            "type": "boolean"
+          },
+          "hasPrevious": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PastExamsHub.Core.Application.ExamSoultions.Queries.GetSingle.GetExamSolutionQueryResult": {
+        "type": "object",
+        "properties": {
+          "solution": {
+            "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Models.ExamSolutionFileModel"
+          },
+          "isCurrentUserOwner": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PastExamsHub.Core.Application.Grades.Commands.Create.CreateGradeCommandResult": {
+        "type": "object",
+        "properties": {
+          "uid": {
+            "type": "string",
+            "nullable": true
+          },
+          "grade": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

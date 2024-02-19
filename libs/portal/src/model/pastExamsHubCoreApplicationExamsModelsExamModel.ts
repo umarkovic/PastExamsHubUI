@@ -32,4 +32,5 @@ export interface PastExamsHubCoreApplicationExamsModelsExamModel {
     fileType?: PastExamsHubCoreDomainEnumsFileType;
     contentType?: string;
     file?: string;
+    isEditAndDeleteAllowed?: boolean;
 }

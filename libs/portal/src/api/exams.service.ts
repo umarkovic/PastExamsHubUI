@@ -20,7 +20,6 @@ import { Observable }                                        from 'rxjs';
 import { InlineResponse404 } from '../model/inlineResponse404';
 import { PastExamsHubCoreApplicationExamsCommandCreateCreateExamCommandResult } from '../model/pastExamsHubCoreApplicationExamsCommandCreateCreateExamCommandResult';
 import { PastExamsHubCoreApplicationExamsQueriesGetCollectionGetExamsQueryResult } from '../model/pastExamsHubCoreApplicationExamsQueriesGetCollectionGetExamsQueryResult';
-import { PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQuery } from '../model/pastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQuery';
 import { PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult } from '../model/pastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult';
 import { PastExamsHubCoreApplicationExamsQueriesGetSingleGetExamQueryResult } from '../model/pastExamsHubCoreApplicationExamsQueriesGetSingleGetExamQueryResult';
 import { PastExamsHubCoreDomainEnumsExamType } from '../model/pastExamsHubCoreDomainEnumsExamType';
@@ -135,20 +134,13 @@ export class ExamsService {
     /**
      * 
      * 
-     * @param request 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public examsLatestExamsGet(request?: PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQuery, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult>;
-    public examsLatestExamsGet(request?: PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQuery, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult>>;
-    public examsLatestExamsGet(request?: PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQuery, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult>>;
-    public examsLatestExamsGet(request?: PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQuery, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (request !== undefined && request !== null) {
-            queryParameters = queryParameters.set('request', <any>request);
-        }
+    public examsLatestExamsGet(observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult>;
+    public examsLatestExamsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult>>;
+    public examsLatestExamsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult>>;
+    public examsLatestExamsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -174,7 +166,6 @@ export class ExamsService {
 
         return this.httpClient.request<PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQueryResult>('get',`${this.basePath}/Exams/LatestExams`,
             {
-                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

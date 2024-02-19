@@ -18,4 +18,5 @@ export interface PastExamsHubCoreApplicationExamPeriodsExamPeriodModel {
     startDate?: Date;
     endDate?: Date;
     periodDayDuration?: number;
+    isEditAndDeleteAllowed?: boolean;
 }

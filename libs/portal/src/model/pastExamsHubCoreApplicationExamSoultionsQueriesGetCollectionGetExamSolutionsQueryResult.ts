@@ -9,8 +9,15 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionFileModel } from './pastExamsHubCoreApplicationExamSoultionsModelsExamSolutionFileModel';
 import { PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel } from './pastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel';
 
 export interface PastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult { 
-    solutions?: Array<PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel>;
+    solutions?: Array<PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel | PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionFileModel>;
+    totalCount?: number;
+    pageSize?: number;
+    currentPage?: number;
+    totalPages?: number;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
 }
