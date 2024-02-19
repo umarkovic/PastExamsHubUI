@@ -10,27 +10,11 @@
  * Do not edit the class manually.
  */
 import { PastExamsHubBaseDomainEnumsRoleType } from './pastExamsHubBaseDomainEnumsRoleType';
+import { PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel } from './pastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel';
 import { PastExamsHubCoreDomainEnumsExamPeriodType } from './pastExamsHubCoreDomainEnumsExamPeriodType';
 import { PastExamsHubCoreDomainEnumsExamType } from './pastExamsHubCoreDomainEnumsExamType';
 import { PastExamsHubCoreDomainEnumsFileType } from './pastExamsHubCoreDomainEnumsFileType';
 
-export interface PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel { 
-    uid?: string;
-    createdDateTimeUtc?: Date;
-    ownerUid?: string;
-    ownerFirstName?: string;
-    ownerLastName?: string;
-    ownerRole?: PastExamsHubBaseDomainEnumsRoleType;
-    fileType?: PastExamsHubCoreDomainEnumsFileType;
-    taskNumber?: number;
-    soulutionComment?: string;
-    ownerStudyYear?: number;
-    gradeCount?: number;
-    grade?: number;
-    courseName?: string;
-    type?: PastExamsHubCoreDomainEnumsExamType;
-    periodName?: string;
-    periodType?: PastExamsHubCoreDomainEnumsExamPeriodType;
-    isEditAndDeleteAllowed?: boolean;
-    isAlreadyGraded?: boolean;
+export interface PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionFileModel extends PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel { 
+    file?: string;
 }

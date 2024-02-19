@@ -20,6 +20,8 @@ import { Observable }                                        from 'rxjs';
 import { InlineResponse404 } from '../model/inlineResponse404';
 import { PastExamsHubCoreApplicationExamSoultionsCommandsCreateCreateExamSolutionCommandResult } from '../model/pastExamsHubCoreApplicationExamSoultionsCommandsCreateCreateExamSolutionCommandResult';
 import { PastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult } from '../model/pastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult';
+import { PastExamsHubCoreApplicationExamSoultionsQueriesGetSingleGetExamSolutionQueryResult } from '../model/pastExamsHubCoreApplicationExamSoultionsQueriesGetSingleGetExamSolutionQueryResult';
+import { PastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult } from '../model/pastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -115,6 +117,110 @@ export class ExamSolutionService {
         return this.httpClient.request<PastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult>('get',`${this.basePath}/ExamSolution`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param examSolutionUid 
+     * @param isPositive 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public examSolutionGradePost(examSolutionUid?: string, isPositive?: boolean, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult>;
+    public examSolutionGradePost(examSolutionUid?: string, isPositive?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult>>;
+    public examSolutionGradePost(examSolutionUid?: string, isPositive?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult>>;
+    public examSolutionGradePost(examSolutionUid?: string, isPositive?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (examSolutionUid !== undefined && examSolutionUid !== null) {
+            queryParameters = queryParameters.set('ExamSolutionUid', <any>examSolutionUid);
+        }
+        if (isPositive !== undefined && isPositive !== null) {
+            queryParameters = queryParameters.set('IsPositive', <any>isPositive);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<PastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult>('post',`${this.basePath}/ExamSolution/Grade`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param uid 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public examSolutionUidGet(uid: string, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationExamSoultionsQueriesGetSingleGetExamSolutionQueryResult>;
+    public examSolutionUidGet(uid: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationExamSoultionsQueriesGetSingleGetExamSolutionQueryResult>>;
+    public examSolutionUidGet(uid: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationExamSoultionsQueriesGetSingleGetExamSolutionQueryResult>>;
+    public examSolutionUidGet(uid: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (uid === null || uid === undefined) {
+            throw new Error('Required parameter uid was null or undefined when calling examSolutionUidGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<PastExamsHubCoreApplicationExamSoultionsQueriesGetSingleGetExamSolutionQueryResult>('get',`${this.basePath}/ExamSolution/${encodeURIComponent(String(uid))}`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

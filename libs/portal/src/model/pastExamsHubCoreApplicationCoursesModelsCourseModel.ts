@@ -23,4 +23,5 @@ export interface PastExamsHubCoreApplicationCoursesModelsCourseModel {
     studyYear?: number;
     semester?: number;
     espb?: number;
+    isEditAndDeleteAllowed?: boolean;
 }

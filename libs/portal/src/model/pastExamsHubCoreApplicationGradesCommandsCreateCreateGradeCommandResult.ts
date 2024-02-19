@@ -10,5 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface PastExamsHubCoreApplicationExamsQueriesGetLatestExamsGetLatestExamsQuery { 
+export interface PastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult { 
+    uid?: string;
+    grade?: number;
 }
