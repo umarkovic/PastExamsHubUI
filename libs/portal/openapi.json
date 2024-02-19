@@ -2041,6 +2041,29 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "PageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "SearchText",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -3895,9 +3918,17 @@
       "PastExamsHub.Core.Application.ExamSoultions.Models.ExamSolutionModel": {
         "type": "object",
         "properties": {
+          "uid": {
+            "type": "string",
+            "nullable": true
+          },
           "createdDateTimeUtc": {
             "type": "string",
             "format": "date-time"
+          },
+          "ownerUid": {
+            "type": "string",
+            "nullable": true
           },
           "ownerFirstName": {
             "type": "string",
@@ -3961,6 +3992,28 @@
               "$ref": "#/components/schemas/PastExamsHub.Core.Application.ExamSoultions.Models.ExamSolutionModel"
             },
             "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currentPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasNext": {
+            "type": "boolean"
+          },
+          "hasPrevious": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

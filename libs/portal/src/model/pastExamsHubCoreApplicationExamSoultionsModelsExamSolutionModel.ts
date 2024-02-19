@@ -15,7 +15,9 @@ import { PastExamsHubCoreDomainEnumsExamType } from './pastExamsHubCoreDomainEnu
 import { PastExamsHubCoreDomainEnumsFileType } from './pastExamsHubCoreDomainEnumsFileType';
 
 export interface PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel { 
+    uid?: string;
     createdDateTimeUtc?: Date;
+    ownerUid?: string;
     ownerFirstName?: string;
     ownerLastName?: string;
     ownerRole?: PastExamsHubBaseDomainEnumsRoleType;

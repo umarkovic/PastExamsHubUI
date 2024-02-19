@@ -13,4 +13,10 @@ import { PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel } from 
 
 export interface PastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult { 
     solutions?: Array<PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel>;
+    totalCount?: number;
+    pageSize?: number;
+    currentPage?: number;
+    totalPages?: number;
+    hasNext?: boolean;
+    hasPrevious?: boolean;
 }

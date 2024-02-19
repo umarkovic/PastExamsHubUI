@@ -61,18 +61,33 @@ export class ExamSolutionService {
      * 
      * 
      * @param examUid 
+     * @param pageNumber 
+     * @param pageSize 
+     * @param searchText 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public examSolutionGet(examUid?: string, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult>;
-    public examSolutionGet(examUid?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult>>;
-    public examSolutionGet(examUid?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult>>;
-    public examSolutionGet(examUid?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public examSolutionGet(examUid?: string, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult>;
+    public examSolutionGet(examUid?: string, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult>>;
+    public examSolutionGet(examUid?: string, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult>>;
+    public examSolutionGet(examUid?: string, pageNumber?: number, pageSize?: number, searchText?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (examUid !== undefined && examUid !== null) {
             queryParameters = queryParameters.set('ExamUid', <any>examUid);
+        }
+        if (pageNumber !== undefined && pageNumber !== null) {
+            queryParameters = queryParameters.set('PageNumber', <any>pageNumber);
+        }
+        if (pageSize !== undefined && pageSize !== null) {
+            queryParameters = queryParameters.set('PageSize', <any>pageSize);
+        }
+        if (searchText !== undefined && searchText !== null) {
+            queryParameters = queryParameters.set('SearchText', <any>searchText);
         }
 
         let headers = this.defaultHeaders;
