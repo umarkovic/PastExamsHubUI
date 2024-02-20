@@ -140,4 +140,8 @@ export class SubjectsComponent {
       }
     });
   }
+
+  applyFilter(event: any) {
+    const filterValue = event.target.value.trim().toLowerCase();
+  }
 }
