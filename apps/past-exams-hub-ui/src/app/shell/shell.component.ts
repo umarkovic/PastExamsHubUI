@@ -49,19 +49,25 @@ export class ShellComponent {
 
   }
   readonly menuItems: MenuItem[] = [
+    
     {
       text: 'Pocetna',
       iconName: 'home',
       url: '/pocetna',
     },
     {
+      text: 'Blanketi',
+      iconName: 'assignment',
+      url: '/blanketi',
+    },
+    {
       text: 'Predmeti',
-      iconName: 'description',
+      iconName: 'auto_stories',
       url: '/predmeti',
     },
     {
       text: 'Rokovi',
-      iconName: 'list_alt',
+      iconName: 'event',
       url: '/rokovi',
     },
     {

@@ -24,6 +24,7 @@ export class BlanketComponent {
     switchMap((x) => {
       const uid = x['uid'];
       this.lastPage = x['lastPage'];
+      console.log(this.lastPage);
       return this.blanketService.fetchData(x['lastPage'], uid);
     })
   );
