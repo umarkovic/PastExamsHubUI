@@ -5,7 +5,7 @@
   </button>
 </div>
 <mat-dialog-content>{{ data }}</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Ne</button>
-  <button mat-button color="primary" (click)="onYesClick()">Da</button>
+<mat-dialog-actions style="display: flex; justify-content: flex-end">
+  <button mat-raised-button (click)="onNoClick()">Ne</button>
+  <button mat-raised-button color="primary" (click)="onYesClick()">Da</button>
 </mat-dialog-actions>

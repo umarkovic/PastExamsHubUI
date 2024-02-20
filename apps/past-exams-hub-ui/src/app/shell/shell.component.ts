@@ -33,7 +33,7 @@ interface MenuItem {
     MatIconModule,
     MatRippleModule,
     AsyncPipe,
-    CommonModule
+    CommonModule,
   ],
 })
 export class ShellComponent {
@@ -42,16 +42,10 @@ export class ShellComponent {
   private router = inject(Router);
   currentUser = this.currentUserService.currentUser;
 
-
-  constructor(
-    private currentUserService: CurrentUserService
-  ) {
-
-  }
+  constructor(private currentUserService: CurrentUserService) {}
   readonly menuItems: MenuItem[] = [
-    
     {
-      text: 'Pocetna',
+      text: 'Početna',
       iconName: 'home',
       url: '/pocetna',
     },
