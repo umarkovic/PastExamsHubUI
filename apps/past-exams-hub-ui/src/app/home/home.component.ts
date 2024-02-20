@@ -64,4 +64,10 @@ export class HomeComponent {
   redirectTo(uid: string) {
     this.router.navigate(['/blanket', uid]);
   }
+  redirectToPage(page: string) {
+    this.router.navigate([page]);
+  }
+  
+
+
 }
