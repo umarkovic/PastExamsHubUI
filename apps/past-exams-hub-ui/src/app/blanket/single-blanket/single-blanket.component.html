@@ -167,38 +167,35 @@
                         justify-content: space-between;
                       "
                     >
-                      <!-- [disabled]="element.isAlreadyGraded"
-                  *ngIf="currentUser.sub === element.ownerUid" -->
-                      <button mat-button (click)="minusRating(element.uid)">
+                      <button
+                        *ngIf="currentUser.sub !== element.ownerUid"
+                        mat-button
+                        (click)="
+                          minusRating(element.uid, element.isAlreadyGraded)
+                        "
+                      >
                         <mat-icon
-                          [ngClass]="
-                            element.isAlreadyGraded
-                              ? 'material-symbols-outlined remove_circle grey-icon'
-                              : 'material-symbols-outlined remove_circle'
-                          "
+                          class="material-symbols-outlined remove_circle"
                         >
                           remove_circle
                         </mat-icon>
                       </button>
 
                       <div class="rating-table-wrapper">
-                        {{ element.grade | json }}
                         <span>{{ element.grade ?? '0' }}</span>
                         <span>{{
                           ' (' + (element.gradeCount ?? '0') + ')'
                         }}</span>
                       </div>
 
-                      <!-- *ngIf="currentUser.sub === element.ownerUid"
-                    [disabled]="element.isAlreadyGraded" -->
-                      <button mat-button (click)="plusRating(element.uid)">
-                        <mat-icon
-                          [ngClass]="
-                            element.isAlreadyGraded
-                              ? 'material-symbols-outlined  add_circle grey-icon'
-                              : 'material-symbols-outlined add_circle'
-                          "
-                        >
+                      <button
+                        *ngIf="currentUser.sub !== element.ownerUid"
+                        mat-button
+                        (click)="
+                          plusRating(element.uid, element.isAlreadyGraded)
+                        "
+                      >
+                        <mat-icon class="material-symbols-outlined add_circle">
                           add_circle
                         </mat-icon>
                       </button>

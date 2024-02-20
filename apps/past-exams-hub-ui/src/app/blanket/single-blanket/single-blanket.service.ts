@@ -101,9 +101,9 @@ export class SingleBlanketService {
     );
   }
 
-  postGrade(uid: string, value: boolean) {
+  postGrade(uid: string, value: boolean, isAlreadyGraded: boolean) {
     this.examSolutionService
-      .examSolutionGradePost(uid, value)
+      .examSolutionGradePost(uid, value, isAlreadyGraded)
       .pipe(tap(() => this.refreshData()))
       .subscribe();
   }

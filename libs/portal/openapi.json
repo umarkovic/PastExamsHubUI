@@ -2458,6 +2458,13 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "name": "IsUpdate",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -4171,6 +4178,10 @@
             "type": "string",
             "format": "byte",
             "nullable": true
+          },
+          "contentType": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4245,6 +4256,10 @@
           },
           "isAlreadyGraded": {
             "type": "boolean"
+          },
+          "isPositiveGraded": {
+            "type": "boolean",
+            "nullable": true
           }
         },
         "additionalProperties": false

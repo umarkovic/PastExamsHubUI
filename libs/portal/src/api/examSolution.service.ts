@@ -130,13 +130,15 @@ export class ExamSolutionService {
      * 
      * @param examSolutionUid 
      * @param isPositive 
+     * @param isUpdate 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public examSolutionGradePost(examSolutionUid?: string, isPositive?: boolean, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult>;
-    public examSolutionGradePost(examSolutionUid?: string, isPositive?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult>>;
-    public examSolutionGradePost(examSolutionUid?: string, isPositive?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult>>;
-    public examSolutionGradePost(examSolutionUid?: string, isPositive?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public examSolutionGradePost(examSolutionUid?: string, isPositive?: boolean, isUpdate?: boolean, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult>;
+    public examSolutionGradePost(examSolutionUid?: string, isPositive?: boolean, isUpdate?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult>>;
+    public examSolutionGradePost(examSolutionUid?: string, isPositive?: boolean, isUpdate?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult>>;
+    public examSolutionGradePost(examSolutionUid?: string, isPositive?: boolean, isUpdate?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
 
@@ -146,6 +148,9 @@ export class ExamSolutionService {
         }
         if (isPositive !== undefined && isPositive !== null) {
             queryParameters = queryParameters.set('IsPositive', <any>isPositive);
+        }
+        if (isUpdate !== undefined && isUpdate !== null) {
+            queryParameters = queryParameters.set('IsUpdate', <any>isUpdate);
         }
 
         let headers = this.defaultHeaders;

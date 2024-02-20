@@ -33,4 +33,5 @@ export interface PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel
     periodType?: PastExamsHubCoreDomainEnumsExamPeriodType;
     isEditAndDeleteAllowed?: boolean;
     isAlreadyGraded?: boolean;
+    isPositiveGraded?: boolean;
 }

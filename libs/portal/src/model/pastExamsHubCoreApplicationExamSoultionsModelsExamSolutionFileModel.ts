@@ -17,4 +17,5 @@ import { PastExamsHubCoreDomainEnumsFileType } from './pastExamsHubCoreDomainEnu
 
 export interface PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionFileModel extends PastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel { 
     file?: string;
+    contentType?: string;
 }

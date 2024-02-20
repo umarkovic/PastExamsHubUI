@@ -111,12 +111,12 @@ export class SingleBlanketComponent extends FormBaseComponent {
     this.router.navigate(['/dodaj_resenje', uid]);
   }
 
-  minusRating(uid: string) {
-    this.singleBlanketService.postGrade(uid, false);
+  minusRating(uid: string, isAlreadyGraded: boolean) {
+    this.singleBlanketService.postGrade(uid, false, isAlreadyGraded);
   }
 
-  plusRating(uid: string) {
-    this.singleBlanketService.postGrade(uid, true);
+  plusRating(uid: string, isAlreadyGraded: boolean) {
+    this.singleBlanketService.postGrade(uid, true, isAlreadyGraded);
   }
 
   updateSlice(range: ListRange) {
