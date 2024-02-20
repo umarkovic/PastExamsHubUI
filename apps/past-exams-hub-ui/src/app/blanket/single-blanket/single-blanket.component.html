@@ -31,20 +31,20 @@
             <div
               style="display: flex; flex-direction: column; align-items: center"
             >
-            <span>
-              {{
-                data.examData?.type +
-                ', ' +
-                (data.examData?.numberOfTasks ?? 0) +
-                ' ' +
-                ((data.examData?.numberOfTasks ?? 0) === 1
-                  ? 'zadatak'
-                  : (data.examData?.numberOfTasks ?? 0) > 1 &&
-                    (data.examData?.numberOfTasks ?? 0) < 5
-                  ? 'zadatka'
-                  : 'zadataka')
-              }}
-            </span>
+              <span>
+                {{
+                  data.examData?.type +
+                    ', ' +
+                    (data.examData?.numberOfTasks ?? 0) +
+                    ' ' +
+                    ((data.examData?.numberOfTasks ?? 0) === 1
+                      ? 'zadatak'
+                      : (data.examData?.numberOfTasks ?? 0) > 1 &&
+                        (data.examData?.numberOfTasks ?? 0) < 5
+                      ? 'zadatka'
+                      : 'zadataka')
+                }}
+              </span>
               <span>{{ data.examData?.examDate | date : 'dd. MM. YYY' }}</span>
             </div>
           </div>
@@ -149,7 +149,10 @@
                       justify-content: space-between;
                     "
                   >
-                    <mat-icon class="material-symbols-outlined remove_circle">
+                    <mat-icon
+                      class="material-symbols-outlined remove_circle"
+                      (click)="minusRating(element.uid)"
+                    >
                       remove_circle
                     </mat-icon>
                     <div class="rating-table-wrapper">
@@ -159,7 +162,10 @@
                       }}</span>
                     </div>
 
-                    <mat-icon class="material-symbols-outlined add_circle">
+                    <mat-icon
+                      class="material-symbols-outlined add_circle"
+                      (click)="plusRating(element.uid)"
+                    >
                       add_circle
                     </mat-icon>
                   </div>

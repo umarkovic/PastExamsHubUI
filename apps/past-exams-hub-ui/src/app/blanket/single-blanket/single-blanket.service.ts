@@ -6,6 +6,7 @@ import {
   distinctUntilChanged,
   map,
   switchMap,
+  tap,
 } from 'rxjs';
 
 @Injectable()
@@ -78,5 +79,12 @@ export class SingleBlanketService {
         );
       })
     );
+  }
+
+  postGrade(uid: string, value: boolean) {
+    this.examSolutionService
+      .examSolutionGradePost(uid, value)
+      .pipe(tap(() => this.refreshData()))
+      .subscribe();
   }
 }

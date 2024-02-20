@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { FormBaseComponent } from '../shared/components/form-base.component';
 import { MatInputModule } from '@angular/material/input';
@@ -22,6 +22,7 @@ import {
   FileSystemFileEntry,
 } from 'ngx-file-drop';
 import { SafeResourceUrl } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 export type PastExamsHubCoreDomainEnumsExamType =
   | 'Unkwnon'

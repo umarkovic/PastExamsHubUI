@@ -106,4 +106,12 @@ export class SingleBlanketComponent extends FormBaseComponent {
   addSolutions(uid: string | undefined) {
     this.router.navigate(['/dodaj_resenje', uid]);
   }
+
+  minusRating(uid: string) {
+    this.singleBlanketService.postGrade(uid, false);
+  }
+
+  plusRating(uid: string) {
+    this.singleBlanketService.postGrade(uid, true);
+  }
 }

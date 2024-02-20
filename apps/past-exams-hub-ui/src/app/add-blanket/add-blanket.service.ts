@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   CoursesService,
   ExamPeriodsService,
@@ -9,6 +10,8 @@ import { combineLatest, map } from 'rxjs';
 
 @Injectable()
 export class AddBlanketService {
+  private router = inject(Router);
+
   constructor(
     private examsService: ExamsService,
     private examPeriodsService: ExamPeriodsService,
@@ -39,7 +42,10 @@ export class AddBlanketService {
         data.note
       )
       .subscribe({
-        next: () => onSuccess(),
+        next: (res) => {
+          this.router.navigate(['/blanket', res.uid]);
+          onSuccess();
+        },
         error: (error) => {
           onError(error.error.errors);
         },
