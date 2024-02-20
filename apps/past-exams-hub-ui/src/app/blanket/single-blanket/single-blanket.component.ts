@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, switchMap, tap } from 'rxjs';
 import { SingleBlanketService } from './single-blanket.service';
@@ -15,6 +15,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { PastExamsHubCoreApplicationExamsModelsExamModel } from 'libs/portal/src/model/models';
 import { CurrentUserService } from '../../shared/services/current-user.service';
+import { TableScrollingViewportComponent } from '../../shared/components/table-scrolling-viewport';
+import { ListRange } from '@angular/cdk/collections';
 
 @Component({
   selector: 'pastexamshub-single-blanket',
@@ -29,41 +31,43 @@ import { CurrentUserService } from '../../shared/services/current-user.service';
     MatTableModule,
     MatIconModule,
     MatButtonModule,
+    TableScrollingViewportComponent,
   ],
   providers: [SingleBlanketService, ExamsService, ExamSolutionService],
   templateUrl: './single-blanket.component.html',
   styleUrl: './single-blanket.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SingleBlanketComponent extends FormBaseComponent {
   currentUser = this.currentUserService.currentUser;
   fileData!: any;
+  itemsSlice = [];
+  items = [];
   isPdfFile = false;
   data$ = this.route.paramMap.pipe(
     switchMap((x) => {
       const id = x.get('id');
       return combineLatest({
-        examData: this.singleBlanketService.fetchDataExams(id as string),
-        examSolution: this.singleBlanketService.fetchExamSolution(
-          id as string,
-          0,
-          0
-        ),
         userData: this.singleBlanketService.fetchData(id as string),
       }).pipe(
-        tap(({ examData, examSolution }) => {
+        tap((data) => {
           this.fileData = `data:${
-            (examData as PastExamsHubCoreApplicationExamsModelsExamModel)
-              .contentType
+            (
+              data.userData
+                .exam as PastExamsHubCoreApplicationExamsModelsExamModel
+            ).contentType
           };base64,${
-            (examData as PastExamsHubCoreApplicationExamsModelsExamModel).file
+            (
+              data.userData
+                .exam as PastExamsHubCoreApplicationExamsModelsExamModel
+            ).file
           }`;
 
-          console.log(this.fileData);
-
-          this.isPdfFile = examData?.fileType === 'Document' ? true : false;
+          this.isPdfFile =
+            data.userData.exam?.fileType === 'Document' ? true : false;
           this.form = this.fb.group({
             note: [
-              examData!.notes ?? '',
+              data.userData.exam!.notes ?? '',
               [Validators.required, Validators.minLength(1)],
             ],
           });
@@ -113,5 +117,9 @@ export class SingleBlanketComponent extends FormBaseComponent {
 
   plusRating(uid: string) {
     this.singleBlanketService.postGrade(uid, true);
+  }
+
+  updateSlice(range: ListRange) {
+    this.itemsSlice = this.items.slice(range.start, range.end);
   }
 }

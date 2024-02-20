@@ -67,15 +67,35 @@ export class SingleBlanketService {
       .pipe(map((x) => x.solutions));
   }
 
+  // fetchData(uid: string) {
+  //   return combineLatest([this.refresh$, this.dataStateChanged$]).pipe(
+  //     switchMap(([, dataStateChanges]) => {
+  //       return this.fetchExamSolution(
+  //         uid,
+  //         (dataStateChanges.skip as number) /
+  //           (dataStateChanges.take as number) +
+  //           1,
+  //         dataStateChanges.take as number
+  //       );
+  //     })
+  //   );
+  // }
+
   fetchData(uid: string) {
     return combineLatest([this.refresh$, this.dataStateChanged$]).pipe(
       switchMap(([, dataStateChanges]) => {
-        return this.fetchExamSolution(
+        const examSolutions = this.fetchExamSolution(
           uid,
           (dataStateChanges.skip as number) /
             (dataStateChanges.take as number) +
             1,
           dataStateChanges.take as number
+        );
+
+        const examData = this.fetchDataExams(uid);
+
+        return combineLatest([examSolutions, examData]).pipe(
+          map(([solutions, exam]) => ({ solutions, exam }))
         );
       })
     );

@@ -136,6 +136,7 @@ th {
 }
 
 pastexamshub-blanket {
+  height: 100vh !important;
   mat-card {
     padding: 16px;
   }
@@ -145,4 +146,19 @@ pastexamshub-blanket {
   margin: 16px !important;
   display: flex;
   gap: 8px;
+}
+
+.grey-icon {
+  color: grey !important;
+}
+
+.content-blanket {
+  height: calc(100vh - 145px) !important;
+  overflow: auto;
+}
+
+pastexamshub-single-blanket {
+  .cdk-virtual-scroll-viewport {
+    height: 420px !important;
+  }
 }

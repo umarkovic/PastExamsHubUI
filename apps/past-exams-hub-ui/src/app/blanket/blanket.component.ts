@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +15,7 @@ import { CurrentUserService } from '../shared/services/current-user.service';
   styleUrl: './blanket.component.scss',
   imports: [CommonModule, MatButtonModule, MatCardModule],
   providers: [BlanketService, ExamsService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlanketComponent {
   lastPage!: string;

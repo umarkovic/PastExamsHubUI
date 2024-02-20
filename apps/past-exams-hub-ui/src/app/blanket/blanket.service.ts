@@ -9,8 +9,8 @@ export class BlanketService {
     return this.examsService.examsGet(
       lastPage === 'predmeti' ? undefined : uid,
       lastPage === 'predmeti' ? uid : undefined,
-      1,
-      12
+      0,
+      0
     );
   }
 }

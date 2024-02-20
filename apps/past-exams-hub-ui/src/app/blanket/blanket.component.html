@@ -6,9 +6,9 @@
       </div>
     </ng-container>
 
-    <ng-template #exams >
-      <div class="row-center" >
-        <h1 *ngIf="lastPage !== undefined;">
+    <ng-template #exams>
+      <div class="row-center">
+        <h1 *ngIf="lastPage !== undefined">
           Blanketi
           <ng-container *ngIf="lastPage === 'predmeti'; else examPeriod">
             iz predmeta: {{ data?.exams?.[0]?.courseName ?? 'Nepoznato' }}
@@ -18,10 +18,10 @@
             {{ (lastPage !== 'predmeti') ? (data?.exams?.[0]?.examPeriod?.name ?? 'Nepoznato') : '' }}
           </ng-template>
         </h1>
-        <h1 *ngIf="lastPage === undefined;"> Svi blanketi</h1>
+        <h1 *ngIf="lastPage === undefined">Svi blanketi</h1>
       </div>
 
-      <div class="container" >
+      <div class="container content-blanket">
         <div class="row">
           @for (item of data?.exams; track item ) {
           <mat-card class="column">
