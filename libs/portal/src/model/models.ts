@@ -23,6 +23,8 @@ export * from './pastExamsHubCoreApplicationExamPeriodsExamPeriodModel';
 export * from './pastExamsHubCoreApplicationExamPeriodsQueriesGetCollectionGetExamPeriodsQueryResult';
 export * from './pastExamsHubCoreApplicationExamPeriodsQueriesGetSingleGetExamPeriodQueryResult';
 export * from './pastExamsHubCoreApplicationExamSoultionsCommandsCreateCreateExamSolutionCommandResult';
+export * from './pastExamsHubCoreApplicationExamSoultionsCommandsDeleteDeleteExamSolutionCommand';
+export * from './pastExamsHubCoreApplicationExamSoultionsCommandsDeleteDeleteExamSolutionCommandResult';
 export * from './pastExamsHubCoreApplicationExamSoultionsModelsExamSolutionFileModel';
 export * from './pastExamsHubCoreApplicationExamSoultionsModelsExamSolutionModel';
 export * from './pastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult';

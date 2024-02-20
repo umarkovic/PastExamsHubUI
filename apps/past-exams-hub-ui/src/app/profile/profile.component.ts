@@ -82,6 +82,6 @@ export class ProfileComponent extends FormBaseComponent {
   }
 
   submit() {
-    console.log(this.form.getRawValue());
+    this.profileService.editProfile(this.currentUser, this.form.getRawValue());
   }
 }

@@ -19,6 +19,8 @@ import { Observable }                                        from 'rxjs';
 
 import { InlineResponse404 } from '../model/inlineResponse404';
 import { PastExamsHubCoreApplicationExamSoultionsCommandsCreateCreateExamSolutionCommandResult } from '../model/pastExamsHubCoreApplicationExamSoultionsCommandsCreateCreateExamSolutionCommandResult';
+import { PastExamsHubCoreApplicationExamSoultionsCommandsDeleteDeleteExamSolutionCommand } from '../model/pastExamsHubCoreApplicationExamSoultionsCommandsDeleteDeleteExamSolutionCommand';
+import { PastExamsHubCoreApplicationExamSoultionsCommandsDeleteDeleteExamSolutionCommandResult } from '../model/pastExamsHubCoreApplicationExamSoultionsCommandsDeleteDeleteExamSolutionCommandResult';
 import { PastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult } from '../model/pastExamsHubCoreApplicationExamSoultionsQueriesGetCollectionGetExamSolutionsQueryResult';
 import { PastExamsHubCoreApplicationExamSoultionsQueriesGetSingleGetExamSolutionQueryResult } from '../model/pastExamsHubCoreApplicationExamSoultionsQueriesGetSingleGetExamSolutionQueryResult';
 import { PastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult } from '../model/pastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult';
@@ -178,6 +180,65 @@ export class ExamSolutionService {
         return this.httpClient.request<PastExamsHubCoreApplicationGradesCommandsCreateCreateGradeCommandResult>('post',`${this.basePath}/ExamSolution/Grade`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param uid 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public examSolutionUidDelete(uid: string, body?: PastExamsHubCoreApplicationExamSoultionsCommandsDeleteDeleteExamSolutionCommand, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationExamSoultionsCommandsDeleteDeleteExamSolutionCommandResult>;
+    public examSolutionUidDelete(uid: string, body?: PastExamsHubCoreApplicationExamSoultionsCommandsDeleteDeleteExamSolutionCommand, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationExamSoultionsCommandsDeleteDeleteExamSolutionCommandResult>>;
+    public examSolutionUidDelete(uid: string, body?: PastExamsHubCoreApplicationExamSoultionsCommandsDeleteDeleteExamSolutionCommand, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationExamSoultionsCommandsDeleteDeleteExamSolutionCommandResult>>;
+    public examSolutionUidDelete(uid: string, body?: PastExamsHubCoreApplicationExamSoultionsCommandsDeleteDeleteExamSolutionCommand, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (uid === null || uid === undefined) {
+            throw new Error('Required parameter uid was null or undefined when calling examSolutionUidDelete.');
+        }
+
+
+        let headers = this.defaultHeaders;
+
+        // authentication (Bearer) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["Authorization"]) {
+            headers = headers.set('Authorization', this.configuration.apiKeys["Authorization"]);
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json-patch+json',
+            'application/json',
+            'text/json',
+            'application/_*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<PastExamsHubCoreApplicationExamSoultionsCommandsDeleteDeleteExamSolutionCommandResult>('delete',`${this.basePath}/ExamSolution/${encodeURIComponent(String(uid))}`,
+            {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

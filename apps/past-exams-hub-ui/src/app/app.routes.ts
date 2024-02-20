@@ -101,6 +101,14 @@ export const appRoutes: Route[] = [
             (c) => c.AddSolutionComponent
           ),
       },
+
+      {
+        path: 'resenje/:id',
+        loadComponent: () =>
+          import('./solution/solution.component').then(
+            (c) => c.SolutionComponent
+          ),
+      },
     ],
   },
 

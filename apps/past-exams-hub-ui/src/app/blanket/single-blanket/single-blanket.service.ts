@@ -107,4 +107,11 @@ export class SingleBlanketService {
       .pipe(tap(() => this.refreshData()))
       .subscribe();
   }
+
+  deleteSolution(uid: string) {
+    this.examSolutionService
+      .examSolutionUidDelete(uid, {})
+      .pipe(tap(() => this.refreshData()))
+      .subscribe();
+  }
 }
