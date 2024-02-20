@@ -17,6 +17,9 @@ import { PastExamsHubCoreApplicationExamsModelsExamModel } from 'libs/portal/src
 import { CurrentUserService } from '../../shared/services/current-user.service';
 import { TableScrollingViewportComponent } from '../../shared/components/table-scrolling-viewport';
 import { ListRange } from '@angular/cdk/collections';
+import { Location } from '@angular/common';
+import { DeleteConfirmationDialogComponent } from '../../shared/components/delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'pastexamshub-single-blanket',
@@ -91,9 +94,24 @@ export class SingleBlanketComponent extends FormBaseComponent {
     private route: ActivatedRoute,
     private singleBlanketService: SingleBlanketService,
     private sanitizer: DomSanitizer,
-    private currentUserService: CurrentUserService
+    private currentUserService: CurrentUserService,
+    private location: Location,
+    private dialog: MatDialog
   ) {
     super();
+  }
+
+  goBack(): void {
+    this.location.back();
+  }
+
+  transformLabel(label: string): string {
+    return label
+      .split('')
+      .map((char, index) => {
+        return char.toUpperCase() === char && index !== 0 ? ` ${char}` : char;
+      })
+      .join('');
   }
 
   bypassAndSanitize(url: string): SafeResourceUrl {
@@ -121,5 +139,20 @@ export class SingleBlanketComponent extends FormBaseComponent {
 
   updateSlice(range: ListRange) {
     this.itemsSlice = this.items.slice(range.start, range.end);
+  }
+  redirectTo(uid: string) {
+    this.router.navigate(['/resenje', uid]);
+  }
+
+  deleteSolution(uid: string) {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      width: '450px',
+      data: 'Da li ste sigurni da zelite da obrisete?',
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.singleBlanketService.deleteSolution(uid);
+      }
+    });
   }
 }
