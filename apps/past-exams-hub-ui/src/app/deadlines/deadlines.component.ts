@@ -25,7 +25,7 @@ import { ListRange } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditDeadlineDialogComponent } from './add-edit-deadlines-dialog/add-edit-deadlines-dialog.component';
 import { DeleteConfirmationDialogComponent } from '../shared/components/delete-confirmation-dialog/delete-confirmation-dialog.component';
-
+import { CurrentUserService } from '../shared/services/current-user.service';
 @Component({
   selector: 'pastexamshub-deadlines',
   standalone: true,
@@ -49,6 +49,7 @@ export class DeadlinesComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   items = [];
   itemsSlice = [];
+  currentUser = this.currentUserService.currentUser;
   private router = inject(Router);
 
   dataSource = new MatTableDataSource();
@@ -68,7 +69,8 @@ export class DeadlinesComponent {
   constructor(
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    private deadlinesService: DeadlinesService
+    private deadlinesService: DeadlinesService,
+    private currentUserService: CurrentUserService
   ) {}
 
   updatePagination(pageIndex: number, pageSize: number) {

@@ -17,6 +17,7 @@ import { TableScrollingViewportComponent } from '../shared/components/table-scro
 import { ListRange } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditStudentDialogComponent } from './add-edit-student-dialog/add-edit-student-dialog.component';
+import { CurrentUserService } from '../shared/services/current-user.service';
 
 @Component({
   selector: 'pastexamshub-students',
@@ -40,7 +41,7 @@ export class StudentsComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   items = [];
   itemsSlice = [];
-
+  currentUser = this.currentUserService.currentUser;
   dataSource = new MatTableDataSource();
   data$ = this.route.queryParams.pipe(
     switchMap(() => {
@@ -53,7 +54,8 @@ export class StudentsComponent {
   constructor(
     private route: ActivatedRoute,
     private studentsService: StudentsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private currentUserService: CurrentUserService
   ) {}
 
   updatePagination(pageIndex: number, pageSize: number) {

@@ -11,6 +11,7 @@
 
           <div class="btn-save-wrapper">
             <button
+            *ngIf="currentUser.role !== 'Student'"
               color="primary"
               mat-raised-button
               (click)="addEditSubject(data.professorsData!)"
@@ -34,12 +35,11 @@
               <th
                 mat-header-cell
                 *matHeaderCellDef
-                class="nameSubject"
-                class="nameSubject"
+                class="nameSubjectHeader"
               >
                 {{ 'Naziv predmeta' }}
               </th>
-              <td mat-cell *matCellDef="let element" class="nameSubject">
+              <td mat-cell  *matCellDef="let element" class="nameSubject" >
                 {{ element.name ?? '/' }}
               </td>
             </ng-container>
@@ -99,6 +99,7 @@
               </th>
               <td mat-cell *matCellDef="let element" class="action">
                 <mat-icon
+                *ngIf="currentUser.role !== 'Student'"
                   class="material-symbols-outlined cursor"
                   (click)="
                     $event.stopPropagation();
@@ -107,9 +108,20 @@
                   >edit</mat-icon
                 >
                 <mat-icon
+                *ngIf="currentUser.role !== 'Student'"
                   class="material-symbols-outlined cursor"
                   (click)="$event.stopPropagation(); remove(element.uid)"
                   >delete</mat-icon
+
+                  
+                >
+
+                <mat-icon
+                *ngIf="currentUser.role === 'Student'"
+                  class="material-symbols-outlined cursor"
+                  >visibility</mat-icon
+
+                  
                 >
               </td>
             </ng-container>

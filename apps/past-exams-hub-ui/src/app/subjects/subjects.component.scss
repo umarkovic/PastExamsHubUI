@@ -36,7 +36,10 @@ table {
 .mat-header-cell {
   font-size: 14px;
 }
-
+.nameSubject
+{
+  font-weight: bolder;
+}
 .mat-row:hover {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.1);
