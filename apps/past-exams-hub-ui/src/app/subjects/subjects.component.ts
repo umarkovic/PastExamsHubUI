@@ -13,7 +13,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SubjectsService } from './subjects.service';
-import { combineLatest, switchMap } from 'rxjs';
+import {
+  combineLatest,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  startWith,
+  switchMap,
+  tap,
+} from 'rxjs';
 import {
   CoursesService,
   PastExamsHubCoreApplicationCoursesModelsCourseModel,
@@ -27,6 +35,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddEditSubjectsDialogComponent } from './add-edit-subjects-dialog/add-edit-subjects-dialog.component';
 import { DeleteConfirmationDialogComponent } from '../shared/components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { CurrentUserService } from '../shared/services/current-user.service';
+import { isEqual } from 'lodash';
+import { FormBaseComponent } from '../shared/components/form-base.component';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+export interface SubjectsFilter {
+  search: string | null;
+  professor: string | null;
+  type: string | null;
+}
 
 @Component({
   selector: 'pastexamshub-subjects',
@@ -41,26 +59,68 @@ import { CurrentUserService } from '../shared/services/current-user.service';
     MatInputModule,
     MatButtonModule,
     TableScrollingViewportComponent,
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [SubjectsService, CoursesService, TeachersService],
   templateUrl: './subjects.component.html',
   styleUrl: './subjects.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SubjectsComponent {
+export class SubjectsComponent extends FormBaseComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   items = [];
   itemsSlice = [];
   private router = inject(Router);
   dataSource = new MatTableDataSource();
   currentUser = this.currentUserService.currentUser;
-  data$ = this.route.queryParams.pipe(
-    switchMap((params) => {
-      const godinaStudija = params['godinaStudija'];
-      return combineLatest({
-        professorsData: this.subjectsService.fetchProfessorsData(),
-        subjectData: this.subjectsService.fetchData(godinaStudija),
-      });
+  readonly types = [
+    { uid: null, name: 'Svi tipovi' },
+    { uid: 'Obavezni', name: 'Obavezni' },
+    { uid: 'Izborni', name: 'Izborni' },
+  ];
+  readonly DEFAULT_VALUES: SubjectsFilter = {
+    search: null,
+    professor: null,
+    type: null,
+  };
+
+  data$ = this.route.queryParamMap.pipe(
+    switchMap((res: any) => {
+      const godinaStudija = res.get('godinaStudija');
+      return this.form.valueChanges.pipe(
+        startWith(this.DEFAULT_VALUES),
+        debounceTime(300),
+        distinctUntilChanged(isEqual),
+        tap(
+          (changes) =>
+            (this.subjectsService.subjectsFilter = changes as SubjectsFilter)
+        ),
+        switchMap(() =>
+          combineLatest([
+            this.subjectsService.fetchProfessorsData().pipe(
+              map((professorsData) => [
+                {
+                  id: undefined,
+                  uid: undefined,
+                  email: undefined,
+                  fullName: 'Svi profesori',
+                  courses: undefined,
+                  numberOfCourses: undefined,
+                } as PastExamsHubCoreApplicationTeachersModelsTeacherListModel,
+                ...professorsData!,
+              ])
+            ),
+            this.subjectsService.fetchData(godinaStudija),
+          ]).pipe(
+            map(([professorsData, subjectData]) => ({
+              professorsData,
+              subjectData,
+            }))
+          )
+        )
+      );
     })
   );
 
@@ -79,7 +139,18 @@ export class SubjectsComponent {
     private route: ActivatedRoute,
     private subjectsService: SubjectsService,
     private currentUserService: CurrentUserService
-  ) {}
+  ) {
+    super();
+    this.initializeForm();
+  }
+
+  private initializeForm() {
+    this.form = this.fb.group({
+      search: [''],
+      professor: [null],
+      type: [null],
+    });
+  }
 
   updatePagination(pageIndex: number, pageSize: number) {
     this.subjectsService.dataStateChanged = {
@@ -139,9 +210,5 @@ export class SubjectsComponent {
         this.subjectsService.removeSubject(uid);
       }
     });
-  }
-
-  applyFilter(event: any) {
-    const filterValue = event.target.value.trim().toLowerCase();
   }
 }

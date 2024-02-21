@@ -4,15 +4,34 @@
       <section>
         <h2>PREDMETI</h2>
         <div class="justify-content-space-between">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Search</mat-label>
-            <input
-              matInput
-              (keyup)="applyFilter($event)"
-              placeholder="Search Columns"
-              #input
-            />
-          </mat-form-field>
+          <form [formGroup]="form">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Pretrazi</mat-label>
+              <input matInput formControlName="search" #input />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="professor-select">
+              <mat-label>Tip</mat-label>
+              <mat-select formControlName="type">
+                @for (type of types; track type) {
+                <mat-option [value]="type.uid!">
+                  {{ type.name }}
+                </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="professor-select">
+              <mat-label>Profesori</mat-label>
+              <mat-select formControlName="professor">
+                @for (professor of data.professorsData; track professor) {
+                <mat-option [value]="professor.uid!">
+                  {{ professor.fullName }}
+                </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </form>
 
           <div class="btn-save-wrapper">
             <button

@@ -12,6 +12,8 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
+import { SubjectsFilter } from './subjects.component';
+import { isEqual } from 'lodash';
 
 @Injectable()
 export class SubjectsService {
@@ -42,6 +44,15 @@ export class SubjectsService {
   private _refresh = new BehaviorSubject<void>(undefined);
   refresh$ = this._refresh.asObservable();
 
+  private _subjectsFilter = new BehaviorSubject<SubjectsFilter>({
+    search: null,
+    professor: null,
+    type: null,
+  });
+  subjectsFilter$ = this._subjectsFilter
+    .asObservable()
+    .pipe(distinctUntilChanged((prev, curr) => isEqual(prev, curr)));
+
   constructor(
     private coursesService: CoursesService,
     private teachersService: TeachersService
@@ -57,9 +68,29 @@ export class SubjectsService {
     });
   }
 
-  fetchSubjects(godinaStudija: string, pageNumber: number, pageSize: number) {
+  set subjectsFilter(subjectsFilter: SubjectsFilter) {
+    this._subjectsFilter.next(subjectsFilter);
+  }
+
+  get subjectsFilter() {
+    return this._subjectsFilter.value;
+  }
+
+  fetchSubjects(
+    filters: SubjectsFilter,
+    godinaStudija: string,
+    pageNumber: number,
+    pageSize: number
+  ) {
     return this.coursesService
-      .coursesGet(Number(godinaStudija), pageNumber, pageSize)
+      .coursesGet(
+        Number(godinaStudija),
+        filters.professor as string,
+        filters.type as PastExamsHubCoreDomainEnumsCourseType,
+        pageNumber,
+        pageSize,
+        filters.search as string
+      )
       .pipe(
         map((res) => ({
           data: { result: res.courses, count: res.totalCount },
@@ -87,9 +118,14 @@ export class SubjectsService {
   }
 
   fetchData(godinaStudija: string = '') {
-    return combineLatest([this.refresh$, this.dataStateChanged$]).pipe(
-      switchMap(([, dataStateChanges]) => {
+    return combineLatest([
+      this.subjectsFilter$,
+      this.refresh$,
+      this.dataStateChanged$,
+    ]).pipe(
+      switchMap(([subjectsFilter, , dataStateChanges]) => {
         return this.fetchSubjects(
+          subjectsFilter,
           godinaStudija,
           (dataStateChanges.skip as number) /
             (dataStateChanges.take as number) +

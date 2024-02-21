@@ -20,6 +20,20 @@
             }
           },
           {
+            "name": "Filter.TeacherUid",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Filter.Type",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/PastExamsHub.Core.Domain.Enums.CourseType"
+            }
+          },
+          {
             "name": "PageNumber",
             "in": "query",
             "schema": {
@@ -743,6 +757,13 @@
           "ExamPeriods"
         ],
         "parameters": [
+          {
+            "name": "Filter.PeriodType",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/PastExamsHub.Core.Domain.Enums.ExamPeriodType"
+            }
+          },
           {
             "name": "PageNumber",
             "in": "query",
@@ -3307,6 +3328,14 @@
           "Users"
         ],
         "parameters": [
+          {
+            "name": "Filter.StudyYear",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
           {
             "name": "PageNumber",
             "in": "query",

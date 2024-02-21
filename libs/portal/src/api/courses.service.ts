@@ -24,6 +24,7 @@ import { PastExamsHubCoreApplicationCoursesCommandsDeleteDeleteCourseCommandResu
 import { PastExamsHubCoreApplicationCoursesCommandsUpdateUpdateCourseCommand } from '../model/pastExamsHubCoreApplicationCoursesCommandsUpdateUpdateCourseCommand';
 import { PastExamsHubCoreApplicationCoursesQueriesGetCollectionGetCoursesQueryResult } from '../model/pastExamsHubCoreApplicationCoursesQueriesGetCollectionGetCoursesQueryResult';
 import { PastExamsHubCoreApplicationCoursesQueriesGetSingleGetCourseQueryResult } from '../model/pastExamsHubCoreApplicationCoursesQueriesGetSingleGetCourseQueryResult';
+import { PastExamsHubCoreDomainEnumsCourseType } from '../model/pastExamsHubCoreDomainEnumsCourseType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -65,16 +66,20 @@ export class CoursesService {
      * 
      * 
      * @param studyYear 
+     * @param filterTeacherUid 
+     * @param filterType 
      * @param pageNumber 
      * @param pageSize 
      * @param searchText 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public coursesGet(studyYear?: number, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationCoursesQueriesGetCollectionGetCoursesQueryResult>;
-    public coursesGet(studyYear?: number, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationCoursesQueriesGetCollectionGetCoursesQueryResult>>;
-    public coursesGet(studyYear?: number, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationCoursesQueriesGetCollectionGetCoursesQueryResult>>;
-    public coursesGet(studyYear?: number, pageNumber?: number, pageSize?: number, searchText?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public coursesGet(studyYear?: number, filterTeacherUid?: string, filterType?: PastExamsHubCoreDomainEnumsCourseType, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationCoursesQueriesGetCollectionGetCoursesQueryResult>;
+    public coursesGet(studyYear?: number, filterTeacherUid?: string, filterType?: PastExamsHubCoreDomainEnumsCourseType, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationCoursesQueriesGetCollectionGetCoursesQueryResult>>;
+    public coursesGet(studyYear?: number, filterTeacherUid?: string, filterType?: PastExamsHubCoreDomainEnumsCourseType, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationCoursesQueriesGetCollectionGetCoursesQueryResult>>;
+    public coursesGet(studyYear?: number, filterTeacherUid?: string, filterType?: PastExamsHubCoreDomainEnumsCourseType, pageNumber?: number, pageSize?: number, searchText?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
 
 
 
@@ -83,6 +88,12 @@ export class CoursesService {
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (studyYear !== undefined && studyYear !== null) {
             queryParameters = queryParameters.set('StudyYear', <any>studyYear);
+        }
+        if (filterTeacherUid !== undefined && filterTeacherUid !== null) {
+            queryParameters = queryParameters.set('Filter.TeacherUid', <any>filterTeacherUid);
+        }
+        if (filterType !== undefined && filterType !== null) {
+            queryParameters = queryParameters.set('Filter.Type', <any>filterType);
         }
         if (pageNumber !== undefined && pageNumber !== null) {
             queryParameters = queryParameters.set('PageNumber', <any>pageNumber);

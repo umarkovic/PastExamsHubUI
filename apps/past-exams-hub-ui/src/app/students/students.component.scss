@@ -1,9 +1,7 @@
 section {
   margin: 24px;
 }
-body {
-  background: #cbce91;
-}
+
 main {
   display: flex;
   justify-content: center;
@@ -16,7 +14,11 @@ main {
     width: 80%;
   }
 }
-.fullName
-{
+.fullName {
   font-weight: bold;
+}
+
+form {
+  display: flex;
+  gap: 16px;
 }

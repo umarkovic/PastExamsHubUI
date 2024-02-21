@@ -11,6 +11,8 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
+import { DeadlinesFilter } from './deadlines.component';
+import { isEqual } from 'lodash';
 
 @Injectable()
 export class DeadlinesService {
@@ -41,7 +43,23 @@ export class DeadlinesService {
   private _refresh = new BehaviorSubject<void>(undefined);
   refresh$ = this._refresh.asObservable();
 
+  private _deadlinesFilter = new BehaviorSubject<DeadlinesFilter>({
+    search: null,
+    period: null,
+  });
+  deadlinesFilter$ = this._deadlinesFilter
+    .asObservable()
+    .pipe(distinctUntilChanged((prev, curr) => isEqual(prev, curr)));
+
   constructor(private examPeriodsService: ExamPeriodsService) {}
+
+  set deadlinesFilter(deadlinesFilter: DeadlinesFilter) {
+    this._deadlinesFilter.next(deadlinesFilter);
+  }
+
+  get deadlinesFilter() {
+    return this._deadlinesFilter.value;
+  }
 
   set dataStateChanged(dataStateChanged: {
     pageIndex: number;
@@ -53,36 +71,51 @@ export class DeadlinesService {
     });
   }
 
-  fetchExamPeriods(pageNumber: number, pageSize: number) {
-    return this.examPeriodsService.examPeriodsGet(pageNumber, pageSize).pipe(
-      map((res) => ({
-        data: {
-          result: res.periods,
-          count: res.totalCount,
-        },
-        currentPage: res.currentPage,
-        totalPages: res.totalPages,
-        pageSize: res.pageSize,
-        hasNext: res.hasNext,
-        hasPrevious: res.hasPrevious,
-      })),
-      tap((res) => {
-        if ((res.data?.count as number) > 0) {
-          this._pageSettings.next({
-            ...this._pageSettings.getValue(),
-            totalRecordsCount: res.data?.count ?? 0,
-            pageSize: res.pageSize as number,
-            currentPage: res.currentPage,
-          });
-        }
-      })
-    );
+  fetchExamPeriods(
+    filters: DeadlinesFilter,
+    pageNumber: number,
+    pageSize: number
+  ) {
+    return this.examPeriodsService
+      .examPeriodsGet(
+        filters.period as PastExamsHubCoreDomainEnumsExamPeriodType,
+        pageNumber,
+        pageSize
+      )
+      .pipe(
+        map((res) => ({
+          data: {
+            result: res.periods,
+            count: res.totalCount,
+          },
+          currentPage: res.currentPage,
+          totalPages: res.totalPages,
+          pageSize: res.pageSize,
+          hasNext: res.hasNext,
+          hasPrevious: res.hasPrevious,
+        })),
+        tap((res) => {
+          if ((res.data?.count as number) > 0) {
+            this._pageSettings.next({
+              ...this._pageSettings.getValue(),
+              totalRecordsCount: res.data?.count ?? 0,
+              pageSize: res.pageSize as number,
+              currentPage: res.currentPage,
+            });
+          }
+        })
+      );
   }
 
   fetchData() {
-    return combineLatest([this.refresh$, this.dataStateChanged$]).pipe(
-      switchMap(([, dataStateChanges]) => {
+    return combineLatest([
+      this.deadlinesFilter$,
+      this.refresh$,
+      this.dataStateChanged$,
+    ]).pipe(
+      switchMap(([deadlinesFilter, , dataStateChanges]) => {
         return this.fetchExamPeriods(
+          deadlinesFilter,
           (dataStateChanges.skip as number) /
             (dataStateChanges.take as number) +
             1,

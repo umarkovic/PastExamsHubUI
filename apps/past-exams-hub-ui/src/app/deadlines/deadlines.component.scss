@@ -5,14 +5,12 @@ body {
   background: #cbce91;
 }
 
-.justify-content-space-between
-{
+.justify-content-space-between {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  button
-  {
+  button {
     margin-bottom: 22px;
   }
 }
@@ -28,8 +26,12 @@ main {
     width: 80%;
   }
 
-  .nameDeadlines
-{
-  font-weight: bolder;
+  .nameDeadlines {
+    font-weight: bolder;
+  }
 }
+
+form {
+  display: flex;
+  gap: 16px;
 }

@@ -24,6 +24,7 @@ import { PastExamsHubCoreApplicationExamPeriodsCommandDeleteDeleteExamPeriodComm
 import { PastExamsHubCoreApplicationExamPeriodsCommandUpdateUpdateExamPeriodCommand } from '../model/pastExamsHubCoreApplicationExamPeriodsCommandUpdateUpdateExamPeriodCommand';
 import { PastExamsHubCoreApplicationExamPeriodsQueriesGetCollectionGetExamPeriodsQueryResult } from '../model/pastExamsHubCoreApplicationExamPeriodsQueriesGetCollectionGetExamPeriodsQueryResult';
 import { PastExamsHubCoreApplicationExamPeriodsQueriesGetSingleGetExamPeriodQueryResult } from '../model/pastExamsHubCoreApplicationExamPeriodsQueriesGetSingleGetExamPeriodQueryResult';
+import { PastExamsHubCoreDomainEnumsExamPeriodType } from '../model/pastExamsHubCoreDomainEnumsExamPeriodType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -64,21 +65,26 @@ export class ExamPeriodsService {
     /**
      * 
      * 
+     * @param filterPeriodType 
      * @param pageNumber 
      * @param pageSize 
      * @param searchText 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public examPeriodsGet(pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationExamPeriodsQueriesGetCollectionGetExamPeriodsQueryResult>;
-    public examPeriodsGet(pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationExamPeriodsQueriesGetCollectionGetExamPeriodsQueryResult>>;
-    public examPeriodsGet(pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationExamPeriodsQueriesGetCollectionGetExamPeriodsQueryResult>>;
-    public examPeriodsGet(pageNumber?: number, pageSize?: number, searchText?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public examPeriodsGet(filterPeriodType?: PastExamsHubCoreDomainEnumsExamPeriodType, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationExamPeriodsQueriesGetCollectionGetExamPeriodsQueryResult>;
+    public examPeriodsGet(filterPeriodType?: PastExamsHubCoreDomainEnumsExamPeriodType, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationExamPeriodsQueriesGetCollectionGetExamPeriodsQueryResult>>;
+    public examPeriodsGet(filterPeriodType?: PastExamsHubCoreDomainEnumsExamPeriodType, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationExamPeriodsQueriesGetCollectionGetExamPeriodsQueryResult>>;
+    public examPeriodsGet(filterPeriodType?: PastExamsHubCoreDomainEnumsExamPeriodType, pageNumber?: number, pageSize?: number, searchText?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (filterPeriodType !== undefined && filterPeriodType !== null) {
+            queryParameters = queryParameters.set('Filter.PeriodType', <any>filterPeriodType);
+        }
         if (pageNumber !== undefined && pageNumber !== null) {
             queryParameters = queryParameters.set('PageNumber', <any>pageNumber);
         }

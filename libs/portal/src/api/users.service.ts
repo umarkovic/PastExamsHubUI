@@ -61,21 +61,26 @@ export class UsersService {
     /**
      * 
      * 
+     * @param filterStudyYear 
      * @param pageNumber 
      * @param pageSize 
      * @param searchText 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public usersGet(pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationCommonUsersQueriesGetCollectionGetUsersQueryResult>;
-    public usersGet(pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationCommonUsersQueriesGetCollectionGetUsersQueryResult>>;
-    public usersGet(pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationCommonUsersQueriesGetCollectionGetUsersQueryResult>>;
-    public usersGet(pageNumber?: number, pageSize?: number, searchText?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public usersGet(filterStudyYear?: number, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'body', reportProgress?: boolean): Observable<PastExamsHubCoreApplicationCommonUsersQueriesGetCollectionGetUsersQueryResult>;
+    public usersGet(filterStudyYear?: number, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PastExamsHubCoreApplicationCommonUsersQueriesGetCollectionGetUsersQueryResult>>;
+    public usersGet(filterStudyYear?: number, pageNumber?: number, pageSize?: number, searchText?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PastExamsHubCoreApplicationCommonUsersQueriesGetCollectionGetUsersQueryResult>>;
+    public usersGet(filterStudyYear?: number, pageNumber?: number, pageSize?: number, searchText?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (filterStudyYear !== undefined && filterStudyYear !== null) {
+            queryParameters = queryParameters.set('Filter.StudyYear', <any>filterStudyYear);
+        }
         if (pageNumber !== undefined && pageNumber !== null) {
             queryParameters = queryParameters.set('PageNumber', <any>pageNumber);
         }

@@ -10,7 +10,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  startWith,
+  switchMap,
+  tap,
+} from 'rxjs';
 import {
   ExamPeriodsService,
   PastExamsHubCoreApplicationExamPeriodsExamPeriodModel,
@@ -26,6 +33,18 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddEditDeadlineDialogComponent } from './add-edit-deadlines-dialog/add-edit-deadlines-dialog.component';
 import { DeleteConfirmationDialogComponent } from '../shared/components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { CurrentUserService } from '../shared/services/current-user.service';
+import { FormBaseComponent } from '../shared/components/form-base.component';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { isEqual } from 'lodash';
+import { MatSelectModule } from '@angular/material/select';
+
+export interface DeadlinesFilter {
+  search: string | null;
+  period: string | null;
+}
+
 @Component({
   selector: 'pastexamshub-deadlines',
   standalone: true,
@@ -39,13 +58,18 @@ import { CurrentUserService } from '../shared/services/current-user.service';
     MatInputModule,
     MatButtonModule,
     TableScrollingViewportComponent,
+    MatDatepickerModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatSelectModule,
   ],
-  providers: [DeadlinesService, ExamPeriodsService],
+
+  providers: [DeadlinesService, ExamPeriodsService, provideNativeDateAdapter()],
   templateUrl: './deadlines.component.html',
   styleUrl: './deadlines.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeadlinesComponent {
+export class DeadlinesComponent extends FormBaseComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   items = [];
   itemsSlice = [];
@@ -53,9 +77,38 @@ export class DeadlinesComponent {
   private router = inject(Router);
 
   dataSource = new MatTableDataSource();
-  data$ = this.route.queryParams.pipe(
+
+  readonly DEFAULT_VALUES: DeadlinesFilter = {
+    search: null,
+    period: null,
+  };
+
+  readonly periods = [
+    { uid: null, name: 'Svi periodi' },
+    { uid: 'Januar', name: 'Januar' },
+    { uid: 'April', name: 'April' },
+    { uid: 'Jun', name: 'Jun' },
+    { uid: 'Jun2', name: 'Jun2' },
+    { uid: 'Septembar', name: 'Septembar' },
+    { uid: 'Oktobar', name: 'Oktobar' },
+    { uid: 'Oktobar2', name: 'Oktobar2' },
+    { uid: 'Decembar', name: 'Decembar' },
+  ];
+
+  data$ = this.route.queryParamMap.pipe(
     switchMap(() => {
-      return this.deadlinesService.fetchData();
+      return this.form.valueChanges.pipe(
+        startWith({
+          ...this.DEFAULT_VALUES,
+        }),
+        debounceTime(300),
+        distinctUntilChanged(isEqual),
+        tap(
+          (changes) =>
+            (this.deadlinesService.deadlinesFilter = changes as DeadlinesFilter)
+        ),
+        switchMap(() => this.deadlinesService.fetchData())
+      );
     })
   );
 
@@ -71,7 +124,17 @@ export class DeadlinesComponent {
     private route: ActivatedRoute,
     private deadlinesService: DeadlinesService,
     private currentUserService: CurrentUserService
-  ) {}
+  ) {
+    super();
+    this.initializeForm();
+  }
+
+  private initializeForm() {
+    this.form = this.fb.group({
+      search: [''],
+      period: [null],
+    });
+  }
 
   updatePagination(pageIndex: number, pageSize: number) {
     this.deadlinesService.dataStateChanged = {

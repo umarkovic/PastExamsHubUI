@@ -22,7 +22,6 @@ import {
   FileSystemFileEntry,
 } from 'ngx-file-drop';
 import { SafeResourceUrl } from '@angular/platform-browser';
-import { Router } from '@angular/router';
 
 export type PastExamsHubCoreDomainEnumsExamType =
   | 'Unkwnon'

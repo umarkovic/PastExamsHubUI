@@ -6,7 +6,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ActivatedRoute } from '@angular/router';
-import { switchMap } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  startWith,
+  switchMap,
+  tap,
+} from 'rxjs';
 import {
   PastExamsHubCoreApplicationCommonUsersModelsUserModel,
   UsersService,
@@ -18,6 +25,15 @@ import { ListRange } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditStudentDialogComponent } from './add-edit-student-dialog/add-edit-student-dialog.component';
 import { CurrentUserService } from '../shared/services/current-user.service';
+import { FormBaseComponent } from '../shared/components/form-base.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { isEqual } from 'lodash';
+
+export interface StudentsFilter {
+  search: string | null;
+  year: number | string | null;
+}
 
 @Component({
   selector: 'pastexamshub-students',
@@ -30,6 +46,9 @@ import { CurrentUserService } from '../shared/services/current-user.service';
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
     TableScrollingViewportComponent,
   ],
   providers: [StudentsService, UsersService],
@@ -37,15 +56,40 @@ import { CurrentUserService } from '../shared/services/current-user.service';
   styleUrl: './students.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StudentsComponent {
+export class StudentsComponent extends FormBaseComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  years = [
+    { uid: null, name: 'Svi rokovi' },
+    { uid: 1, name: 1 },
+    { uid: 2, name: 2 },
+    { uid: 3, name: 3 },
+    { uid: 4, name: 4 },
+  ];
   items = [];
   itemsSlice = [];
   currentUser = this.currentUserService.currentUser;
   dataSource = new MatTableDataSource();
-  data$ = this.route.queryParams.pipe(
+
+  readonly DEFAULT_VALUES: StudentsFilter = {
+    search: null,
+    year: null,
+  };
+
+  data$ = this.route.queryParamMap.pipe(
     switchMap(() => {
-      return this.studentsService.fetchData();
+      return this.form.valueChanges.pipe(
+        startWith({
+          ...this.DEFAULT_VALUES,
+        }),
+        debounceTime(300),
+        distinctUntilChanged(isEqual),
+        tap(
+          (changes) =>
+            (this.studentsService.studentsFilter = changes as StudentsFilter)
+        ),
+        switchMap(() => this.studentsService.fetchData()),
+        map((data) => ({ students: data }))
+      );
     })
   );
 
@@ -56,7 +100,17 @@ export class StudentsComponent {
     private studentsService: StudentsService,
     private dialog: MatDialog,
     private currentUserService: CurrentUserService
-  ) {}
+  ) {
+    super();
+    this.initializeForm();
+  }
+
+  private initializeForm() {
+    this.form = this.fb.group({
+      search: [''],
+      year: [null],
+    });
+  }
 
   updatePagination(pageIndex: number, pageSize: number) {
     this.studentsService.dataStateChanged = {

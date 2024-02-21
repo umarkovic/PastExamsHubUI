@@ -11,6 +11,8 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
+import { StudentsFilter } from './students.component';
+import { isEqual } from 'lodash';
 
 @Injectable()
 export class StudentsService {
@@ -43,6 +45,14 @@ export class StudentsService {
   private _refresh = new BehaviorSubject<void>(undefined);
   refresh$ = this._refresh.asObservable();
 
+  private _studentsFilter = new BehaviorSubject<StudentsFilter>({
+    search: null,
+    year: null,
+  });
+  studentsFilter$ = this._studentsFilter
+    .asObservable()
+    .pipe(distinctUntilChanged((prev, curr) => isEqual(prev, curr)));
+
   constructor(private usersService: UsersService) {}
 
   set dataStateChanged(dataStateChanged: {
@@ -55,40 +65,59 @@ export class StudentsService {
     });
   }
 
-  fetchUsers(pageNumber: number, pageSize: number) {
-    return this.usersService.usersGet(pageNumber, pageSize).pipe(
-      map((res) => ({
-        data: {
-          result: res.users,
-          count: res.totalCount,
-        },
-        currentPage: res.currentPage,
-        totalPages: res.totalPages,
-        pageSize: res.pageSize,
-        hasNext: res.hasNext,
-        hasPrevious: res.hasPrevious,
-      })),
-      tap((res) => {
-        if (res.data && res.data.count! > 0) {
-          this._pageSettings.next({
-            ...this._pageSettings.getValue(),
-            totalRecordsCount: res.data.count,
-            pageSize: res.pageSize as number,
-            currentPage: res.currentPage,
-          });
-        }
-      })
-    );
+  set studentsFilter(studentsFilter: StudentsFilter) {
+    this._studentsFilter.next(studentsFilter);
+  }
+
+  get studentsFilter() {
+    return this._studentsFilter.value;
+  }
+
+  fetchUsers(filters: StudentsFilter, pageNumber: number, pageSize: number) {
+    return this.usersService
+      .usersGet(
+        filters.year as number,
+        pageNumber,
+        pageSize,
+        filters.search as string
+      )
+      .pipe(
+        map((res) => ({
+          data: {
+            result: res.users,
+            count: res.totalCount,
+          },
+          currentPage: res.currentPage,
+          totalPages: res.totalPages,
+          pageSize: res.pageSize,
+          hasNext: res.hasNext,
+          hasPrevious: res.hasPrevious,
+        })),
+        tap((res) => {
+          if (res.data && res.data.count! > 0) {
+            this._pageSettings.next({
+              ...this._pageSettings.getValue(),
+              totalRecordsCount: res.data.count,
+              pageSize: res.pageSize as number,
+              currentPage: res.currentPage,
+            });
+          }
+        })
+      );
   }
 
   fetchData() {
-    return combineLatest([this.dataStateChanged$, this.refresh$]).pipe(
-      switchMap(([dataStateChanges]) => {
+    return combineLatest([
+      this.studentsFilter$,
+      this.dataStateChanged$,
+      this.refresh$,
+    ]).pipe(
+      switchMap(([studentsFilter, dataStateChanges]) => {
+        const pageNumber = dataStateChanges.skip / dataStateChanges.take + 1;
         return this.fetchUsers(
-          (dataStateChanges.skip as number) /
-            (dataStateChanges.take as number) +
-            1,
-          dataStateChanges.take as number
+          studentsFilter,
+          pageNumber,
+          dataStateChanges.take
         );
       })
     );

@@ -5,11 +5,23 @@
         <section>
           <h2>ROKOVI</h2>
           <div class="justify-content-space-between">
-            <mat-form-field appearance="outline">
-              <mat-label>{{ 'Search' }} </mat-label>
-              <input matInput autocomplete="on" />
-            </mat-form-field>
+            <form [formGroup]="form">
+              <!-- <mat-form-field appearance="outline">
+                <mat-label>{{ 'Search' }} </mat-label>
+                <input matInput autocomplete="on" />
+              </mat-form-field> -->
 
+              <mat-form-field appearance="outline">
+                <mat-label>Period</mat-label>
+                <mat-select formControlName="period">
+                  @for (period of periods; track period) {
+                  <mat-option [value]="period.uid">
+                    {{ period.name }}
+                  </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </form>
             <div class="btn-save-wrapper">
               <button
                 *ngIf="currentUser.role !== 'Student'"
