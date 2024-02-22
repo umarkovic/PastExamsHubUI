@@ -80,7 +80,7 @@ export class DeadlinesService {
       .examPeriodsGet(
         filters.period as PastExamsHubCoreDomainEnumsExamPeriodType,
         pageNumber,
-        pageSize
+        pageSize,filters.search as string
       )
       .pipe(
         map((res) => ({
