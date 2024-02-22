@@ -59,7 +59,7 @@ export interface StudentsFilter {
 export class StudentsComponent extends FormBaseComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   years = [
-    { uid: null, name: 'Svi rokovi' },
+    { uid: null, name: 'Sve godine' },
     { uid: 1, name: 1 },
     { uid: 2, name: 2 },
     { uid: 3, name: 3 },
